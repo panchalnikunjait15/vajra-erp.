@@ -19,6 +19,7 @@ def init_db():
         conn.execute("PRAGMA journal_mode=WAL;")
         conn.execute("PRAGMA synchronous=NORMAL;")
         
+        # ઓરિજિનલ ડેટાબેઝ ટેબલ્સ
         conn.execute('''CREATE TABLE IF NOT EXISTS vouchers (
             id INTEGER PRIMARY KEY AUTOINCREMENT, date TEXT, voucher_type TEXT,
             ledger_name TEXT, amount REAL, gst_amount REAL, total_with_gst REAL, narration TEXT, crypto_hash TEXT)''')
@@ -36,7 +37,151 @@ def init_db():
 
 init_db()
 
-# --- AI & VOICE ASSISTANT API ROUTE ---
+# --- MAIN ROUTE (Login Check) ---
+@app.route("/")
+def index():
+    if session.get("logged_in"):
+        return redirect(url_for("dashboard"))
+    return redirect(url_for("login"))
+
+# --- LOGIN ROUTE ---
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    error = None
+    if request.method == "POST":
+        username = request.form.get("username")
+        password = request.form.get("password")
+        # ⚠️ તમારી જૂની લૉગિન સિસ્ટમ અહીં લાગુ કરો (e.g., DB check). 
+        # હાલમાં ટેસ્ટિંગ માટે ડિફોલ્ટ admin / admin123 સેટ છે.
+        if username == "admin" and password == "admin123":
+            session["logged_in"] = True
+            return redirect(url_for("dashboard"))
+        else:
+            error = "Invalid Credentials. Try admin / admin123"
+    
+    # લૉગિન પેજનો HTML (તમારા ઓરિજિનલ ડિઝાઈન જેવો)
+    return render_template_string('''
+        <!DOCTYPE html>
+        <html lang="gu">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Vajra ERP - Login</title>
+            <style>
+                body { background: #0f172a; color: white; font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+                .login-box { background: #1e293b; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); width: 300px; text-align: center; }
+                input { width: 100%; padding: 10px; margin: 10px 0; background: #0f172a; border: 1px solid #334155; color: white; border-radius: 6px; box-sizing: border-box; }
+                button { width: 100%; padding: 10px; background: #2563eb; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; }
+                button:hover { background: #1d4ed8; }
+                .error { color: #ef4444; font-size: 14px; margin-bottom: 10px; }
+            </style>
+        </head>
+        <body>
+            <div class="login-box">
+                <h2>⚡ Vajra ERP Login</h2>
+                {% if error %}<div class="error">{{ error }}</div>{% endif %}
+                <form method="POST">
+                    <input type="text" name="username" placeholder="Username" required>
+                    <input type="password" name="password" placeholder="Password" required>
+                    <button type="submit">Login</button>
+                </form>
+            </div>
+        </body>
+        </html>
+    ''', error=error)
+
+# --- DASHBOARD ROUTE ---
+@app.route("/dashboard")
+def dashboard():
+    if not session.get("logged_in"):
+        return redirect(url_for("login"))
+    # ડેશબોર્ડ પેજનો HTML (ઓરિજિનલ + AI બટન)
+    return render_template_string('''
+        <!DOCTYPE html>
+        <html lang="gu">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Vajra ERP - Dashboard</title>
+            <style>
+                body { background: #0f172a; color: white; font-family: sans-serif; padding: 20px; margin: 0; }
+                .card { background: #1e293b; padding: 20px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+                button { background: #2563eb; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-size: 16px; margin-right: 10px; }
+                button:hover { background: #1d4ed8; }
+                .logout { background: #dc2626; float: right; }
+                .logout:hover { background: #b91c1c; }
+                h1 { margin-top: 0; }
+            </style>
+        </head>
+        <body>
+            <a href="/logout"><button class="logout">Logout</button></a>
+            <h1>⚡ Vajra ERP Dashboard</h1>
+            
+            <div class="card">
+                <h3>📊 Quick Links</h3>
+                <a href="/export_inventory_csv"><button>Export Inventory CSV</button></a>
+                <a href="/backup_db"><button>Backup Database</button></a>
+            </div>
+
+            <!-- 🤖 નવું AI & Voice Assistant વિજેટ -->
+            <div class="card">
+                <h3>🤖 Vajra AI Voice Assistant</h3>
+                <p id="voiceStatus" style="color: #38bdf8;">માઇક બટન દબાવીને બોલો...</p>
+                <button onclick="startVoiceRecognition()">🎤 બોલો (Speak)</button>
+                <p id="aiReply" style="margin-top: 15px; font-size: 18px; font-weight: bold;"></p>
+            </div>
+
+            <!-- 🔊 JavaScript for AI Voice Feature -->
+            <script>
+            function startVoiceRecognition() {
+                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                if (!SpeechRecognition) {
+                    alert("તમારું બ્રાઉઝર વોઇસ રેકગ્નિશન સપોર્ટ કરતું નથી.");
+                    return;
+                }
+
+                const recognition = new SpeechRecognition();
+                recognition.lang = 'gu-IN'; // ગુજરાતી ભાષા માટે
+
+                recognition.onstart = function() {
+                    document.getElementById("voiceStatus").innerText = "સંભળાઈ રહ્યું છે... બોલો!";
+                };
+
+                recognition.onresult = function(event) {
+                    const spokenText = event.results[0][0].transcript;
+                    document.getElementById("voiceStatus").innerText = "તમે બોલ્યા: " + spokenText;
+                    sendQueryToAI(spokenText);
+                };
+
+                recognition.onerror = function(event) {
+                    document.getElementById("voiceStatus").innerText = "કંઈક ભૂલ થઈ, ફરી પ્રયત્ન કરો.";
+                };
+
+                recognition.start();
+            }
+
+            function sendQueryToAI(queryText) {
+                fetch('/api/ai-assistant', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ query: queryText })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("aiReply").innerText = "AI જવાબ: " + data.reply;
+                    
+                    // જો અવાજ દ્વારા જવાબ બોલાવવો હોય (Text-to-Speech)
+                    let speech = new SpeechSynthesisUtterance(data.reply);
+                    speech.lang = 'gu-IN';
+                    window.speechSynthesis.speak(speech);
+                });
+            }
+            </script>
+        </body>
+        </html>
+    ''')
+
+# --- 🤖 AI & VOICE ASSISTANT API ROUTE (ઓરિજિનલ + AI Logic) ---
 @app.route("/api/ai-assistant", methods=["POST"])
 def ai_assistant():
     data = request.get_json() or {}
@@ -44,17 +189,23 @@ def ai_assistant():
     
     response_text = "માહિતી ઉપલબ્ધ નથી."
     
+    # 💡 અહીં તમે ડેટાબેઝમાંથી અસલી ડેટા ફેચ કરવાનું logic ઉમેરી શકો છો. 
+    # હાલમાં તે 'નફો', 'વેચાણ' કે 'સ્ટોક' શબ્દો પરથી જવાબ આપે છે.
     if "profit" in user_query or "nofo" in user_query or "નફો" in user_query:
+        # Example: response_text = f"આજે કુલ નફો ₹{calculate_profit_today()} થયો છે."
         response_text = "આજે કુલ નફો ₹12,500 થયો છે, જે ગઇકાલ કરતાં 15% વધુ છે."
-    elif "sales" in user_query or "vechan" in user_query or "આવक" in user_query:
+    elif "sales" in user_query or "vechan" in user_query or "aavak" in user_query:
+        # Example: response_text = f"આજના દિવસનું કુલ વેચાણ ₹{calculate_sales_today()} નું રહ્યું છે."
         response_text = "આજના દિવસનું કુલ વેચાણ ₹45,000 નું રહ્યું છે."
     elif "stock" in user_query or "stok" in user_query:
+        # Example: response_text = f"ચેતવણી: {check_low_stock()} પ્રોડક્ટ્સનો સ્ટોક પૂરો થવાની તૈયારીમાં છે."
         response_text = "ચેતવણી: 3 પ્રોડક્ટ્સનો સ્ટોક પૂરો થવાની તૈયારીમાં છે."
     else:
         response_text = "માફ કરશો, હું આ પ્રશ્ન સમજી શક્યો નથી. તમે 'નફો', 'વેચાણ' અથવા 'સ્ટોક' વિશે પૂછી શકો છો."
 
     return jsonify({"status": "success", "reply": response_text})
 
+# --- ઓરિજિનલ ERP Functions ---
 @app.route("/add_inventory", methods=["POST"])
 def add_inventory():
     if not session.get("logged_in"): return redirect(url_for("login"))
