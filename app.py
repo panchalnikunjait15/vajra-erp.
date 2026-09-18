@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import os
 import sqlite3
 import hashlib
@@ -9,9 +10,9 @@ import csv
 import io
 
 app = Flask(__name__)
-app.secret_key = "VAJRA_CLOUD_PRODUCTION_2026"
+app.secret_key = "VAJRA_MULTILINGUAL_CLOUD_2026"
 
-DB_NAME = "vajra_production.db"
+DB_NAME = "vajra_multilingual.db"
 
 def init_db():
     with sqlite3.connect(DB_NAME) as conn:
@@ -32,8 +33,6 @@ def init_db():
             id INTEGER PRIMARY KEY AUTOINCREMENT, bank_id INTEGER, tx_type TEXT, amount REAL, payment_mode TEXT, narration TEXT, date TEXT)''')
         conn.execute('''CREATE TABLE IF NOT EXISTS advances (
             id INTEGER PRIMARY KEY AUTOINCREMENT, party_name TEXT, adv_type TEXT, amount REAL, status TEXT DEFAULT 'PENDING', date TEXT)''')
-        conn.execute('''CREATE TABLE IF NOT EXISTS p2p_nodes (
-            id INTEGER PRIMARY KEY AUTOINCREMENT, node_name TEXT, ip_address TEXT, last_sync TEXT)''')
 
 init_db()
 
@@ -44,6 +43,7 @@ LOGIN_HTML = """
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vajra Cloud OS - Login</title>
     <style>
@@ -58,13 +58,13 @@ LOGIN_HTML = """
 </head>
 <body>
     <div class="card">
-        <h2>Vajra Cloud</h2>
-        <p style="color: #94a3b8; font-size: 0.95em; margin-bottom: 25px;">Global Enterprise OS</p>
+        <h2>Vajra ERP</h2>
+        <p style="color: #94a3b8; font-size: 0.95em; margin-bottom: 25px;">Sovereign Multi-Lingual OS</p>
         {% if error %}<div class="error">{{ error }}</div>{% endif %}
         <form method="POST">
             <input type="text" name="username" placeholder="Username" required>
             <input type="password" name="password" placeholder="Password" required>
-            <button type="submit">Access Cloud OS</button>
+            <button type="submit">Access Sovereign System</button>
         </form>
         <div class="hint">User: VajraERP | Pass: Vajra@erp</div>
     </div>
@@ -76,8 +76,9 @@ DASHBOARD_HTML = """
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vajra ERP - Cloud Dashboard</title>
+    <title>Vajra ERP - Multi-Lingual Dashboard</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -129,7 +130,7 @@ DASHBOARD_HTML = """
 </head>
 <body>
     <header>
-        <h1><i class="fas fa-cloud"></i> <span data-key="header_title">VAJRA CLOUD ENTERPRISE OS</span></h1>
+        <h1><i class="fas fa-globe"></i> <span data-key="header_title">VAJRA SOVEREIGN ERP OS</span></h1>
         
         <!-- LANGUAGE SWITCHER -->
         <div class="lang-switcher">
@@ -152,11 +153,11 @@ DASHBOARD_HTML = """
 
     <div class="ai-banner">
         <div>
-            <h3 data-key="sentinel_title"><i class="fas fa-shield-alt"></i> Cloud Autonomous Financial Sentinel</h3>
+            <h3 data-key="sentinel_title"><i class="fas fa-shield-alt"></i> Sovereign Multi-Lingual Sentinel</h3>
             <p><span data-key="runway_label">Estimated Liquidity Runway</span>: <strong style="color:#34d399;">{{ runway_days }} Days</strong> | <span data-key="sentinel_status">Status</span>: <strong style="color:#38bdf8;">{{ sentinel_status }}</strong></p>
         </div>
         <div style="background: rgba(0,0,0,0.4); padding: 15px 20px; border-radius: 8px; text-align: center; border: 1px solid #6366f1;">
-            <div style="font-size: 0.75em; text-transform: uppercase; color: #c7d2fe;" data-key="cloud_status">Cloud Deployment</div>
+            <div style="font-size: 0.75em; text-transform: uppercase; color: #c7d2fe;" data-key="cloud_status">Cloud Status</div>
             <div style="font-size: 1.1em; font-weight: bold; color: #34d399;">Live & Secure</div>
         </div>
     </div>
@@ -334,15 +335,15 @@ DASHBOARD_HTML = """
     <script>
         const translations = {
             en: {
-                header_title: "VAJRA CLOUD ENTERPRISE OS",
+                header_title: "VAJRA SOVEREIGN ERP OS",
                 logout: "Logout",
                 backup_db: "Backup DB",
                 export_csv: "Export CSV",
                 print_report: "Print Report",
-                sentinel_title: "Cloud Autonomous Financial Sentinel",
+                sentinel_title: "Sovereign Multi-Lingual Sentinel",
                 runway_label: "Estimated Liquidity Runway",
                 sentinel_status: "Status",
-                cloud_status: "Cloud Deployment",
+                cloud_status: "Cloud Status",
                 kpi_revenue: "Total Revenue",
                 kpi_profit: "Net Profit (P&L)",
                 kpi_bank: "Total Bank Balance",
@@ -405,15 +406,15 @@ DASHBOARD_HTML = """
                 send: "Send"
             },
             hi: {
-                header_title: "???? ?????? ?????????? ???",
+                header_title: "???? ??????? ????? ???",
                 logout: "??? ???",
                 backup_db: "??????? ?????",
                 export_csv: "?????????? ?????????",
                 print_report: "??????? ?????? ????",
-                sentinel_title: "?????? ??????? ?????????? ???????",
+                sentinel_title: "??????? ??????? ??????",
                 runway_label: "???????? ????? ????",
                 sentinel_status: "??????",
-                cloud_status: "?????? ???????????",
+                cloud_status: "?????? ??????",
                 kpi_revenue: "??? ??????",
                 kpi_profit: "????? ??? (P&L)",
                 kpi_bank: "??? ???? ???",
@@ -476,15 +477,15 @@ DASHBOARD_HTML = """
                 send: "?????"
             },
             gu: {
-                header_title: "???? ?????? ??????????? ???",
+                header_title: "???? ?????? ????? ???",
                 logout: "??????",
                 backup_db: "????? ????",
                 export_csv: "?????????? ?????????",
                 print_report: "??????? ???????",
-                sentinel_title: "?????? ?????? ??????????? ????????",
+                sentinel_title: "?????? ?????-???????? ????????",
                 runway_label: "??????? ?????????? ????",
                 sentinel_status: "??????",
-                cloud_status: "?????? ????????????",
+                cloud_status: "?????? ??????",
                 kpi_revenue: "??? ???",
                 kpi_profit: "??? ??????? (???)",
                 kpi_bank: "??? ???? ???????",
@@ -523,7 +524,7 @@ DASHBOARD_HTML = """
                 lbl_opening_bal: "???????? ??????? (?):",
                 btn_register_bank: "???? ??????? ???",
                 inv_title: "?????????? ???????",
-                lbl_movement: "???????? ??????:",
+                lbl_movement: "????????? ??????:",
                 opt_inward: "???",
                 opt_outward: "????",
                 lbl_item_name: "??????? ???:",
@@ -603,7 +604,7 @@ def dashboard():
         burn_rate = expenses if expenses > 0 else 1.0
         runway_days = int((bank_bal / burn_rate) * 30) if burn_rate > 0 else 999
         if runway_days < 0: runway_days = 0
-        sentinel_status = "Optimal Cloud Liquidity" if runway_days > 30 else "Cash Conservation Alert"
+        sentinel_status = "Optimal Liquidity" if runway_days > 30 else "Cash Conservation Alert"
 
         inv_rows = conn.execute("SELECT item_name, sku, qty, price, movement_type, market_status FROM inventory").fetchall()
         stock_map = {}
@@ -642,18 +643,18 @@ def add_bank():
 def bank_transaction():
     if not session.get("logged_in"): return redirect(url_for("login"))
     bank_id = int(request.form.get("bank_id"))
-    tx_type = request.form.get("tx_type")
+    py_type = request.form.get("tx_type")
     payment_mode = request.form.get("payment_mode")
     amount = float(request.form.get("amount"))
     narration = request.form.get("narration", "")
     
     with sqlite3.connect(DB_NAME) as conn:
-        if tx_type == "DEPOSIT":
+        if py_type == "DEPOSIT":
             conn.execute("UPDATE bank_accounts SET balance = balance + ? WHERE id = ?", (amount, bank_id))
         else:
             conn.execute("UPDATE bank_accounts SET balance = balance - ? WHERE id = ?", (amount, bank_id))
         conn.execute("INSERT INTO bank_transactions (bank_id, tx_type, amount, payment_mode, narration, date) VALUES (?, ?, ?, ?, ?, ?)",
-                     (bank_id, tx_type, amount, payment_mode, narration, datetime.now().strftime("%Y-%m-%d %H:%M")))
+                     (bank_id, py_type, amount, payment_mode, narration, datetime.now().strftime("%Y-%m-%d %H:%M")))
     return redirect(url_for("dashboard"))
 
 @app.route("/add_advance", methods=["POST"])
