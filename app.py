@@ -102,10 +102,11 @@ def dashboard():
             <style>
                 body { background: #0f172a; color: white; font-family: sans-serif; padding: 20px; margin: 0; }
                 .card { background: #1e293b; padding: 20px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
-                button { background: #2563eb; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-size: 16px; margin-right: 10px; }
+                button { background: #2563eb; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-size: 16px; margin-right: 10px; margin-top: 5px; }
                 button:hover { background: #1d4ed8; }
                 .logout { background: #dc2626; float: right; }
                 .logout:hover { background: #b91c1c; }
+                input, select { padding: 8px; margin: 5px 0; background: #0f172a; border: 1px solid #334155; color: white; border-radius: 6px; width: 100%; box-sizing: border-box; }
                 h1 { margin-top: 0; }
             </style>
         </head>
@@ -113,6 +114,19 @@ def dashboard():
             <a href="/logout"><button class="logout">Logout</button></a>
             <h1>⚡ Vajra ERP Dashboard</h1>
             
+            <div class="card">
+                <h3>📦 Add Inventory Item</h3>
+                <form action="/add_inventory" method="POST">
+                    <input type="text" name="item_name" placeholder="Item Name" required>
+                    <input type="text" name="sku" placeholder="SKU" required>
+                    <input type="number" name="qty" placeholder="Quantity" required>
+                    <input type="number" step="0.01" name="price" placeholder="Price" required>
+                    <input type="text" name="movement_type" placeholder="Movement Type (In/Out)" required>
+                    <input type="text" name="market_status" placeholder="Market Status" value="REGULAR">
+                    <button type="submit">Add Item</button>
+                </form>
+            </div>
+
             <div class="card">
                 <h3>📊 Quick Links & Operations</h3>
                 <a href="/export_inventory_csv"><button>Export Inventory CSV</button></a>
@@ -131,7 +145,7 @@ def dashboard():
             function startVoiceRecognition() {
                 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
                 if (!SpeechRecognition) {
-                    alert("તમારું બ્રાઉઝર વોઇસ રેકગ્નિશન સપોર્ટ કરતું નથી.");
+                    alert("તમારું બ્રાઉઝર વોઇး રેકગ્નિશન સપોર્ટ કરતું નથી.");
                     return;
                 }
 
@@ -227,3 +241,4 @@ def logout():
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5027))
     app.run(host="0.0.0.0", port=port)
+    
