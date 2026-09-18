@@ -1,4 +1,4 @@
-﻿# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 import os
 import sqlite3
 import hashlib
@@ -10,9 +10,9 @@ import csv
 import io
 
 app = Flask(__name__)
-app.secret_key = "VAJRA_MULTILINGUAL_CLOUD_2026"
+app.secret_key = "VAJRA_UNICODE_SAFE_2026"
 
-DB_NAME = "vajra_multilingual.db"
+DB_NAME = "vajra_safe.db"
 
 def init_db():
     with sqlite3.connect(DB_NAME) as conn:
@@ -64,7 +64,7 @@ LOGIN_HTML = """
         <form method="POST">
             <input type="text" name="username" placeholder="Username" required>
             <input type="password" name="password" placeholder="Password" required>
-            <button type="submit">Access Sovereign System</button>
+            <button type="submit">Access System</button>
         </form>
         <div class="hint">User: VajraERP | Pass: Vajra@erp</div>
     </div>
@@ -78,7 +78,7 @@ DASHBOARD_HTML = """
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vajra ERP - Multi-Lingual Dashboard</title>
+    <title>Vajra ERP - Dashboard</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -135,8 +135,8 @@ DASHBOARD_HTML = """
         <!-- LANGUAGE SWITCHER -->
         <div class="lang-switcher">
             <button class="lang-btn active" onclick="setLanguage('en')">EN</button>
-            <button class="lang-btn" onclick="setLanguage('hi')">??????</button>
-            <button class="lang-btn" onclick="setLanguage('gu')">???????</button>
+            <button class="lang-btn" onclick="setLanguage('hi')">\u0939\u093f\u0928\u094d\u0926\u0940</button>
+            <button class="lang-btn" onclick="setLanguage('gu')">\u0a97\u0ac1\u0a9c\u0ab0\u0abe\u0aa4\u0ac0</button>
         </div>
 
         <div style="display: flex; gap: 10px; align-items: center;">
@@ -366,9 +366,9 @@ DASHBOARD_HTML = """
                 acc_title: "Accounting & GST Voucher",
                 lbl_vtype: "Voucher Type:",
                 lbl_party: "Party / Ledger Name:",
-                lbl_amount: "Base Amount (?):",
+                lbl_amount: "Base Amount (\u20b9):",
                 lbl_narration: "Narration:",
-                btn_save_voucher: "? Save Voucher (Auto 18% GST)",
+                btn_save_voucher: "\u26a1 Save Voucher (Auto 18% GST)",
                 bank_tx_title: "Indian Bank Transactions Hub",
                 lbl_select_bank: "Select Bank:",
                 lbl_tx_type: "Transaction Type:",
@@ -376,10 +376,10 @@ DASHBOARD_HTML = """
                 opt_withdraw: "Withdrawal",
                 lbl_pay_mode: "Payment Mode:",
                 lbl_ref: "Narration / Ref:",
-                btn_process_tx: "?? Process Bank Txn",
+                btn_process_tx: "\U0001f3e6 Process Bank Txn",
                 lbl_add_bank: "+ Add Indian Bank Account:",
                 lbl_acc_num: "Account Number:",
-                lbl_opening_bal: "Opening Balance (?):",
+                lbl_opening_bal: "Opening Balance (\u20b9):",
                 btn_register_bank: "Register Bank",
                 inv_title: "Inventory Control",
                 lbl_movement: "Movement Type:",
@@ -388,16 +388,16 @@ DASHBOARD_HTML = """
                 lbl_item_name: "Item Name:",
                 lbl_sku: "SKU Code:",
                 lbl_market_status: "Market Trend Status:",
-                opt_trending: "?? Fast-Moving (Trending)",
+                opt_trending: "\U0001f525 Fast-Moving (Trending)",
                 lbl_qty: "Qty:",
-                lbl_price: "Price (?):",
-                btn_update_stock: "?? Update Stock",
+                lbl_price: "Price (\u20b9):",
+                btn_update_stock: "\U0001f680 Update Stock",
                 adv_title: "Advance Ledger",
                 lbl_party_name: "Party Name:",
                 lbl_adv_type: "Advance Type:",
                 opt_adv_given: "Advance Given",
                 opt_adv_taken: "Advance Taken",
-                btn_record_adv: "?? Record Advance",
+                btn_record_adv: "\U0001f91d Record Advance",
                 history_title: "Recent Vouchers & Sharing",
                 th_type: "Type",
                 th_party: "Party",
@@ -406,146 +406,146 @@ DASHBOARD_HTML = """
                 send: "Send"
             },
             hi: {
-                header_title: "???? ??????? ????? ???",
-                logout: "??? ???",
-                backup_db: "??????? ?????",
-                export_csv: "?????????? ?????????",
-                print_report: "??????? ?????? ????",
-                sentinel_title: "??????? ??????? ??????",
-                runway_label: "???????? ????? ????",
-                sentinel_status: "??????",
-                cloud_status: "?????? ??????",
-                kpi_revenue: "??? ??????",
-                kpi_profit: "????? ??? (P&L)",
-                kpi_bank: "??? ???? ???",
-                kpi_advances: "????? ??????",
-                bank_hub_title: "?????? ???? ???? ??",
-                th_bank_name: "???? ?? ???",
-                th_acc_no: "???? ?????? / ??????",
-                th_balance: "??????? ???",
-                no_bank: "??? ?? ??? ???? ???? ??????? ???? ???",
-                stock_hub_title: "???? ????? ?? ????? ????? ??????",
-                th_item: "????? ?? ???",
-                th_sku: "SKU ???",
-                th_status: "????? ??????",
-                th_qty: "??????? ??????",
-                th_price: "???? ?????",
-                th_val: "????? ?????",
-                trending: "?????????",
-                regular: "??????",
-                low_stock: "?? ?????",
-                acc_title: "??????? ?? ?????? ?????",
-                lbl_vtype: "????? ??????:",
-                lbl_party: "?????? / ???? ???:",
-                lbl_amount: "??? ???? (?):",
-                lbl_narration: "?????:",
-                btn_save_voucher: "? ????? ?????? (??? 18% ??????)",
-                bank_tx_title: "?????? ???? ?????? ??",
-                lbl_select_bank: "???? ?????:",
-                lbl_tx_type: "?????? ??????:",
-                opt_deposit: "???",
-                opt_withdraw: "??????",
-                lbl_pay_mode: "?????? ???:",
-                lbl_ref: "????? / ??????:",
-                btn_process_tx: "?? ???? ?????? ?????????",
-                lbl_add_bank: "+ ?????? ???? ???? ??????:",
-                lbl_acc_num: "???? ??????:",
-                lbl_opening_bal: "??????? ??? (?):",
-                btn_register_bank: "???? ??????? ????",
-                inv_title: "?????????? ????????",
-                lbl_movement: "??????? ??????:",
-                opt_inward: "???",
-                opt_outward: "????",
-                lbl_item_name: "????? ?? ???:",
-                lbl_sku: "SKU ???:",
-                lbl_market_status: "????? ????? ??????:",
-                opt_trending: "?? ???? ?? ????? ????",
-                lbl_qty: "??????",
-                lbl_price: "????? (?):",
-                btn_update_stock: "?? ????? ????? ????",
-                adv_title: "?????? ???? ????",
-                lbl_party_name: "?????? ?? ???:",
-                lbl_adv_type: "?????? ??????:",
-                opt_adv_given: "?????? ???? ???",
-                opt_adv_taken: "?????? ???? ???",
-                btn_record_adv: "?? ?????? ???? ????",
-                history_title: "??? ?? ????? ?? ???????",
-                th_type: "??????",
-                th_party: "??????",
-                th_total: "??? (?????? ????)",
-                th_action: "????????",
-                send: "?????"
+                header_title: "\u0935\u091c\u094d\u0930 \u0938\u092e\u094d\u092a\u094d\u0930\u092d\u0941 \u0908\u0906\u0930\u092a\u0940 \u0913\u090f\u0938",
+                logout: "\u0932\u0949\u0917 \u0906\u0909\u091f",
+                backup_db: "\u0921\u0947\u091f\u093e\u092c\u0947\u0938 \u092c\u0948\u0915\u0905\u092a",
+                export_csv: "\u0907\u0928\u094d\u0935\u0947\u0928\u094d\u091f\u094d\u0930\u0940 \u090f\u0915\u094d\u0938\u092a\u094b\u0930\u094d\u091f",
+                print_report: "\u0930\u093f\u092a\u094b\u0930\u094d\u091f \u092a\u094d\u0930\u093f\u0902\u091f \u0915\u0930\u0947\u0902",
+                sentinel_title: "\u0938\u092e\u094d\u092a\u094d\u0930\u092d\u0941 \u092c\u0939\u0941\u092d\u093e\u0937\u0940 \u092a\u094d\u0930\u0939\u0930\u0940",
+                runway_label: "\u0905\u0928\u0941\u092e\u093e\u0928\u093f\u0924 \u0924\u0930\u0932\u0924\u093e \u0930\u0928\u0935\u0947",
+                sentinel_status: "\u0938\u094d\u0925\u093f\u0924\u093f",
+                cloud_status: "\u0915\u094d\u0932\u093e\u0909\u0921 \u0938\u094d\u0925\u093f\u0924\u093f",
+                kpi_revenue: "\u0915\u0941\u0932 \u0930\u093e\u091c\u0938\u094d\u0935",
+                kpi_profit: "\u0936\u0941\u0926\u094d\u0927 \u0932\u093e\u092d (P&L)",
+                kpi_bank: "\u0915\u0941\u0932 \u092c\u0948\u0902\u0915 \u0936\u0947\u0937",
+                kpi_advances: "\u0936\u0941\u0926\u094d\u0927 \u0905\u0917\u094d\u0930\u093f\u092e",
+                bank_hub_title: "\u092d\u093e\u0930\u0924\u0940\u092f \u092c\u0948\u0902\u0915 \u0916\u093e\u0924\u093e \u0939\u092c",
+                th_bank_name: "\u092c\u0948\u0902\u0915 \u0915\u093e \u0928\u093e\u092e",
+                th_acc_no: "\u0916\u093e\u0924\u093e \u0938\u0902\u0916\u094d\u092f\u093e / \u0938\u0902\u0926\u0930\u094d\u092d",
+                th_balance: "\u0935\u0930\u094d\u0924\u092e\u093e\u0928 \u0936\u0947\u0937",
+                no_bank: "\u0905\u092d\u0940 \u0924\u0915 \u0915\u094b\u0908 \u092c\u0948\u0902\u0915 \u0916\u093e\u0924\u093e \u092a\u0902\u091c\u0940\u0915\u0943\u0924 \u0928\u0939\u0940\u0902 \u0939\u0948\u0964",
+                stock_hub_title: "\u0932\u093e\u0907\u0935 \u0938\u094d\u091f\u0949\u0915 \u0914\u0930 \u092c\u093e\u091c\u093e\u0930 \u0930\u0941\u091d\u093e\u0928 \u0938\u094d\u0925\u093f\u0924\u093f",
+                th_item: "\u0935\u0938\u094d\u0924\u0941 \u0915\u093e \u0928\u093e\u092e",
+                th_sku: "SKU \u0915\u094b\u0921",
+                th_status: "\u092c\u093e\u091c\u093e\u0930 \u0938\u094d\u0925\u093f\u0924\u093f",
+                th_qty: "\u0935\u0930\u094d\u0924\u092e\u093e\u0928 \u092e\u093e\u0924\u094d\u0930\u093e",
+                th_price: "\u0907\u0915\u093e\u0908 \u092e\u0942\u0932\u094d\u092f",
+                th_val: "\u0938\u094d\u091f\u0949\u0915 \u092e\u0942\u0932\u094d\u092f",
+                trending: "\u091f\u094d\u0930\u0947\u0902\u0921\u093f\u0902\u0917",
+                regular: "\u0928\u093f\u092f\u092e\u093f\u0924",
+                low_stock: "\u0915\u092e \u0938\u094d\u091f\u0949\u0915",
+                acc_title: "\u0932\u0947\u0916\u093e\u0902\u0915\u0928 \u0914\u0930 \u091c\u0940\u090f\u0938\u091f\u0940 \u0935\u093e\u0909\u091a\u0930",
+                lbl_vtype: "\u0935\u093e\u0909\u091a\u0930 \u092a\u094d\u0930\u0915\u093e\u0930:",
+                lbl_party: "\u092a\u093e\u0930\u094d\u091f\u0940 / \u0932\u0947\u091c\u0930 \u0928\u093e\u092e:",
+                lbl_amount: "\u092e\u0942\u0932 \u0930\u093e\u0936\u093f (\u20b9):",
+                lbl_narration: "\u0935\u093f\u0935\u0930\u0923:",
+                btn_save_voucher: "\u26a1 \u0935\u093e\u0909\u091a\u0930 \u0938\u0939\u0947\u091c\u0947\u0902 (\u0911\u091f\u094b 18% \u091c\u0940\u090f\u0938\u091f\u0940)",
+                bank_tx_title: "\u092d\u093e\u0930\u0924\u0940\u092f \u092c\u0948\u0902\u0915 \u0932\u0947\u0928\u0926\u0947\u0928 \u0939\u092c",
+                lbl_select_bank: "\u092c\u0948\u0902\u0915 \u091a\u0941\u0928\u0947\u0902:",
+                lbl_tx_type: "\u0932\u0947\u0928\u0926\u0947\u0928 \u092a\u094d\u0930\u0915\u093e\u0930:",
+                opt_deposit: "\u091c\u092e\u093e",
+                opt_withdraw: "\u0928\u093f\u0915\u093e\u0938\u0940",
+                lbl_pay_mode: "\u092d\u0941\u0917\u0924\u093e\u0928 \u092e\u094b\u0921:",
+                lbl_ref: "\u0935\u093f\u0935\u0930\u0923 / \u0938\u0902\u0926\u0930\u094d\u092d:",
+                btn_process_tx: "\U0001f3e6 \u092c\u0948\u0902\u0915 \u0932\u0947\u0928\u0926\u0947\u0928 \u092a\u094d\u0930\u0915\u094d\u0930\u093f\u092f\u093e",
+                lbl_add_bank: "+ \u092d\u093e\u0930\u0924\u0940\u092f \u092c\u0948\u0902\u0915 \u0916\u093e\u0924\u093e \u091c\u094b\u0921\u093c\u0947\u0902:",
+                lbl_acc_num: "\u0916\u093e\u0924\u093e \u0938\u0902\u0916\u094d\u092f\u093e:",
+                lbl_opening_bal: "\u0936\u0941\u0930\u0941\u0906\u0924\u0940 \u0936\u0947\u0937 (\u20b9):",
+                btn_register_bank: "\u092c\u0948\u0902\u0915 \u092a\u0902\u091c\u0940\u0915\u0943\u0924 \u0915\u0930\u0947\u0902",
+                inv_title: "\u0907\u0928\u094d\u0935\u0947\u0928\u094d\u091f\u094d\u0930\u0940 \u0928\u093f\u092f\u0902\u0924\u094d\u0930\u0923",
+                lbl_movement: "\u092e\u0942\u0935\u092e\u0947\u0902\u091f \u092a\u094d\u0930\u0915\u093e\u0930:",
+                opt_inward: "\u0906\u0935\u0915",
+                opt_outward: "\u091c\u093e\u0935\u0915",
+                lbl_item_name: "\u0935\u0938\u094d\u0924\u0941 \u0915\u093e \u0928\u093e\u092e:",
+                lbl_sku: "SKU \u0915\u094b\u0921:",
+                lbl_market_status: "\u092c\u093e\u091c\u093e\u0930 \u0930\u0941\u091d\u093e\u0928 \u0938\u094d\u0925\u093f\u0924\u093f:",
+                opt_trending: "\U0001f525 \u0924\u0947\u091c\u0940 \u0938\u0947 \u092c\u093f\u0915\u0928\u0947 \u0935\u093e\u0932\u093e",
+                lbl_qty: "\u092e\u093e\u0924\u094d\u0930\u093e",
+                lbl_price: "\u092e\u0942\u0932\u094d\u092f (\u20b9):",
+                btn_update_stock: "\U0001f680 \u0938\u094d\u091f\u0949\u0915 \u0905\u092a\u0921\u0947\u091f \u0915\u0930\u0947\u0902",
+                adv_title: "\u0905\u0917\u094d\u0930\u093f\u092e \u0916\u093e\u0924\u093e \u0932\u0947\u091c\u0930",
+                lbl_party_name: "\u092a\u093e\u0930\u094d\u0932\u0940 \u0915\u093e \u0928\u093e\u092e:",
+                lbl_adv_type: "\u0905\u0917\u094d\u0930\u093f\u092e \u092a\u094d\u0930\u0915\u093e\u0930:",
+                opt_adv_given: "\u0905\u0917\u094d\u0930\u093f\u092e \u0926\u093f\u092f\u093e \u0917\u092f\u093e",
+                opt_adv_taken: "\u0905\u0917\u094d\u0930\u093f\u092e \u0932\u093f\u092f\u093e \u0917\u092f\u093e",
+                btn_record_adv: "\U0001f91d \u0905\u0917\u094d\u0930\u093f\u092e \u0926\u0930\u094d\u091c \u0915\u0930\u0947\u0902",
+                history_title: "\u0939\u093e\u0932 \u0915\u0947 \u0935\u093e\u0909\u091a\u0930 \u0914\u0930 \u0936\u0947\u0930\u093f\u0902\u0917",
+                th_type: "\u092a\u094d\u0930\u0915\u093e\u0930",
+                th_party: "\u092a\u093e\u0930\u094d\u091f\u0940",
+                th_total: "\u0915\u0941\u0932 (\u091c\u0940\u090f\u0938\u091f\u0940 \u093\u0938\u0939\u093f\u0924)",
+                th_action: "\u0915\u093e\u0930\u094d\u0930\u0935\u093e\u0908",
+                send: "\u092d\u0947\u091c\u0947\u0902"
             },
             gu: {
-                header_title: "???? ?????? ????? ???",
-                logout: "??????",
-                backup_db: "????? ????",
-                export_csv: "?????????? ?????????",
-                print_report: "??????? ???????",
-                sentinel_title: "?????? ?????-???????? ????????",
-                runway_label: "??????? ?????????? ????",
-                sentinel_status: "??????",
-                cloud_status: "?????? ??????",
-                kpi_revenue: "??? ???",
-                kpi_profit: "??? ??????? (???)",
-                kpi_bank: "??? ???? ???????",
-                kpi_advances: "??? ???????",
-                bank_hub_title: "??????? ???? ????????? ??",
-                th_bank_name: "??????? ???",
-                th_acc_no: "??????? ???? / ??????",
-                th_balance: "??????? ???????",
-                no_bank: "??? ???? ??? ???? ?? ??? ???.",
-                stock_hub_title: "???? ????? ??? ??????? ?????????? ??????",
-                th_item: "??????? ???",
-                th_sku: "?????? ???",
-                th_status: "??????? ??????",
-                th_qty: "??? ?????",
-                th_price: "????? ??????",
-                th_val: "????? ??????",
-                trending: "??????? ????",
-                regular: "???????",
-                low_stock: "??? ?????",
-                acc_title: "?????????? ??? ?????? ?????",
-                lbl_vtype: "????? ??????:",
-                lbl_party: "?????? / ???? ???:",
-                lbl_amount: "??? ??? (?):",
-                lbl_narration: "?????:",
-                btn_save_voucher: "? ????? ??? ??? (??? ??% GST)",
-                bank_tx_title: "??????? ???? ?????????????? ??",
-                lbl_select_bank: "???? ???? ???:",
-                lbl_tx_type: "???????????? ??????:",
-                opt_deposit: "???",
-                opt_withdraw: "????",
-                lbl_pay_mode: "??????? ???:",
-                lbl_ref: "????? / ???:",
-                btn_process_tx: "?? ???? ???????????? ??????? ???",
-                lbl_add_bank: "+ ??? ???? ?????:",
-                lbl_acc_num: "??????? ????:",
-                lbl_opening_bal: "???????? ??????? (?):",
-                btn_register_bank: "???? ??????? ???",
-                inv_title: "?????????? ???????",
-                lbl_movement: "????????? ??????:",
-                opt_inward: "???",
-                opt_outward: "????",
-                lbl_item_name: "??????? ???:",
-                lbl_sku: "?????? ???:",
-                lbl_market_status: "??????? ??????? ??????:",
-                opt_trending: "?? ??????? ???? ????? (Trending)",
-                lbl_qty: "????? (Qty):",
-                lbl_price: "????? (?):",
-                btn_update_stock: "?? ????? ????? ???",
-                adv_title: "??????? ??????? ????",
-                lbl_party_name: "????????? ???:",
-                lbl_adv_type: "??????? ??????:",
-                opt_adv_given: "??????? ??????",
-                opt_adv_taken: "??????? ???????",
-                btn_record_adv: "?? ??????? ????? ???",
-                history_title: "???????? ??????? ??? ??????",
-                th_type: "??????",
-                th_party: "??????",
-                th_total: "??? (?????? ????)",
-                th_action: "?????",
-                send: "?????"
+                header_title: "\u0ab5\u0a9c\u0acd\u0ab0 \u0ab8\u0acb\u0ab5\u0ab0\u0abf\u0aa8 \u0 ?????\u0abf\u0a86\u0ab0\u0aaa\u0ac0 \u0a93\u0a8f\u0ab8",
+                logout: "\u0ab2\u0acb\u0a97\u0abe\u0a89\u0a9f",
+                backup_db: "\u0aac\u0ac7\u0a95\u0a85\u0aaa \u0aa1\u0ac0\u0aac\u0ac0",
+                export_csv: "\u0abf\u0a87\u0aa8\u0acd\u0ab5\u0ac7\u0aa8\u0acd\u0a9f\u0ab0\u0ac0 \u0a8f\u0a95\u0acd\u0ab8\u0aaa\u0acb\u0ab0\u0acd\u0a9f",
+                print_report: "\u0aaa\u0acd\u0ab0\u0abf\u0aa8\u0acd\u0a9f \u0ab0\u0abf\u0aaa\u0acb\u0ab0\u0acd\u0a9f",
+                sentinel_title: "\u0ab8\u0acb\u0ab5\u0ab0\u0abf\u0aa8 \u0aae\u0ab2\u0acd\u0a9f\u0ac0-\u0ab2\u0abf\u0a82\u0a97\u0acd\u0ab5\u0ac7\u0a9c \u0ab8\u0ac7\u0aa8\u0acd\u0a9f\u0abf\u0aa8\u0ab2",
+                runway_label: "\u0a85\u0a82\u0aa6\u0abe\u0a9c\u0abf\u0aa4 \u0ab2\u0abf\u0a95\u0acd\u0ab5\u0abf\u0aa1\u0abf\u0a9f\u0ac0 \u0ab0\u0aa8\u0ab5\u0ac7",
+                sentinel_status: "\u0ab8\u0acd\u0aa5\u0abf\u0aa4\u0abf",
+                cloud_status: "\u0a95\u0acd\u0ab2\u0abe\u0a8a\u0aa1 \u0ab8\u0acd\u0a9f\u0ac7\u0a9f\u0ab8",
+                kpi_revenue: "\u0a95\u0ac1\u0ab2 \u0a86\u0ab5\u0a95",
+                kpi_profit: "\u0aa8\u0ac7\u0a9f \u0aaa\u0acd\u0ab0\u0acb\u0aab\u0abf\u0a9f (\u0aa8\u0??\u0acb)",
+                kpi_bank: "\u0a95\u0ac1\u0ab2 \u0aac\u0ac7\u0a82\u0a95 \u0aac\u0ac7\u0ab2\u0ac7\u0aa8\u0acd\u0ab8",
+                kpi_advances: "\u0aa8\u0ac7\u0a9f \u0a8f\u0aa1\u0ab5\u0abe\u0aa8\u0acd\u0ab8",
+                bank_hub_title: "\u0a87\u0aa8\u0acd\u0aa1\u0abf\u0aaf\u0aa8 \u0aac\u0ac7\u0a82\u0a95 \u0a8f\u0a95\u0abe\u0a8a\u0aa8\u0acd\u0a9f\u0acd\u0ab8 \u0ab9\u0aac",
+                th_bank_name: "\u0aac\u0ac7\u0a82\u0a95\u0aa8\u0ac1\u0a82 \u0aa8\u0abe\u0aae",
+                th_acc_no: "\u0a8f\u0a95\u0abe\u0a8a\u0aa8\u0acd\u0a9f \u0aa8\u0a82\u0aac\u0ab0 / \u0ab8\u0a82\u0aa6\u0ab0\u0acd\u0aad",
+                th_balance: "\u0ab5\u0ab0\u0acd\u0aa4\u0aae\u0abe\u0aa8 \u0aac\u0ac7\u0ab2\u0ac7\u0aa8\u0acd\u0ab8",
+                no_bank: "\u0ab9\u0a9c\u0ac0 \u0ab8\u0ac1\u0aa7\u0ac0 \u0a95\u0acb\u0a88 \u0aac\u0ac7\u0a82\u0a95 \u0a8f\u0aa1 \u0aa8\u0aa5\u0ac0 \u0a95\u0ab0\u0ac0.",
+                stock_hub_title: "\u0ab2\u0abe\u0a87\u0ab5 \u0ab8\u0acd\u0a9f\u0acb\u0a95 \u0a85\u0aa8\u0ac7 \u0aae\u0abe\u0ab0\u0acd\u0a95\u0ac7\u0a9f \u0a9f\u0acd\u0ab0\u0ac7\u0a82\u0aa1\u0abf\u0a82\u0a97 \u0ab8\u0acd\u0a9f\u0ac7\u0a9f\u0ab8",
+                th_item: "\u0a86\u0a88\u0a9f\u0aae\u0aa8\u0ac1\u0a82 \u0aa8\u0abe\u0aae",
+                th_sku: "\u0a8f\u0ab8\u0a95\u0ac7\u0aaf\u0ac1 \u0a95\u0acb\u0aa1",
+                th_status: "\u0aae\u0abe\u0ab0\u0acd\u0a95\u0ac7\u0a9f \u0ab8\u0acd\u0a9f\u0ac7\u0a9f\u0ab8",
+                th_qty: "\u0a95\u0ac1\u0ab2 \u0a9c\u0aa5\u0acd\u0aa5\u0acb",
+                th_price: "\u0aaf\u0ac1\u0aa8\u0abf\u0a9f \u0aaa\u0acd\u0ab0\u0abe\u0a87\u0ab8",
+                th_val: "\u0ab8\u0acd\u0a9f\u0acb\u0a95 \u0ab5\u0ac7\u0ab2\u0acd\u0aaf\u0ac1",
+                trending: "\u0aac\u0a9c\u0abe\u0ab0\u0aae\u0abe\u0a82 \u0a9a\u0ab2\u0aa4\u0ac0",
+                regular: "\u0ab8\u0abe\u0aae\u0abe\u0aa8\u0acd\u0aaf",
+                low_stock: "\u0a93\u0a9b\u0acb \u0ab8\u0acd\u0a9f\u0acb\u0a95",
+                acc_title: "\u0a8f\u0a95\u0abe\u0a8a\u0aa8\u0acd\u0a9f\u0abf\u0a82\u0a97 \u0a85\u0aa8\u0ac7 \u0a9c\u0ac0\u0a8f\u0ab8\u0a9f\u0ac0 \u0ab5\u0abe\u0a89\u0a9a\u0ab0",
+                lbl_vtype: "\u0ab5\u0abe\u0a89\u0a9a\u0ab0 \u0aaa\u0acd\u0ab0\u0 accueillir \u0ab0\u0abe\u0ab0:",
+                lbl_party: "\u0aaa\u0abe\u0ab0\u0acd\u0a9f\u0ac0 / \u0ab2\u0ac7\u0a9c\u0ab0 \u0aa8\u0abe\u0aae:",
+                lbl_amount: "\u0aae\u0ac2\u0ab3 \u0ab0\u0a95\u0aae (\u20b9):",
+                lbl_narration: "\u0aa8\u0ab0\u0ac7\u0ab6\u0aa8:",
+                btn_save_voucher: "\u26a1 \u0ab5\u0abe\u0a89\u0a9a\u0ab0 \u0ab8\u0ac7\u0ab5 \u0a95\u0ab0\u0acb (\u0a93\u0a9f\u0acb \u0ae7\u0aeee% GST)",
+                bank_tx_title: "\u0a87\u0aa8\u0acd\u0aa1\u0abf\u0aaf\u0aa8 \u0aac\u0ac7\u0a82\u0a95 \u0a??????? \u0a9f\u0acd\u0ab0\u0abe\u0a82\u0a9d\u0ac7\u0a95\u0acd\u0ab6\u0aa8\u0acd\u0ab8 \u0ab9\u0aac",
+                lbl_select_bank: "\u0aac\u0ac7\u0a82\u0a95 \u0aaa\u0ab8\u0a82\u0aa6 \u0a95\u0ab0\u0acb:",
+                lbl_tx_type: "\u0a9f\u0acd\u0ab0\u0abe\u0a82\u0a9d\u0ac7\u0a95\u0acd\u0ab6\u0aa8 \u0aaa\u0acd\u0ab0\u0a95\u0abe\u0ab0:",
+                opt_deposit: "\u0a9c\u0aae\u0abe",
+                opt_withdraw: "\u0a eficiencia",
+                lbl_pay_mode: "\u0aaa\u0ac7\u0aae\u0ac7\u0aa8\u0acd\u0a9f \u0aae\u0acb\u0aa1:",
+                lbl_ref: "\u0aa8\u0ab0\u0ac7\u0ab6\u0aa8 / \u0ab0\u0ac7\u0aab:",
+                btn_process_tx: "\U0001f3e6 \u0aac\u0ac7\u0a82\u0a95 \u0a9f\u0acd\u0ab0\u0abe\u0a82\u0a9d\u0ac7\u0a95\u0acd\u0ab6\u0aa8 \u0aaa\u0acd\u0ab0\u0acb\u0ab8\u0ac7\u0ab8 \u0a95\u0ab0\u0acb",
+                lbl_add_bank: "+ \u0aa8\u0ab5\u0ac0 \u0aac\u0ac7\u0a82\u0a95 \u0a89\u0aae\u0ac7\u0ab0\u0acb:",
+                lbl_acc_num: "\u0a8f\u0a95\u0abe\u0a8a\u0aa8\u0acd\u0a9f \u0aa8\u0a82\u0aac\u0ab0:",
+                lbl_opening_bal: "\u0ab6\u0acd\u0ab0\u0ac1\u0a86\u0aa4\u0aa8\u0ac1\u0a82 \u0aac\u0ac7\u0ab2\u0ac7\u0aa8\u0acd\u0ab8 (\u20b9):",
+                btn_register_bank: "\u0aac\u0ac7\u0a82\u0a95 \u0ab0\u0a9c\u0abf\u0ab8\u0acd\u0a9f\u0ab0 \u0a95\u0ab0\u0acb",
+                inv_title: "\u0a87\u0aa8\u0acd\u0ab5\u0ac7\u0aa8\u0acd\u0a9f\u0ab0\u0ac0 \u0a95\u0aa8\u0acd\u0a9f\u0acd\u0ab0\u0acb\u0ab2",
+                lbl_movement: "\u0aae\u0ac2\u0ab5\u0aae\u0ac7\u0aa8\u0acd\u0a9f \u0aaa\u0acd\u0ab0\u0a95\u0abe\u0ab0:",
+                opt_inward: "\u0a86\u0ab5\u0a95",
+                opt_outward: "\u0a9c\u0abe\u0ab5\u0a95",
+                lbl_item_name: "\u0a86\u0a88\u0a9f\u0aae\u0aa8\u0ac1\u0a82 \u0aa8\u0abe\u0aae:",
+                lbl_sku: "\u0a8f\u0ab8\u0a95\u0ac7\u0aaf\u0ac1 \u0a95\u0acb\u0aa1:",
+                lbl_market_status: "\u0aae\u0abe\u0ab0\u0acd\u0a95\u0ac7\u0a9f \u0a9f\u0acd\u0ab0\u0ac7\u0aa8\u0acd\u0aa1 \u0ab8\u0acd\u0a9f\u0ac7\u0a9f\u0ab8:",
+                opt_trending: "\U0001f525 \u0aac\u0a9c\u0abe\u0ab0\u0aae\u0abe\u0a82 \u0a9a\u0ab2\u0aa4\u0ac0 \u0ab5\u0ab8\u0acd\u0aa4\u0ac1 (Trending)",
+                lbl_qty: "\u0a9c\u0aa5\u0acd\u0aa5\u0acb (Qty):",
+                lbl_price: "\u0a95\u0abf\u0a82\u0aae\u0aa4 (\u20b9):",
+                btn_update_stock: "\U0001f680 \u0ab8\u0acd\u0a9f\u0acb\u0a95 \u0a85\u0aaa\u0aa1\u0ac7\u0a9f \u0a95\u0ab0\u0acb",
+                adv_title: "\u0a8f\u0aa1\u0ab5\u0abe\u0aa8\u0acd\u0ab8 \u0a8f\u0a95\u0abe\u0a8a\u0aa8\u0acd\u0a9f \u0ab2\u0ac7\u0a9c\u0ab0",
+                lbl_party_name: "\u0aaa\u0abe\u0ab0\u0acd\u0a9f\u0ac0\u0aa8\u0ac1\u0a82 \u0aa8\u0abe\u0aae:",
+                lbl_adv_type: "\u0a8f\u0aa1\u0ab5\u0abe\u0aa8\u0acd\u0ab8 \u0aaa\u0acd\u0ab0\u0a95\u0abe\u0ab0:",
+                opt_adv_given: "\u0a8f\u0aa1\u0ab5\u0abe\u0aa8\u0acd\u0ab8 \u0a86\u0aaa\u0ac7\u0ab2\u0ac1\u0a82",
+                opt_adv_taken: "\u0a8f\u0aa1\u0ab5\u0abe\u0aa8\u0acd\u0ab8 \u0ab2\u0ac0\u0aa7\u0ac7\u0ab2\u0ac1\u0a82",
+                btn_record_adv: "\U0001f91d \u0a8f\u0aa1\u0ab5\u0abe\u0aa8\u0acd\u0ab8 \u0aa8\u0acb\u0a82\u0aa7\u0ac0 \u0a95\u0ab0\u0acb",
+                history_title: "\u0aa4\u0abe\u0a9c\u0ac7\u0aa4\u0ab0\u0aa8\u0abe \u0ab5\u0abe\u0a89\u0a9a\u0ab0\u0acd\u0ab8 \u0a85\u0aa8\u0ac7 \u0ab6\u0ac7\u0ab0\u0abf\u0a82\u0a97",
+                th_type: "\u0aaa\u0acd\u0ab0\u0a95\u0abe\u0ab0",
+                th_party: "\u0aaa\u0abe\u0ab0\u0acd\u0a9f\u0ac0",
+                th_total: "\u0a95\u0ac1\u0ab2 (\u0a9c\u0ac0\u0a8f\u0ab8\u0a9f\u0ac0 \u0ab8\u0abe\u0aa5\u0ac7)",
+                th_action: "\u0a8f\u0a95\u0acd\u0ab6\u0aa8",
+                send: "\u0aae\u0acb\u0a95\u0ab2\u0acb"
             }
         };
 
@@ -643,18 +643,18 @@ def add_bank():
 def bank_transaction():
     if not session.get("logged_in"): return redirect(url_for("login"))
     bank_id = int(request.form.get("bank_id"))
-    py_type = request.form.get("tx_type")
+    tx_type = request.form.get("tx_type")
     payment_mode = request.form.get("payment_mode")
     amount = float(request.form.get("amount"))
     narration = request.form.get("narration", "")
     
     with sqlite3.connect(DB_NAME) as conn:
-        if py_type == "DEPOSIT":
+        if tx_type == "DEPOSIT":
             conn.execute("UPDATE bank_accounts SET balance = balance + ? WHERE id = ?", (amount, bank_id))
         else:
             conn.execute("UPDATE bank_accounts SET balance = balance - ? WHERE id = ?", (amount, bank_id))
         conn.execute("INSERT INTO bank_transactions (bank_id, tx_type, amount, payment_mode, narration, date) VALUES (?, ?, ?, ?, ?, ?)",
-                     (bank_id, py_type, amount, payment_mode, narration, datetime.now().strftime("%Y-%m-%d %H:%M")))
+                     (bank_id, tx_type, amount, payment_mode, narration, datetime.now().strftime("%Y-%m-%d %H:%M")))
     return redirect(url_for("dashboard"))
 
 @app.route("/add_advance", methods=["POST"])
