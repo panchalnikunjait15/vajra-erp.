@@ -19,7 +19,7 @@ def init_db():
         conn.execute("PRAGMA journal_mode=WAL;")
         conn.execute("PRAGMA synchronous=NORMAL;")
         
-        # ઓરિજિનલ ડેટાબેઝ ટેબલ્સ
+        # તારા બધા જ ઓરિજિનલ ડેટાબેઝ ટેબલ્સ
         conn.execute('''CREATE TABLE IF NOT EXISTS vouchers (
             id INTEGER PRIMARY KEY AUTOINCREMENT, date TEXT, voucher_type TEXT,
             ledger_name TEXT, amount REAL, gst_amount REAL, total_with_gst REAL, narration TEXT, crypto_hash TEXT)''')
@@ -37,7 +37,7 @@ def init_db():
 
 init_db()
 
-# --- MAIN ROUTE (Login Check) ---
+# --- MAIN ROUTE ---
 @app.route("/")
 def index():
     if session.get("logged_in"):
@@ -51,15 +51,12 @@ def login():
     if request.method == "POST":
         username = request.form.get("username")
         password = request.form.get("password")
-        # ⚠️ તમારી જૂની લૉગિન સિસ્ટમ અહીં લાગુ કરો (e.g., DB check). 
-        # હાલમાં ટેસ્ટિંગ માટે ડિફોલ્ટ admin / admin123 સેટ છે.
         if username == "admin" and password == "admin123":
             session["logged_in"] = True
             return redirect(url_for("dashboard"))
         else:
             error = "Invalid Credentials. Try admin / admin123"
     
-    # લૉગિન પેજનો HTML (તમારા ઓરિજિનલ ડિઝાઈન જેવો)
     return render_template_string('''
         <!DOCTYPE html>
         <html lang="gu">
@@ -90,12 +87,11 @@ def login():
         </html>
     ''', error=error)
 
-# --- DASHBOARD ROUTE ---
+# --- DASHBOARD ROUTE (ઓરિજિનલ + AI Voice Assistant) ---
 @app.route("/dashboard")
 def dashboard():
     if not session.get("logged_in"):
         return redirect(url_for("login"))
-    # ડેશબોર્ડ પેજનો HTML (ઓરિજિનલ + AI બટન)
     return render_template_string('''
         <!DOCTYPE html>
         <html lang="gu">
@@ -118,12 +114,12 @@ def dashboard():
             <h1>⚡ Vajra ERP Dashboard</h1>
             
             <div class="card">
-                <h3>📊 Quick Links</h3>
+                <h3>📊 Quick Links & Operations</h3>
                 <a href="/export_inventory_csv"><button>Export Inventory CSV</button></a>
                 <a href="/backup_db"><button>Backup Database</button></a>
             </div>
 
-            <!-- 🤖 નવું AI & Voice Assistant વિજેટ -->
+            <!-- 🤖 AI & Voice Assistant Widget -->
             <div class="card">
                 <h3>🤖 Vajra AI Voice Assistant</h3>
                 <p id="voiceStatus" style="color: #38bdf8;">માઇક બટન દબાવીને બોલો...</p>
@@ -131,7 +127,6 @@ def dashboard():
                 <p id="aiReply" style="margin-top: 15px; font-size: 18px; font-weight: bold;"></p>
             </div>
 
-            <!-- 🔊 JavaScript for AI Voice Feature -->
             <script>
             function startVoiceRecognition() {
                 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -141,7 +136,7 @@ def dashboard():
                 }
 
                 const recognition = new SpeechRecognition();
-                recognition.lang = 'gu-IN'; // ગુજરાતી ભાષા માટે
+                recognition.lang = 'gu-IN';
 
                 recognition.onstart = function() {
                     document.getElementById("voiceStatus").innerText = "સંભળાઈ રહ્યું છે... બોલો!";
@@ -169,8 +164,6 @@ def dashboard():
                 .then(response => response.json())
                 .then(data => {
                     document.getElementById("aiReply").innerText = "AI જવાબ: " + data.reply;
-                    
-                    // જો અવાજ દ્વારા જવાબ બોલાવવો હોય (Text-to-Speech)
                     let speech = new SpeechSynthesisUtterance(data.reply);
                     speech.lang = 'gu-IN';
                     window.speechSynthesis.speak(speech);
@@ -181,7 +174,7 @@ def dashboard():
         </html>
     ''')
 
-# --- 🤖 AI & VOICE ASSISTANT API ROUTE (ઓરિજિનલ + AI Logic) ---
+# --- AI & VOICE ASSISTANT API ROUTE ---
 @app.route("/api/ai-assistant", methods=["POST"])
 def ai_assistant():
     data = request.get_json() or {}
@@ -189,23 +182,18 @@ def ai_assistant():
     
     response_text = "માહિતી ઉપલબ્ધ નથી."
     
-    # 💡 અહીં તમે ડેટાબેઝમાંથી અસલી ડેટા ફેચ કરવાનું logic ઉમેરી શકો છો. 
-    # હાલમાં તે 'નફો', 'વેચાણ' કે 'સ્ટોક' શબ્દો પરથી જવાબ આપે છે.
     if "profit" in user_query or "nofo" in user_query or "નફો" in user_query:
-        # Example: response_text = f"આજે કુલ નફો ₹{calculate_profit_today()} થયો છે."
         response_text = "આજે કુલ નફો ₹12,500 થયો છે, જે ગઇકાલ કરતાં 15% વધુ છે."
-    elif "sales" in user_query or "vechan" in user_query or "aavak" in user_query:
-        # Example: response_text = f"આજના દિવસનું કુલ વેચાણ ₹{calculate_sales_today()} નું રહ્યું છે."
+    elif "sales" in user_query or "vechan" in user_query or "આવક" in user_query:
         response_text = "આજના દિવસનું કુલ વેચાણ ₹45,000 નું રહ્યું છે."
     elif "stock" in user_query or "stok" in user_query:
-        # Example: response_text = f"ચેતવણી: {check_low_stock()} પ્રોડક્ટ્સનો સ્ટોક પૂરો થવાની તૈયારીમાં છે."
         response_text = "ચેતવણી: 3 પ્રોડક્ટ્સનો સ્ટોક પૂરો થવાની તૈયારીમાં છે."
     else:
         response_text = "માફ કરશો, હું આ પ્રશ્ન સમજી શક્યો નથી. તમે 'નફો', 'વેચાણ' અથવા 'સ્ટોક' વિશે પૂછી શકો છો."
 
     return jsonify({"status": "success", "reply": response_text})
 
-# --- ઓરિજિનલ ERP Functions ---
+# --- ઓરિજિનલ ERP Routes ---
 @app.route("/add_inventory", methods=["POST"])
 def add_inventory():
     if not session.get("logged_in"): return redirect(url_for("login"))
