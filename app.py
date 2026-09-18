@@ -5,12 +5,11 @@ import hashlib
 import time
 from datetime import datetime
 from flask import Flask, render_template_string, request, redirect, url_for, session, Response, send_file
-import threading
 import csv
 import io
 
 app = Flask(__name__)
-app.secret_key = "VAJRA_ULTIMATE_SAFE_2026"
+app.secret_key = "VAJRA_PRO_ERP_2026"
 
 DB_NAME = "vajra_erp.db"
 
@@ -39,7 +38,7 @@ init_db()
 def generate_hash(text):
     return hashlib.sha256(text.encode()).hexdigest()[:16]
 
-LOGIN_HTML = r"""
+LOGIN_HTML = """
 <!DOCTYPE html>
 <html>
 <head>
@@ -72,7 +71,7 @@ LOGIN_HTML = r"""
 </html>
 """
 
-DASHBOARD_HTML = r"""
+DASHBOARD_HTML = """
 <!DOCTYPE html>
 <html>
 <head>
@@ -134,8 +133,8 @@ DASHBOARD_HTML = r"""
         
         <div class="lang-switcher">
             <button class="lang-btn active" onclick="setLanguage('en')">EN</button>
-            <button class="lang-btn" onclick="setLanguage('hi')">&#2361;&#2368;&#2344;&#2368;</button>
-            <button class="lang-btn" onclick="setLanguage('gu')">&#2a9;&#307;&#2ac1;&#2af3;&#2ab0;&#2abe;&#2aa4;&#2ac1;</button>
+            <button class="lang-btn" onclick="setLanguage('hi')">हिन्दी</button>
+            <button class="lang-btn" onclick="setLanguage('gu')">ગુજરાતી</button>
         </div>
 
         <div style="display: flex; gap: 10px; align-items: center;">
@@ -162,10 +161,10 @@ DASHBOARD_HTML = r"""
     </div>
 
     <div class="kpi-grid">
-        <div class="kpi"><h3 data-key="kpi_revenue">Total Revenue</h3><p>&#8377;{{ "%.2f"|format(kpis.revenue) }}</p></div>
-        <div class="kpi"><h3 data-key="kpi_profit">Net Profit (P&L)</h3><p>&#8377;{{ "%.2f"|format(kpis.profit) }}</p></div>
-        <div class="kpi"><h3 data-key="kpi_bank">Total Bank Balance</h3><p style="color: #34d399;">&#8377;{{ "%.2f"|format(kpis.bank_bal) }}</p></div>
-        <div class="kpi"><h3 data-key="kpi_advances">Net Advances</h3><p>&#8377;{{ "%.2f"|format(kpis.advances) }}</p></div>
+        <div class="kpi"><h3 data-key="kpi_revenue">Total Revenue</h3><p>₹{{ "%.2f"|format(kpis.revenue) }}</p></div>
+        <div class="kpi"><h3 data-key="kpi_profit">Net Profit (P&L)</h3><p>₹{{ "%.2f"|format(kpis.profit) }}</p></div>
+        <div class="kpi"><h3 data-key="kpi_bank">Total Bank Balance</h3><p style="color: #34d399;">₹{{ "%.2f"|format(kpis.bank_bal) }}</p></div>
+        <div class="kpi"><h3 data-key="kpi_advances">Net Advances</h3><p>₹{{ "%.2f"|format(kpis.advances) }}</p></div>
     </div>
 
     <div class="card" style="margin-bottom: 25px;">
@@ -177,7 +176,7 @@ DASHBOARD_HTML = r"""
                 <tr>
                     <td><strong>{{ b[1] }}</strong></td>
                     <td>{{ b[2] }}</td>
-                    <td style="font-weight: bold; color: #34d399;">&#8377;{{ "%.2f"|format(b[3]) }}</td>
+                    <td style="font-weight: bold; color: #34d399;">₹{{ "%.2f"|format(b[3]) }}</td>
                 </tr>
                 {% endfor %}
             {% else %}
@@ -203,8 +202,8 @@ DASHBOARD_HTML = r"""
                     {% if s[3] <= 5 %}<span class="badge-alert" data-key="low_stock">Low Stock</span>{% endif %}
                 </td>
                 <td style="font-weight: bold; color: {% if s[3] <= 5 %}#ef4444{% else %}#34d399{% endif %};">{{ s[3] }}</td>
-                <td>&#8377;{{ "%.2f"|format(s[4]) }}</td>
-                <td>&#8377;{{ "%.2f"|format(s[3] * s[4]) }}</td>
+                <td>₹{{ "%.2f"|format(s[4]) }}</td>
+                <td>₹{{ "%.2f"|format(s[3] * s[4]) }}</td>
             </tr>
             {% endfor %}
         </table>
@@ -217,9 +216,9 @@ DASHBOARD_HTML = r"""
                 <label data-key="lbl_vtype">Voucher Type:</label>
                 <select name="voucher_type"><option>RECEIPT</option><option>PAYMENT</option><option>SALES</option><option>PURCHASE</option></select>
                 <label data-key="lbl_party">Party / Ledger Name:</label><input type="text" name="ledger_name" required>
-                <label data-key="lbl_amount">Base Amount (&#8377;):</label><input type="number" step="0.01" name="amount" required>
+                <label data-key="lbl_amount">Base Amount (₹):</label><input type="number" step="0.01" name="amount" required>
                 <label data-key="lbl_narration">Narration:</label><input type="text" name="narration">
-                <button type="submit" data-key="btn_save_voucher">&#9889; Save Voucher (Auto 18% GST)</button>
+                <button type="submit" data-key="btn_save_voucher">Save Voucher (Auto 18% GST)</button>
             </form>
         </div>
 
@@ -249,9 +248,9 @@ DASHBOARD_HTML = r"""
                     <option value="IMPS">IMPS</option>
                     <option value="CASH">Cash</option>
                 </select>
-                <label data-key="lbl_amount">Amount (&#8377;):</label><input type="number" step="0.01" name="amount" required>
+                <label data-key="lbl_amount">Amount (₹):</label><input type="number" step="0.01" name="amount" required>
                 <label data-key="lbl_ref">Narration / Ref:</label><input type="text" name="narration" placeholder="Txn ID / Ref No">
-                <button type="submit" style="background:#10b981;" data-key="btn_process_tx">&#127976; Process Bank Txn</button>
+                <button type="submit" style="background:#10b981;" data-key="btn_process_tx">Process Bank Txn</button>
             </form>
             
             <form action="/add_bank" method="POST" style="margin-top:20px; border-top:1px solid #1f2937; padding-top:15px;">
@@ -267,7 +266,7 @@ DASHBOARD_HTML = r"""
                     <option value="Canara Bank">Canara Bank</option>
                 </select>
                 <label data-key="lbl_acc_num">Account Number:</label><input type="text" name="account_no" placeholder="Enter A/C No" required>
-                <label data-key="lbl_opening_bal">Opening Balance (&#8377;):</label><input type="number" step="0.01" name="balance" value="0.0" required>
+                <label data-key="lbl_opening_bal">Opening Balance (₹):</label><input type="number" step="0.01" name="balance" value="0.0" required>
                 <button type="submit" style="background:#6366f1; margin-top:8px;" data-key="btn_register_bank">Register Bank</button>
             </form>
         </div>
@@ -281,13 +280,13 @@ DASHBOARD_HTML = r"""
                 <label data-key="lbl_market_status">Market Trend Status:</label>
                 <select name="market_status">
                     <option value="REGULAR" data-key="opt_regular">Regular Stock</option>
-                    <option value="TRENDING" data-key="opt_trending">&#128293; Fast-Moving (Trending)</option>
+                    <option value="TRENDING" data-key="opt_trending">Fast-Moving (Trending)</option>
                 </select>
                 <div style="display: flex; gap: 10px; margin-top: 8px;">
                     <div style="flex:1;"><label data-key="lbl_qty">Qty:</label><input type="number" name="qty" required></div>
-                    <div style="flex:1;"><label data-key="lbl_price">Price (&#8377;):</label><input type="number" step="0.01" name="price" required></div>
+                    <div style="flex:1;"><label data-key="lbl_price">Price (₹):</label><input type="number" step="0.01" name="price" required></div>
                 </div>
-                <button type="submit" data-key="btn_update_stock">&#128640; Update Stock</button>
+                <button type="submit" data-key="btn_update_stock">Update Stock</button>
             </form>
         </div>
 
@@ -300,8 +299,8 @@ DASHBOARD_HTML = r"""
                     <option value="GIVEN" data-key="opt_adv_given">Advance Given</option>
                     <option value="TAKEN" data-key="opt_adv_taken">Advance Taken</option>
                 </select>
-                <label data-key="lbl_amount">Amount (&#8377;):</label><input type="number" step="0.01" name="amount" required>
-                <button type="submit" style="background:#8b5cf6;" data-key="btn_record_adv">&#129309; Record Advance</button>
+                <label data-key="lbl_amount">Amount (₹):</label><input type="number" step="0.01" name="amount" required>
+                <button type="submit" style="background:#8b5cf6;" data-key="btn_record_adv">Record Advance</button>
             </form>
         </div>
     </div>
@@ -314,9 +313,9 @@ DASHBOARD_HTML = r"""
             <tr>
                 <td>{{ v[2] }}</td>
                 <td>{{ v[3] }}</td>
-                <td>&#8377;{{ "%.2f"|format(v[6]) }}</td>
+                <td>₹{{ "%.2f"|format(v[6]) }}</td>
                 <td>
-                    <a href="https://wa.me/?text=Vajra%20ERP%20Invoice:%20{{ v[2] }}%20for%20{{ v[3] }}%20Amount:%20&#8377;{{ '%.2f'|format(v[6]) }}" target="_blank" class="whatsapp-btn">
+                    <a href="https://wa.me/?text=Vajra%20ERP%20Invoice:%20{{ v[2] }}%20for%20{{ v[3] }}%20Amount:%20₹{{ '%.2f'|format(v[6]) }}" target="_blank" class="whatsapp-btn">
                         <i class="fab fa-whatsapp"></i> <span data-key="send">Send</span>
                     </a>
                 </td>
@@ -359,9 +358,9 @@ DASHBOARD_HTML = r"""
                 acc_title: "Accounting & GST Voucher",
                 lbl_vtype: "Voucher Type:",
                 lbl_party: "Party / Ledger Name:",
-                lbl_amount: "Base Amount (\u20b9):",
+                lbl_amount: "Base Amount (Rs):",
                 lbl_narration: "Narration:",
-                btn_save_voucher: "\u26a1 Save Voucher (Auto 18% GST)",
+                btn_save_voucher: "Save Voucher (Auto 18% GST)",
                 bank_tx_title: "Indian Bank Transactions Hub",
                 lbl_select_bank: "Select Bank:",
                 lbl_tx_type: "Transaction Type:",
@@ -369,10 +368,10 @@ DASHBOARD_HTML = r"""
                 opt_withdraw: "Withdrawal",
                 lbl_pay_mode: "Payment Mode:",
                 lbl_ref: "Narration / Ref:",
-                btn_process_tx: "\U0001f3e6 Process Bank Txn",
+                btn_process_tx: "Process Bank Txn",
                 lbl_add_bank: "+ Add Indian Bank Account:",
                 lbl_acc_num: "Account Number:",
-                lbl_opening_bal: "Opening Balance (\u20b9):",
+                lbl_opening_bal: "Opening Balance (Rs):",
                 btn_register_bank: "Register Bank",
                 inv_title: "Inventory Control",
                 lbl_movement: "Movement Type:",
@@ -381,16 +380,16 @@ DASHBOARD_HTML = r"""
                 lbl_item_name: "Item Name:",
                 lbl_sku: "SKU Code:",
                 lbl_market_status: "Market Trend Status:",
-                opt_trending: "\U0001f525 Fast-Moving (Trending)",
+                opt_trending: "Fast-Moving (Trending)",
                 lbl_qty: "Qty:",
-                lbl_price: "Price (\u20b9):",
-                btn_update_stock: "\U0001f680 Update Stock",
+                lbl_price: "Price (Rs):",
+                btn_update_stock: "Update Stock",
                 adv_title: "Advance Ledger",
                 lbl_party_name: "Party Name:",
                 lbl_adv_type: "Advance Type:",
                 opt_adv_given: "Advance Given",
                 opt_adv_taken: "Advance Taken",
-                btn_record_adv: "\U0001f91d Record Advance",
+                btn_record_adv: "Record Advance",
                 history_title: "Recent Vouchers & Sharing",
                 th_type: "Type",
                 th_party: "Party",
@@ -399,146 +398,146 @@ DASHBOARD_HTML = r"""
                 send: "Send"
             },
             hi: {
-                header_title: "\u0935\u091c\u094d\u0930 \u0938\u092e\u094d\u092a\u094d\u092f\u0941 \u0908\u0906\u0930\u092a\u0940 \u0913\u090f\u0938",
-                logout: "\u0932\u0949\u0917 \u0906\u0909\u091f",
-                backup_db: "\u0921\u0947\u091f\u093e\u092c\u0947\u0938 \u092c\u0948\u0915\u0905\u092a",
-                export_csv: "\u0907\u0928\u094d\u0935\u0947\u0928\u094d\u0930\u094d\u0920\u0940 \u090f\u0915\u094d\u0938\u092a\u094b\u0930\u094d\u091f",
-                print_report: "\u0930\u093f\u092a\u094b\u0930\u094d\u091f \u092a\u094d\u0930\u093f\u0902\u091f \u0915\u0930\u0947\u0902",
-                sentinel_title: "\u0938\u092e\u094d\u092a\u094d\u0930\u092d\u0941 \u092c\u0939\u0941\u092d\u093e\u0937\u0940 \u092a\u094d\u0930\u0939\u0930\u0940",
-                runway_label: "\u0905\u0928\u0941\u092e\u093e\u0928\u093f\u0924 \u0924\u0930\u0932\u0924\u093e \u0930\u0928\u0935\u0947",
-                sentinel_status: "\u0938\u094d\u0925\u093f\u0924\u093f",
-                cloud_status: "\u0915\u094d\u0932\u093e\u0909\u0921 \u0938\u094d\u0925\u093f\u0924\u093f",
-                kpi_revenue: "\u0915\u0941\u0932 \u0930\u093e\u091c\u0938\u094d\u0935",
-                kpi_profit: "\u0936\u0941\u0926\u094d\u0927 \u0932\u093e\u092d (P&L)",
-                kpi_bank: "\u0915\u0941\u0932 \u092c\u0948\u0902\u0915 \u0936\u0947\u0937",
-                kpi_advances: "\u0936\u0941\u0926\u094d\u0927 \u0905\u0917\u094d\u0930\u093f\u092e",
-                bank_hub_title: "\u092d\u093e\u0930\u0924\u0940\u092f \u092c\u0948\u0902\u0915 \u0916\u093e\u0924\u093e \u0939\u092c",
-                th_bank_name: "\u092c\u0948\u0902\u0915 \u0915\u093e \u0928\u093e\u092e",
-                th_acc_no: "\u0916\u093e\u0924\u093e \u0938\u0902\u0916\u094d\u092f\u093e / \u0938\u0902\u0926\u0930\u094d\u092d",
-                th_balance: "\u0935\u0930\u094d\u0924\u092e\u093e\u0928 \u0936\u0947\u0937",
-                no_bank: "\u0905\u092d\u0940 \u0924\u0915 \u0915\u094b\u0908 \u092c\u0948\u0902\u0915 \u0916\u093e\u0924\u093e \u092a\u0902\u091c\u0940\u0915\u0943\u0924 \u0928\u0939\u0940\u0902 \u0939\u0948\u0964",
-                stock_hub_title: "\u0932\u093e\u0907\u0935 \u0938\u094d\u091f\u0949\u0915 \u0914\u0930 \u092c\u093e\u091c\u093e\u0930 \u0930\u0941\u091d\u093e\u0928 \u0938\u094d\u0925\u093f\u0924\u093f",
-                th_item: "\u0935\u0938\u094d\u0924\u0941 \u0915\u093e \u0928\u093e\u092e",
-                th_sku: "SKU \u0915\u094b\u0921",
-                th_status: "\u092c\u093e\u091c\u093e\u0930 \u0938\u094d\u0925\u093f\u0924\u093f",
-                th_qty: "\u0935\u0930\u094d\u0924\u092e\u093e\u0928 \u092e\u093e\u0924\u094d\u0930\u093e",
-                th_price: "\u0907\u0915\u093e\u0908 \u092e\u0942\u0932\u094d\u092f",
-                th_val: "\u0938\u094d\u091f\u0949\u0915 \u092e\u0942\u0932\u094d\u092f",
-                trending: "\u091f\u094d\u0930\u0947\u0902\u0921\u093f\u0902\u0917",
-                regular: "\u0928\u093f\u092f\u092e\u093f\u0924",
-                low_stock: "\u0915\u092e \u0938\u094d\u091f\u0949\u0915",
-                acc_title: "\u0932\u0947\u0916\u093e\u0902\u0915\u0928 \u0914\u0930 \u091c\u0940\u090f\u0938\u091f\u0940 \u0935\u093e\u0909\u091a\u0930",
-                lbl_vtype: "\u0935\u093e\u0909\u091a\u0930 \u092a\u094d\u0930\u0915\u093e\u0930:",
-                lbl_party: "\u092a\u093e\u0930\u094d\u091f\u0940 / \u0932\u0947\u091c\u0930 \u0928\u093e\u092e:",
-                lbl_amount: "\u092e\u0942\u0932 \u0930\u093e\u0936\u093f (\u20b9):",
-                lbl_narration: "\u0935\u093f\u0935\u0930\u0923:",
-                btn_save_voucher: "\u26a1 \u0935\u093e\u0909\u091a\u0930 \u0938\u0939\u0947\u091c\u0947\u0902 (\u0911\u091f\u094b 18% \u091c\u0940\u090f\u0938\u091f\u0940)",
-                bank_tx_title: "\u092d\u093e\u0930\u0924\u0940\u092f \u092c\u0948\u0902\u0915 \u0932\u0947\u0928\u0926\u0947\u0928 \u0939\u092c",
-                lbl_select_bank: "\u092c\u0948\u0902\u0915 \u091a\u0941\u0928\u0947\u0902:",
-                lbl_tx_type: "\u0932\u0947\u0928\u0926\u0947\u0928 \u092a\u094d\u0930\u0915\u093e\u0930:",
-                opt_deposit: "\u091c\u092e\u093e",
-                opt_withdraw: "\u0928\u093f\u0915\u093e\u0938\u0940",
-                lbl_pay_mode: "\u092d\u0941\u0917\u0924\u093e\u0928 \u092e\u094b\u0921:",
-                lbl_ref: "\u0935\u093f\u0935\u0930\u0923 / \u0938\u0902\u0926\u0930\u094d\u092f:",
-                btn_process_tx: "\U0001f3e6 \u092c\u0948\u0902\u0915 \u0932\u0947\u0928\u0926\u0947\u0928 \u092a\u094d\u0930\u0915\u094d\u0930\u093f\u092f\u093e",
-                lbl_add_bank: "+ \u092d\u093e\u0930\u0924\u0940\u092f \u092c\u0948\u0902\u0915 \u0916\u093e\u0924\u093e \u091c\u094b\u0921\u093c\u0947\u0902:",
-                lbl_acc_num: "\u0916\u093e\u0924\u093e \u0938\u0902\u0916\u094d\u092f\u093e:",
-                lbl_opening_bal: "\u0936\u0941\u0930\u0941\u0906\u0924\u0940 \u0936\u0947\u0937 (\u20b9):",
-                btn_register_bank: "\u092c\u0948\u0902\u0915 \u092a\u0902\u091c\u0940\u0915\u0943\u0924 \u0915\u0930\u0947\u0902",
-                inv_title: "\u0907\u0928\u094d\u0935\u0947\u0928\u094d\u0930\u094d\u0920\u0940 \u0928\u093f\u092f\u0902\u0924\u094d\u0930\u0923",
-                lbl_movement: "\u092e\u0942\u0935\u092e\u0947\u0902\u091f \u092a\u094d\u0930\u0915\u093e\u0930:",
-                opt_inward: "\u0906\u0935\u0915",
-                opt_outward: "\u091c\u093e\u0935\u0915",
-                lbl_item_name: "\u0935\u0938\u094d\u0924\u0941 \u0915\u093e \u0928\u093e\u092e:",
-                lbl_sku: "SKU \u0915\u094b\u0921:",
-                lbl_market_status: "\u092c\u093e\u091c\u093e\u0930 \u0930\u0941\u091d\u093e\u0928 \u0938\u094d\u0925\u093f\u0924\u093f:",
-                opt_trending: "\U0001f525 \u0924\u0947\u091c\u0940 \u0938\u0947 \u092c\u093f\u0915\u0928\u0947 \u0935\u093e\u0932\u093e",
-                lbl_qty: "\u092e\u093e\u0924\u094d\u0930\u093e",
-                lbl_price: "\u092e\u0942\u0932\u094d\u092f (\u20b9):",
-                btn_update_stock: "\U0001f680 \u0938\u094d\u091f\u0949\u0915 \u0905\u092a\u0921\u0947\u091f \u0915\u0930\u0947\u0902",
-                adv_title: "\u0905\u0917\u094d\u0930\u093f\u092e \u0916\u093e\u0924\u093e \u0932\u0947\u091c\u0930",
-                lbl_party_name: "\u092a\u093e\u0930\u094d\u091f\u0940 \u0915\u093e \u0928\u093e\u092e:",
-                lbl_adv_type: "\u0905\u0917\u094d\u0930\u093f\u092e \u092a\u094d\u0930\u0915\u093e\u0930:",
-                opt_adv_given: "\u0905\u0917\u094d\u0930\u093f\u092e \u0926\u093f\u092f\u093e \u0917\u092f\u093e",
-                opt_adv_taken: "\u0905\u0917\u094d\u0930\u093f\u092e \u0932\u093f\u092f\u093e \u0917\u092f\u093e",
-                btn_record_adv: "\U0001f91d \u0905\u0917\u094d\u0930\u093f\u092e \u0926\u0930\u094d\u091c \u0915\u0930\u0947\u0902",
-                history_title: "\u0939\u093e\u0932 \u0915\u0947 \u0935\u093e\u0909\u091a\u0930 \u0914\u0930 \u0936\u0947\u0930\u093f\u0902\u0917",
-                th_type: "\u092a\u094d\u0930\u0915\u093e\u0930",
-                th_party: "\u092a\u093e\u0930\u094d\u091f\u0940",
-                th_total: "\u0915\u0941\u0932 (\u091c\u0940\u090f\u0938\u091f\u0940 \u0938\u0939\u093f\u0924)",
-                th_action: "\u0915\u093e\u0930\u094d\u0930\u0935\u093e\u0908",
-                send: "\u092d\u0947\u091c\u0947\u0902"
+                header_title: "वज्र संप्रभु ईआरपी ओएस",
+                logout: "लॉग आउट",
+                backup_db: "डेटाबेस बैकअप",
+                export_csv: "इन्वेंट्री एक्सपोर्ट",
+                print_report: "रिपोर्ट प्रिंट करें",
+                sentinel_title: "संप्रभु बहुभाषी प्रहरी",
+                runway_label: "अनुमानित तरलता रनवे",
+                sentinel_status: "स्थिति",
+                cloud_status: "क्लाउड स्थिति",
+                kpi_revenue: "कुल राजस्व",
+                kpi_profit: "शुद्ध लाभ (P&L)",
+                kpi_bank: "कुल बैंक शेष",
+                kpi_advances: "शुद्ध अग्रिम",
+                bank_hub_title: "भारतीय बैंक खाता हब",
+                th_bank_name: "बैंक का नाम",
+                th_acc_no: "खाता संख्या / संदर्भ",
+                th_balance: "वर्तमान शेष",
+                no_bank: "अभी तक कोई बैंक खाता पंजीकृत नहीं है।",
+                stock_hub_title: "लाइव स्टॉक और बाजार रुझान स्थिति",
+                th_item: "वस्तु का नाम",
+                th_sku: "SKU कोड",
+                th_status: "बाजार स्थिति",
+                th_qty: "वर्तमान मात्रा",
+                th_price: "इकाई मूल्य",
+                th_val: "स्टॉक मूल्य",
+                trending: "ट्रेंडिंग",
+                regular: "नियमित",
+                low_stock: "कम स्टॉक",
+                acc_title: "लेखांकन और जीएसटी वाउचर",
+                lbl_vtype: "वाउचर प्रकार:",
+                lbl_party: "पार्टी / लेजर नाम:",
+                lbl_amount: "मूल राशि (Rs):",
+                lbl_narration: "विवरण:",
+                btn_save_voucher: "वाउचर सहेजें (ऑटो 18% जीएसटी)",
+                bank_tx_title: "भारतीय बैंक लेनदेन हब",
+                lbl_select_bank: "बैंक चुनें:",
+                lbl_tx_type: "लेनदेन प्रकार:",
+                opt_deposit: "जमा",
+                opt_withdraw: "निकासी",
+                lbl_pay_mode: "भुगतान मोड:",
+                lbl_ref: "विवरण / संदर्भ:",
+                btn_process_tx: "बैंक लेनदेन प्रक्रिया",
+                lbl_add_bank: "+ भारतीय बैंक खाता जोड़ें:",
+                lbl_acc_num: "खाता संख्या:",
+                lbl_opening_bal: "शुरुआती शेष (Rs):",
+                btn_register_bank: "बैंक पंजीकृत करें",
+                inv_title: "इन्वेंट्री नियंत्रण",
+                lbl_movement: "मूवमेंट प्रकार:",
+                opt_inward: "आवक",
+                opt_outward: "जावक",
+                lbl_item_name: "वस्तु का नाम:",
+                lbl_sku: "SKU कोड:",
+                lbl_market_status: "बाजार रुझान स्थिति:",
+                opt_trending: "तेजी से बिकने वाला",
+                lbl_qty: "मात्रा",
+                lbl_price: "मूल्य (Rs):",
+                btn_update_stock: "स्टॉक अपडेट करें",
+                adv_title: "अग्रिम खाता लेजर",
+                lbl_party_name: "पार्टी का नाम:",
+                lbl_adv_type: "अग्रिम प्रकार:",
+                opt_adv_given: "अग्रिम दिया गया",
+                opt_adv_taken: "अग्रिम लिया गया",
+                btn_record_adv: "अग्रिम दर्ज करें",
+                history_title: "हाल के वाउचर और शेयरिंग",
+                th_type: "प्रकार",
+                th_party: "पार्टी",
+                th_total: "कुल (जीएसटी सहित)",
+                th_action: "कार्रवाई",
+                send: "भेजें"
             },
             gu: {
-                header_title: "\u0ab5\u0a9c\u0acd\u0ab0 \u0ab8\u0acb\u0ab5\u0ab0\u0abf\u0aa8 \u0a87\u0abe\u0ab0\u0aaa\u0ac0 \u0a93\u0a8f\u0ab8",
-                logout: "\u0ab2\u0acb\u0a97\u0abe\u0a89\u0a9f",
-                backup_db: "\u0aac\u0ac7\u0a95\u0a85\u0aaa \u0aa1\u0ac0\u0aac\u0ac0",
-                export_csv: "\u0abf\u0a87\u0aa8\u0acd\u0ab5\u0ac7\u0aa8\u0acd\u0a9f\u0ab0\u0ac0 \u0a8f\u0a95\u0acd\u0ab8\u0aaa\u0acb\u0ab0\u0acd\u0a9f",
-                print_report: "\u0aaa\u0acd\u0ab0\u0abf\u0aa8\u0acd\u0a9f \u0ab0\u0abf\u0aaa\u0acb\u0ab0\u0acd\u0a9f",
-                sentinel_title: "\u0ab8\u0acb\u0ab5\u0ab0\u0abf\u0aa8 \u0aae\u0ab2\u0acd\u0a9f\u0ac0-\u0ab2\u0abf\u0a82\u0a97\u0acd\u0ab5\u0ac7\u0a9c \u0ab8\u0ac7\u0aa8\u0acd\u0a9f\u0abf\u0aa8\u0ab2",
-                runway_label: "\u0a85\u0a82\u0aa6\u0abe\u0a9c\u0abf\u0aa4 \u0ab2\u0abf\u0a95\u0acd\u0ab5\u0abf\u0aa1\u0abf\u0a9f\u0ac0 \u0ab0\u0aa8\u0ab5\u0ac7",
-                sentinel_status: "\u0ab8\u0acd\u0aa5\u0abf\u0aa4\u0abf",
-                cloud_status: "\u0a95\u0acd\u0ab2\u0abe\u0a8a\u0aa1 \u0ab8\u0acd\u0a9f\u0ac7\u0a9f\u0ab8",
-                kpi_revenue: "\u0a95\u0ac1\u0ab2 \u0a86\u0ab5\u0a95",
-                kpi_profit: "\u0aa8\u0ac7\u0a9f \u0aaa\u0acd\u0ab0\u0acb\u0aab\u0abf\u0a9f (\u0aa8\u0aab\u0acb)",
-                kpi_bank: "\u0a95\u0ac1\u0ab2 \u0aac\u0ac7\u0a82\u0a95 \u0aac\u0ac7\u0ab2\u0ac7\u0aa8\u0acd\u0ab8",
-                kpi_advances: "\u0aa8\u0ac7\u0a9f \u0a8f\u0aa1\u0ab5\u0abe\u0aa8\u0acd\u0ab8",
-                bank_hub_title: "\u0a87\u0aa8\u0acd\u0aa1\u0abf\u0aaf\u0aa8 \u0aac\u0ac7\u0a82\u0a95 \u0a8f\u0a95\u0abe\u0a8a\u0aa8\u0acd\u0a9f\u0acd\u0ab8 \u0ab9\u0aac",
-                th_bank_name: "\u0aac\u0ac7\u0a82\u0a95\u0aa8\u0ac1\u0a82 \u0aa8\u0abe\u0aae",
-                th_acc_no: "\u0a8f\u0a95\u0abe\u0a8a\u0aa8\u0acd\u0a9f \u0aa8\u0a82\u0aac\u0ab0 / \u0ab8\u0a82\u0aa6\u0ab0\u0acd\u0aad",
-                th_balance: "\u0ab5\u0ab0\u0acd\u0aa4\u0aae\u0abe\u0aa8 \u0aac\u0ac7\u0ab2\u0ac7\u0aa8\u0acd\u0ab8",
-                no_bank: "\u0ab9\u0a9c\u0ac0 \u0ab8\u0ac1\u0aa7\u0ac0 \u0a95\u0acb\u0a88 \u0aac\u0ac7\u0a82\u0a95 \u0a8f\u0aa1 \u0aa8\u0aa5\u0ac0 \u0a95\u0ab0\u0ac0.",
-                stock_hub_title: "\u0ab2\u0abe\u0a87\u0ab5 \u0ab8\u0acd\u0a9f\u0acb\u0a95 \u0a85\u0aa8\u0ac7 \u0aae\u0abe\u0ab0\u0acd\u0a95\u0ac7\u0a9f \u0a9f\u0acd\u0ab0\u0ac7\u0a82\u0aa1\u0abf\u0a82\u0a97 \u0ab8\u0acd\u0a9f\u0ac7\u0a9f\u0ab8",
-                th_item: "\u0a86\u0a88\u0a9f\u0aae\u0aa8\u0ac1\u0a82 \u0aa8\u0abe\u0aae",
-                th_sku: "\u0a8f\u0ab8\u0a95\u0ac7\u0aaf\u0ac1 \u0a95\u0acb\u0aa1",
-                th_status: "\u0aae\u0abe\u0ab0\u0acd\u0a95\u0ac7\u0a9f \u0ab8\u0acd\u0a9f\u0ac7\u0a9f\u0ab8",
-                th_qty: "\u0a95\u0ac1\u0ab2 \u0a9c\u0aa5\u0acd\u0aa5\u0acb",
-                th_price: "\u0aaf\u0ac1\u0aa8\u0abf\u0a9f \u0aaa\u0acd\u0ab0\u0abe\u0a87\u0ab8",
-                th_val: "\u0ab8\u0acd\u0a9f\u0acb\u0a95 \u0ab5\u0ac7\u0ab2\u0acd\u0aaf\u0ac1",
-                trending: "\u0aac\u0a9c\u0abe\u0ab0\u0aae\u0abe\u0a82 \u0a9a\u0ab2\u0aa4\u0ac0",
-                regular: "\u0ab8\u0abe\u0aae\u0abe\u0aa8\u0acd\u0aaf",
-                low_stock: "\u0a93\u0a9b\u0acb \u0ab8\u0acd\u0a9f\u0acb\u0a95",
-                acc_title: "\u0a8f\u0a95\u0abe\u0a8a\u0aa8\u0acd\u0a9f\u0abf\u0a82\u0a97 \u0a85\u0aa8\u0ac7 \u0a9c\u0ac0\u0a8f\u0ab8\u0a9f\u0ac0 \u0ab5\u0abe\u0a89\u0a9a\u0ab0",
-                lbl_vtype: "\u0ab5\u0abe\u0a89\u0a9a\u0ab0 \u0aaa\u0acd\u0ab0\u0a95\u0abe\u0ab0:",
-                lbl_party: "\u0aaa\u0abe\u0ab0\u0acd\u0a9f\u0ac0 / \u0ab2\u0ac7\u0a9c\u0ab0 \u0aa8\u0abe\u0aae:",
-                lbl_amount: "\u0aae\u0ac2\u0ab3 \u0ab0\u0a95\u0aae (\u20b9):",
-                lbl_narration: "\u0aa8\u0ab0\u0ac7\u0ab6\u0aa8:",
-                btn_save_voucher: "\u26a1 \u0ab5\u0abe\u0a89\u0a9a\u0ab0 \u0ab8\u0ac7\u0ab5 \u0a95\u0ab0\u0acb (\u0a93\u0a9f\u0acb \u0ae7\u0aeee% GST)",
-                bank_tx_title: "\u0a87\u0aa8\u0acd\u0aa1\u0abf\u0aaf\u0aa8 \u0aac\u0ac7\u0a82\u0a95 \u0a9f\u0acd\u0ab0\u0abe\u0a82\u0a9d\u0ac7\u0a95\u0acd\u0ab6\u0aa8\u0acd\u0ab8 \u0ab9\u0aac",
-                lbl_select_bank: "\u0aac\u0ac7\u0a82\u0a95 \u0aaa\u0ab8\u0a82\u0aa6 \u0a95\u0ab0\u0acb:",
-                lbl_tx_type: "\u0a9f\u0acd\u0ab0\u0abe\u0a82\u0a9d\u0ac7\u0a95\u0acd\u0ab6\u0aa8 \u0aaa\u0acd\u0ab0\u0a95\u0abe\u0ab0:",
-                opt_deposit: "\u0a9c\u0aae\u0abe",
-                opt_withdraw: "\u0a89\u0aaa\u0abe\u0aa1",
-                lbl_pay_mode: "\u0aaa\u0ac7\u0aae\u0ac7\u0aa8\u0acd\u0a9f \u0aae\u0acb\u0aa1:",
-                lbl_ref: "\u0aa8\u0ab0\u0ac7\u0ab6\u0aa8 / \u0ab0\u0ac7\u0aab:",
-                btn_process_tx: "\U0001f3e6 \u0aac\u0ac7\u0a82\u0a95 \u0a9f\u0acd\u0ab0\u0abe\u0a82\u0a9d\u0ac7\u0a95\u0acd\u0ab6\u0aa8 \u0aaa\u0acd\u0ab0\u0acb\u0ab8\u0ac7\u0ab8 \u0a95\u0ab0\u0acb",
-                lbl_add_bank: "+ \u0aa8\u0ab5\u0ac0 \u0aac\u0ac7\u0a82\u0a95 \u0a89\u0aae\u0ac7\u0ab0\u0acb:",
-                lbl_acc_num: "\u0a8f\u0a95\u0abe\u0a8a\u0aa8\u0acd\u0a9f \u0aa8\u0a82\u0aac\u0ab0:",
-                lbl_opening_bal: "\u0ab6\u0acd\u0ab0\u0ac1\u0a86\u0aa4\u0aa8\u0ac1\u0a82 \u0aac\u0ac7\u0ab2\u0ac7\u0aa8\u0acd\u0ab8 (\u20b9):",
-                btn_register_bank: "\u0aac\u0ac7\u0a82\u0a95 \u0ab0\u0a9c\u0abf\u0ab8\u0acd\u0ab5\u0ab0 \u0a95\u0ab0\u0acb",
-                inv_title: "\u0a87\u0aa8\u0acd\u0ab5\u0ac7\u0aa8\u0acd\u0a9f\u0ab0\u0ac0 \u0a95\u0aa8\u0acd\u0a9f\u0acd\u0ab0\u0acb\u0ab2",
-                lbl_movement: "\u0aae\u0ac2\u0ab5\u0aae\u0ac7\u0aa8\u0acd\u0a9f \u0aaa\u0acd\u0ab0\u0a95\u0abe\u0ab0:",
-                opt_inward: "\u0a86\u0ab5\u0a95",
-                opt_outward: "\u0a9c\u0abe\u0ab5\u0a95",
-                lbl_item_name: "\u0a86\u0a88\u0a9f\u0aae\u0aa8\u0ac1\u0a82 \u0aa8\u0abe\u0aae:",
-                lbl_sku: "\u0a8f\u0ab8\u0a95\u0ac7\u0aaf\u0ac1 \u0a95\u0acb\u0aa1:",
-                lbl_market_status: "\u0aae\u0abe\u0ab0\u0acd\u0a95\u0ac7\u0a9f \u0a9f\u0acd\u0ab0\u0ac7\u0aa8\u0acd\u0aa1 \u0ab8\u0acd\u0a9f\u0ac7\u0a9f\u0ab8:",
-                opt_trending: "\U0001f525 \u0aac\u0a9c\u0abe\u0ab0\u0aae\u0abe\u0a82 \u0a9a\u0ab2\u0aa4\u0ac0 \u0ab5\u0ab8\u0acd\u0aa4\u0ac1 (Trending)",
-                lbl_qty: "\u0a9c\u0aa5\u0acd\u0aa5\u0acb (Qty):",
-                lbl_price: "\u0a95\u0abf\u0a82\u0aae\u0aa4 (\u20b9):",
-                btn_update_stock: "\U0001f680 \u0ab8\u0acd\u0a9f\u0acb\u0a95 \u0a85\u0aaa\u0aa1\u0ac7\u0a9f \u0a95\u0ab0\u0acb",
-                adv_title: "\u0a8f\u0aa1\u0ab5\u0abe\u0aa8\u0acd\u0ab8 \u0a8f\u0a95\u0abe\u0a8a\u0aa8\u0acd\u0a9f \u0ab2\u0ac7\u0a9c\u0ab0",
-                lbl_party_name: "\u0aaa\u0abe\u0ab0\u0acd\u0a9f\u0ac0\u0aa8\u0ac1\u0a82 \u0aa8\u0abe\u0aae:",
-                lbl_adv_type: "\u0a8f\u0aa1\u0ab5\u0abe\u0aa8\u0acd\u0ab8 \u0aaa\u0acd\u0ab0\u0a95\u0abe\u0ab0:",
-                opt_adv_given: "\u0a8f\u0aa1\u0ab5\u0abe\u0aa8\u0acd\u0ab8 \u0a86\u0aaa\u0ac7\u0ab2\u0ac1\u0a82",
-                opt_adv_taken: "\u0a8f\u0aa1\u0ab5\u0abe\u0aa8\u0acd\u0ab8 \u0ab2\u0ac0\u0aa7\u0ac7\u0ab2\u0ac1\u0a82",
-                btn_record_adv: "\U0001f91d \u0a8f\u0aa1\u0ab5\u0abe\u0aa8\u0acd\u0ab8 \u0aa8\u0acb\u0a82\u0aa7\u0ac0 \u0a95\u0ab0\u0acb",
-                history_title: "\u0aa4\u0abe\u0a9c\u0ac7\u0aa4\u0ab0\u0aa8\u0abe \u0ab5\u0abe\u0a89\u0a9a\u0ab0\u0acd\u0ab8 \u0a85\u0aa8\u0ac7 \u0ab6\u0ac7\u0ab0\u0abf\u0a82\u0a97",
-                th_type: "\u0aaa\u0acd\u0ab0\u0a95\u0abe\u0ab0",
-                th_party: "\u0aaa\u0abe\u0ab0\u0acd\u0a9f\u0ac0",
-                th_total: "\u0a95\u0ac1\u0ab2 (\u0a9c\u0ac0\u0a8f\u0ab8\u0a9f\u0ac0 \u0ab8\u0abe\u0aa5\u0ac7)",
-                th_action: "\u0a8f\u0a95\u0acd\u0ab6\u0aa8",
-                send: "\u0aae\u0acb\u0a95\u0ab2\u0acb"
+                header_title: "વજ્ર સોવરિન ઇઆરપી ઓએસ",
+                logout: "લોગઆઉટ",
+                backup_db: "બેકઅપ ડીબી",
+                export_csv: "ઇન્વેન્ટરી એક્સપોર્ટ",
+                print_report: "પ્રિન્ટ રિપોર્ટ",
+                sentinel_title: "સોવરિન મલ્ટી-લિંગ્વેજ સેન્ટિનલ",
+                runway_label: "અંદાજિત લિક્વિડિટી રનવે",
+                sentinel_status: "સ્થિતિ",
+                cloud_status: "ક્લાઉડ સ્ટેટસ",
+                kpi_revenue: "કુલ આવક",
+                kpi_profit: "નેટ પ્રોફિટ (નફો)",
+                kpi_bank: "કુલ બેંક બેલેન્સ",
+                kpi_advances: "નેટ એડવાન્સ",
+                bank_hub_title: "ઇન્ડિયન બેંક એકાઉન્ટ્સ હબ",
+                th_bank_name: "બેંકનું નામ",
+                th_acc_no: "એકાઉન્ટ નંબર / સંદર્ભ",
+                th_balance: "વર્તમાન બેલેન્સ",
+                no_bank: "હજી સુધી કોઈ બેંક એડ નથી કરી.",
+                stock_hub_title: "લાઈવ સ્ટોક અને માર્કેટ ટ્રેન્ડિંગ સ્ટેટસ",
+                th_item: "આઇટમનું નામ",
+                th_sku: "એસકેયુ કોડ",
+                th_status: "માર્કેટ સ્ટેટસ",
+                th_qty: "કુલ જથ્થો",
+                th_price: "યુનિટ પ્રાઇસ",
+                th_val: "સ્ટોક વેલ્યુ",
+                trending: "બજારમાં ચલતી",
+                regular: "સામાન્ય",
+                low_stock: "ઓછો સ્ટોક",
+                acc_title: "એકાઉન્ટિંગ અને જીએસટી વાઉચર",
+                lbl_vtype: "વાઉચર પ્રકાર:",
+                lbl_party: "પાર્ટી / લેજર નામ:",
+                lbl_amount: "મૂળ રકમ (Rs):",
+                lbl_narration: "નરેશન:",
+                btn_save_voucher: "વાઉચર સેવ કરો (ઓટો ૧૮% GST)",
+                bank_tx_title: "ઇન્ડિયન બેંક ટ્રાન્ઝેક્શન્સ હબ",
+                lbl_select_bank: "બેંક પસંદ કરો:",
+                lbl_tx_type: "ટ્રાન્ઝેક્શન પ્રકાર:",
+                opt_deposit: "જમા",
+                opt_withdraw: "ઉપાડ",
+                lbl_pay_mode: "પેમેન્ટ મોડ:",
+                lbl_ref: "નરેશન / રેફ:",
+                btn_process_tx: "બેંક ટ્રાન્ઝેક્શન પ્રોસેસ કરો",
+                lbl_add_bank: "+ નવી બેંક ઉમેરો:",
+                lbl_acc_num: "એકાઉન્ટ નંબર:",
+                lbl_opening_bal: "શરૂઆતનું બેલેન્સ (Rs):",
+                btn_register_bank: "બેંક રજીસ્ટર કરો",
+                inv_title: "ઇન્વેન્ટરી કંટ્રોલ",
+                lbl_movement: "મૂવમેન્ટ પ્રકાર:",
+                opt_inward: "આવક",
+                opt_outward: "જાવક",
+                lbl_item_name: "આઇટમનું નામ:",
+                lbl_sku: "એસકેયુ કોડ:",
+                lbl_market_status: "માર્કેટ ટ્રેન્ડ સ્ટેટસ:",
+                opt_trending: "બજારમાં ચલતી વસ્તુ (Trending)",
+                lbl_qty: "જથ્થો (Qty):",
+                lbl_price: "કિંમત (Rs):",
+                btn_update_stock: "સ્ટોક અપડેટ કરો",
+                adv_title: "એડવાન્સ એકાઉન્ટ લેજર",
+                lbl_party_name: "પાર્ટીનું નામ:",
+                lbl_adv_type: "એડવાન્સ પ્રકાર:",
+                opt_adv_given: "એડવાન્સ આપેલું",
+                opt_adv_taken: "એડવાન્સ લીધેલું",
+                btn_record_adv: "એડવાન્સ નોંધી કરો",
+                history_title: "તાજેતરના વાઉચર્સ અને શેરિંગ",
+                th_type: "પ્રકાર",
+                th_party: "પાર્ટી",
+                th_total: "કુલ (જીએસટી સાથે)",
+                th_action: "એક્શન",
+                send: "મોકલો"
             }
         };
 
