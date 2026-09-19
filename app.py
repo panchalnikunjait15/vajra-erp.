@@ -116,7 +116,11 @@ DASHBOARD_HTML = """
         th { background: #0f172a; color: #38bdf8; }
         .badge-trend { background: #10b981; color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.75em; font-weight: bold; }
         .badge-alert { background: #ef4444; color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.75em; font-weight: bold; }
-        .whatsapp-btn { background: #25d366; color: white; padding: 5px 10px; border-radius: 4px; text-decoration: none; font-size: 0.8em; display: inline-flex; align-items: center; gap: 5px; font-weight: bold; }
+        
+        .share-group { display: flex; gap: 5px; flex-wrap: wrap; }
+        .whatsapp-btn { background: #25d366; color: white; padding: 5px 8px; border-radius: 4px; text-decoration: none; font-size: 0.75em; display: inline-flex; align-items: center; gap: 4px; font-weight: bold; }
+        .telegram-btn { background: #0088cc; color: white; padding: 5px 8px; border-radius: 4px; text-decoration: none; font-size: 0.75em; display: inline-flex; align-items: center; gap: 4px; font-weight: bold; }
+        .gmail-btn { background: #ea4335; color: white; padding: 5px 8px; border-radius: 4px; text-decoration: none; font-size: 0.75em; display: inline-flex; align-items: center; gap: 4px; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -371,9 +375,17 @@ DASHBOARD_HTML = """
                 <td>{{ v[3] }}</td>
                 <td>₹{{ "%.2f"|format(v[6]) }}</td>
                 <td>
-                    <a href="https://wa.me/?text=Vajra%20ERP%20Invoice:%20{{ v[2] }}%20for%20{{ v[3] }}%20Amount:%20₹{{ '%.2f'|format(v[6]) }}" target="_blank" class="whatsapp-btn">
-                        <i class="fab fa-whatsapp"></i> <span data-key="send">Send</span>
-                    </a>
+                    <div class="share-group">
+                        <a href="https://wa.me/?text=Vajra%20ERP%20Invoice:%20{{ v[2] }}%20for%20{{ v[3] }}%20Amount:%20₹{{ '%.2f'|format(v[6]) }}" target="_blank" class="whatsapp-btn">
+                            <i class="fab fa-whatsapp"></i> <span data-key="share_wa">WA</span>
+                        </a>
+                        <a href="https://t.me/share/url?url=&text=Vajra%20ERP%20Invoice:%20{{ v[2] }}%20for%20{{ v[3] }}%20Amount:%20₹{{ '%.2f'|format(v[6]) }}" target="_blank" class="telegram-btn">
+                            <i class="fab fa-telegram-plane"></i> <span data-key="share_tg">TG</span>
+                        </a>
+                        <a href="mailto:?subject=Vajra%20ERP%20Invoice&body=Voucher%20Type:%20{{ v[2] }}%0AParty:%20{{ v[3] }}%0AAmount:%20₹{{ '%.2f'|format(v[6]) }}" class="gmail-btn">
+                            <i class="fas fa-envelope"></i> <span data-key="share_mail">Mail</span>
+                        </a>
+                    </div>
                 </td>
             </tr>
             {% endfor %}
@@ -455,7 +467,9 @@ DASHBOARD_HTML = """
                 th_party: "Party",
                 th_total: "Total (Inc. GST)",
                 th_action: "Action",
-                send: "Send",
+                share_wa: "WA",
+                share_tg: "TG",
+                share_mail: "Mail",
                 ai_voice_title: "Vajra AI Voice & Smart Assistant",
                 speak_btn: "🎤 Speak",
                 ask_btn: "Ask AI",
@@ -587,7 +601,9 @@ DASHBOARD_HTML = """
                 th_party: "पार्टी",
                 th_total: "कुल (जीएसटी सहित)",
                 th_action: "कार्रवाई",
-                send: "भेजें",
+                share_wa: "व्हाट्सऐप",
+                share_tg: "टेलीग्राम",
+                share_mail: "मेल",
                 ai_voice_title: "वज्र एआई वॉयस और स्मार्ट असिस्टेंट",
                 speak_btn: "🎤 बोलें",
                 ask_btn: "पूछें",
@@ -724,7 +740,9 @@ DASHBOARD_HTML = """
                 th_party: "પાર્ટી",
                 th_total: "કુલ (જીએસટી સાથે)",
                 th_action: "એક્શન",
-                send: "મોકલો",
+                share_wa: "વ્હોટ્સએપ",
+                share_tg: "ટેલિગ્રામ",
+                share_mail: "મેઇલ",
                 ai_voice_title: "વજ્ર એઆઈ વોઇસ અને સ્માર્ટ અસિસ્ટન્ટ",
                 speak_btn: "🎤 બોલો",
                 ask_btn: "પૂછો",
@@ -784,11 +802,11 @@ DASHBOARD_HTML = """
                 bank_cosmos: "કોસ્મોસ કો-ઓપરેટીવ બેંક",
                 bank_abhyudaya: "अभ्युदय को-ऑपरेटिव बैंक (મુંબઈ)",
                 bank_greater_bombay: "ગ્રેટર બોમ્બે કો-ઓપરેટિવ બેંક",
-                bank_up_coop: "ઉત્તર પ્રદેશ સહકારી બેંક",
-                bank_aryavart: "આર્યાવર્ત બેંક (યુપી)",
-                bank_mp_coop: "મધ્ય પ્રદેશ રાજ્ય સહકારી બેંક",
-                bank_mp_gramin: "મધ્ય પ્રદેશ ગ્રામીણ બેંક",
-                bank_delhi_coop: "દિલ્હી રાજ્ય સહકારી બેંક"
+                bank_up_coop: "उत्तर प्रदेश सहकारी बैंक",
+                bank_aryavart: "आर्यावर्त बैंक (यूपी)",
+                bank_mp_coop: "मध्य प्रदेश राज्य सहकारी बैंक",
+                bank_mp_gramin: "मध्य प्रदेश ग्रामीण बैंक",
+                bank_delhi_coop: "दिल्ली राज्य सहकारी बैंक"
             }
         };
 
