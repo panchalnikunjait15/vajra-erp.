@@ -281,8 +281,15 @@ DASHBOARD_HTML = """
                     <option value="Axis Bank" data-key="bank_axis">Axis Bank</option>
                     <option value="Punjab National Bank (PNB)" data-key="bank_pnb">Punjab National Bank (PNB)</option>
                     <option value="Bank of Baroda" data-key="bank_bob">Bank of Baroda</option>
-                    <option value="Kotak Mahindra Bank" data-key="bank_kotak">Kotak Mahindra Bank</option>
                     <option value="Canara Bank" data-key="bank_canara">Canara Bank</option>
+                    <option value="Union Bank of India" data-key="bank_union">Union Bank of India</option>
+                    <option value="Bank of India" data-key="bank_boi">Bank of India</option>
+                    <option value="Indian Bank" data-key="bank_indian">Indian Bank</option>
+                    <option value="Kotak Mahindra Bank" data-key="bank_kotak">Kotak Mahindra Bank</option>
+                    <option value="IndusInd Bank" data-key="bank_indusind">IndusInd Bank</option>
+                    <option value="Yes Bank" data-key="bank_yes">Yes Bank</option>
+                    <option value="Federal Bank" data-key="bank_federal">Federal Bank</option>
+                    <option value="IDFC First Bank" data-key="bank_idfc">IDFC First Bank</option>
                 </select>
                 <label data-key="lbl_acc_num">Account Number:</label><input type="text" name="account_no" placeholder="Enter A/C No" required>
                 <label data-key="lbl_opening_bal">Opening Balance (₹):</label><input type="number" step="0.01" name="balance" value="0.0" required>
@@ -452,8 +459,15 @@ DASHBOARD_HTML = """
                 bank_axis: "Axis Bank",
                 bank_pnb: "Punjab National Bank (PNB)",
                 bank_bob: "Bank of Baroda",
+                bank_canara: "Canara Bank",
+                bank_union: "Union Bank of India",
+                bank_boi: "Bank of India",
+                bank_indian: "Indian Bank",
                 bank_kotak: "Kotak Mahindra Bank",
-                bank_canara: "Canara Bank"
+                bank_indusind: "IndusInd Bank",
+                bank_yes: "Yes Bank",
+                bank_federal: "Federal Bank",
+                bank_idfc: "IDFC First Bank"
             },
             hi: {
                 header_title: "वज्र संप्रभु ईआरपी ओएस",
@@ -550,7 +564,7 @@ DASHBOARD_HTML = """
                 opt_inward: "आवक",
                 opt_outward: "जावक",
                 opt_deposit: "जमा",
-                opt_withdraw: "નिकासी",
+                opt_withdraw: "निकासी",
                 mode_upi: "यूपीआई (UPI)",
                 mode_neft: "एनईएफटी (NEFT)",
                 mode_rtgs: "आरटीजीएस (RTGS)",
@@ -561,8 +575,15 @@ DASHBOARD_HTML = """
                 bank_axis: "एक्सिस बैंक",
                 bank_pnb: "पंजाब नेशनल बैंक (पीएनबी)",
                 bank_bob: "बैंक ऑफ बड़ौदा",
+                bank_canara: "केनरा बैंक",
+                bank_union: "यूनियन बैंक ऑफ इंडिया",
+                bank_boi: "बैंक ऑफ इंडिया",
+                bank_indian: "इंडियन बैंक",
                 bank_kotak: "कोटक महिंद्रा बैंक",
-                bank_canara: "केनरा बैंक"
+                bank_indusind: "इंडसइंड बैंक",
+                bank_yes: "यस बैंक",
+                bank_federal: "फेडरल बैंक",
+                bank_idfc: "आईडीएफसी फर्स्ट बैंक"
             },
             gu: {
                 header_title: "વજ્ર સોવરિન ઇઆરપી ઓએસ",
@@ -670,8 +691,15 @@ DASHBOARD_HTML = """
                 bank_axis: "એક્સિસ બેંક",
                 bank_pnb: "પંજાબ નેશનલ બેંક (PNB)",
                 bank_bob: "બેંક ઓફ બરોડા",
+                bank_canara: "કેનરા બેંક",
+                bank_union: "યુનિયન બેંક ઓફ ઇન્ડિયા",
+                bank_boi: "બેંક ઓફ ઇન્ડિયા",
+                bank_indian: "ઇન્ડિયન બેંક",
                 bank_kotak: "કોટક મહિન્દ્રા બેંક",
-                bank_canara: "કેનરા બેંક"
+                bank_indusind: "ઇન્ડસઇન્ડ બેંક",
+                bank_yes: "યસ બેંક",
+                bank_federal: "ફેડરલ બેંક",
+                bank_idfc: "આઈડીએફસી ફર્સ્ટ બેંક"
             }
         };
 
@@ -868,7 +896,7 @@ def dashboard():
     query_latency = round((time.time() - start_time) * 1000, 2)
     return render_template_string(DASHBOARD_HTML, vouchers=vouchers, kpis=kpis, banks=banks, stock_summary=stock_summary, runway_days=runway_days, sentinel_status=sentinel_status, query_latency=query_latency)
 
-# --- 🖨️ PRINT REPORT VIEW ROUTE (WEBVIEW & MOBILE FRIENDLY WITH DIRECT HTML DOWNLOAD) ---
+# --- 🖨️ PRINT REPORT VIEW ROUTE ---
 @app.route("/print_report_view")
 def print_report_view():
     if not session.get("logged_in"): return redirect(url_for("login"))
