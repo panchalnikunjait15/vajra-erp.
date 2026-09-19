@@ -279,7 +279,6 @@ DASHBOARD_HTML = """
             <form action="/add_bank" method="POST" style="margin-top:20px; border-top:1px solid #1f2937; padding-top:15px;">
                 <label style="color:#38bdf8;" data-key="lbl_add_bank">+ Add Indian Bank Account:</label>
                 <select name="bank_name" required>
-                    <!-- Nationalized & Major Private Banks -->
                     <option value="State Bank of India (SBI)" data-key="bank_sbi">State Bank of India (SBI)</option>
                     <option value="HDFC Bank" data-key="bank_hdfc">HDFC Bank</option>
                     <option value="ICICI Bank" data-key="bank_icici">ICICI Bank</option>
@@ -295,8 +294,6 @@ DASHBOARD_HTML = """
                     <option value="Yes Bank" data-key="bank_yes">Yes Bank</option>
                     <option value="Federal Bank" data-key="bank_federal">Federal Bank</option>
                     <option value="IDFC First Bank" data-key="bank_idfc">IDFC First Bank</option>
-                    
-                    <!-- Gujarat Co-operative & Regional Banks -->
                     <option value="The Kalupur Commercial Co-op Bank" data-key="bank_kalupur">The Kalupur Commercial Co-op Bank</option>
                     <option value="Surat People's Co-operative Bank" data-key="bank_surat">Surat People's Co-operative Bank</option>
                     <option value="Mehsana Urban Co-operative Bank" data-key="bank_mehsana_urban">Mehsana Urban Co-operative Bank</option>
@@ -309,8 +306,6 @@ DASHBOARD_HTML = """
                     <option value="Anand Mercantile Co-op Bank" data-key="bank_anand">Anand Mercantile Co-op Bank</option>
                     <option value="Sabarkantha District Cooperative Bank" data-key="bank_sabarkantha">Sabarkantha District Cooperative Bank</option>
                     <option value="Banaskantha District Central Cooperative Bank" data-key="bank_banaskantha">Banaskantha District Central Cooperative Bank</option>
-                    
-                    <!-- Mumbai, UP, MP, Delhi Co-operative & Regional Banks -->
                     <option value="Saraswat Co-operative Bank" data-key="bank_saraswat">Saraswat Co-operative Bank</option>
                     <option value="Cosmos Co-operative Bank" data-key="bank_cosmos">Cosmos Co-operative Bank</option>
                     <option value="Abhyudaya Co-operative Bank (Mumbai)" data-key="bank_abhyudaya">Abhyudaya Co-operative Bank (Mumbai)</option>
@@ -382,7 +377,7 @@ DASHBOARD_HTML = """
                         <a href="https://t.me/share/url?url=&text=Vajra%20ERP%20Invoice:%20{{ v[2] }}%20for%20{{ v[3] }}%20Amount:%20₹{{ '%.2f'|format(v[6]) }}" target="_blank" class="telegram-btn">
                             <i class="fab fa-telegram-plane"></i> <span data-key="share_tg">TG</span>
                         </a>
-                        <a href="mailto:?subject=Vajra%20ERP%20Invoice&body=Voucher%20Type:%20{{ v[2] }}%0AParty:%20{{ v[3] }}%0AAmount:%20₹{{ '%.2f'|format(v[6]) }}" class="gmail-btn">
+                        <a href="https://mail.google.com/mail/?view=cm&fs=1&su=Vajra%20ERP%20Invoice&body=Voucher%20Type:%20{{ v[2] }}%20Party:%20{{ v[3] }}%20Amount:%20₹{{ '%.2f'|format(v[6]) }}" target="_blank" class="gmail-btn">
                             <i class="fas fa-envelope"></i> <span data-key="share_mail">Mail</span>
                         </a>
                     </div>
