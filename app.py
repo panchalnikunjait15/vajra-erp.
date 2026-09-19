@@ -149,16 +149,16 @@ DASHBOARD_HTML = """
         <button onclick="window.print()"><i class="fas fa-print"></i> <span data-key="print_report">Print Report</span></button>
     </div>
 
-    <!-- 🤖 NEW AI VOICE ASSISTANT WIDGET -->
-    <div class="card" style="margin-bottom: 25px; border: 1px solid #6366f1; background: linear-gradient(135deg, #111827, #1e1b4b);">
-        <h3><span><i class="fas fa-microphone-alt"></i> <span data-key="ai_voice_title">Vajra AI Voice & Smart Assistant</span></span></h3>
-        <p id="voiceStatus" style="color: #38bdf8; margin: 8px 0; font-size: 0.95em;">Click mic & speak (e.g. "Profit", "Sales", "Stock") / માઇક દબાવીને બોલો...</p>
+    <!-- 🤖 PREMIUM STYLISH AI VOICE ASSISTANT WIDGET -->
+    <div class="card" style="margin-bottom: 25px; border: 1.5px solid #818cf8; background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%); box-shadow: 0 12px 30px rgba(99,102,241,0.25);">
+        <h3><span><i class="fas fa-microphone-alt" style="color: #818cf8;"></i> <span data-key="ai_voice_title">Vajra AI Voice & Smart Assistant</span></span></h3>
+        <p id="voiceStatus" style="color: #38bdf8; margin: 8px 0; font-size: 0.95em;" data-key="voice_hint">Click mic or type query (e.g. profit, sales, stock) / માઇક દબાવો અથવા ટાઈપ કરો...</p>
         <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-            <button onclick="startVoiceRecognition()" style="background: #2563eb; width: auto; padding: 10px 24px; margin-top: 0;"><i class="fas fa-microphone"></i> <span data-key="speak_btn">🎤 Speak / બોલો</span></button>
-            <input type="text" id="aiTextInput" placeholder="Or type your query here..." style="flex: 1; margin-top: 0; padding: 10px;" onkeypress="if(event.key==='Enter') sendQueryToAI(this.value)">
-            <button onclick="sendQueryToAI(document.getElementById('aiTextInput').value)" style="background: #10b981; width: auto; padding: 10px 20px; margin-top: 0;"><span data-key="ask_btn">Ask AI</span></button>
+            <button onclick="startVoiceRecognition()" style="background: linear-gradient(135deg, #2563eb, #1d4ed8); width: auto; padding: 10px 22px; margin-top: 0; border-radius: 8px; box-shadow: 0 4px 12px rgba(37,99,235,0.4);"><i class="fas fa-microphone"></i> <span data-key="speak_btn">🎤 Speak / બોલો</span></button>
+            <input type="text" id="aiTextInput" placeholder="Type your business query here..." style="flex: 1; margin-top: 0; padding: 11px; background: #030712; border: 1px solid #4f46e5; border-radius: 8px; color: #fff;" onkeypress="if(event.key==='Enter') sendQueryToAI(this.value)">
+            <button onclick="sendQueryToAI(document.getElementById('aiTextInput').value)" style="background: linear-gradient(135deg, #10b981, #059669); width: auto; padding: 10px 22px; margin-top: 0; border-radius: 8px; box-shadow: 0 4px 12px rgba(16,185,129,0.4);"><span data-key="ask_btn">Ask AI</span></button>
         </div>
-        <p id="aiReply" style="margin-top: 15px; font-size: 1.05em; font-weight: bold; color: #34d399;"></p>
+        <p id="aiReply" style="margin-top: 15px; font-size: 1.05em; font-weight: bold; color: #4ade80; border-left: 4px solid #22c55e; padding-left: 10px; display: none;"></p>
     </div>
 
     <div class="ai-banner">
@@ -337,6 +337,8 @@ DASHBOARD_HTML = """
     </div>
 
     <script>
+        let currentLang = 'en';
+
         const translations = {
             en: {
                 header_title: "VAJRA SOVEREIGN ERP OS",
@@ -410,7 +412,8 @@ DASHBOARD_HTML = """
                 send: "Send",
                 ai_voice_title: "Vajra AI Voice & Smart Assistant",
                 speak_btn: "🎤 Speak / બોલો",
-                ask_btn: "Ask AI"
+                ask_btn: "Ask AI",
+                voice_hint: "Click mic or type query (e.g. profit, sales, stock)"
             },
             hi: {
                 header_title: "वज्र संप्रभु ईआरपी ओएस",
@@ -484,7 +487,8 @@ DASHBOARD_HTML = """
                 send: "भेजें",
                 ai_voice_title: "वज्र एआई वॉयस और स्मार्ट असिस्टेंट",
                 speak_btn: "🎤 Speak / बोलें",
-                ask_btn: "पूछें"
+                ask_btn: "पूछें",
+                voice_hint: "माइक दबाएं या टाइप करें (उदा. लाभ, बिक्री, स्टॉक)"
             },
             gu: {
                 header_title: "વજ્ર સોવરિન ઇઆરપી ઓએસ",
@@ -558,11 +562,13 @@ DASHBOARD_HTML = """
                 send: "મોકલો",
                 ai_voice_title: "વજ્ર એઆઈ વોઇસ અને સ્માર્ટ અસિસ્ટન્ટ",
                 speak_btn: "🎤 Speak / બોલો",
-                ask_btn: "પૂછો"
+                ask_btn: "પૂછો",
+                voice_hint: "માઈક દબાવો અથવા ટાઈપ કરો (જેવા કે નફો, વેચાણ, સ્ટોક)"
             }
         };
 
         function setLanguage(lang) {
+            currentLang = lang;
             document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
             event.target.classList.add('active');
             
@@ -579,28 +585,38 @@ DASHBOARD_HTML = """
             });
         }
 
-        // 🎙️ Voice Recognition & AI Assistant Logic
+        // 🎙️ Robust Voice Recognition with Multi-lingual Support & Fallback
         function startVoiceRecognition() {
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             if (!SpeechRecognition) {
-                alert("Browser does not support voice recognition.");
+                alert("Voice recognition is not supported in this browser/app view. Please type your query below.");
                 return;
             }
             const recognition = new SpeechRecognition();
-            recognition.lang = 'gu-IN'; // Gujarati support
-            recognition.onstart = function() {
-                document.getElementById("voiceStatus").innerText = "Listening... Bolu chho tamari query...";
-            };
+            
+            // Set language based on active UI language selection
+            if(currentLang === 'gu') recognition.lang = 'gu-IN';
+            else if(currentLang === 'hi') recognition.lang = 'hi-IN';
+            else recognition.lang = 'en-US';
+
+            document.getElementById("voiceStatus").innerText = currentLang === 'gu' ? "સાંભળી રહ્યું છે... બોલો!" : (currentLang === 'hi' ? "सुन रहा है... बोलें!" : "Listening... Speak now!");
+            
             recognition.onresult = function(event) {
                 const spokenText = event.results[0][0].transcript;
-                document.getElementById("voiceStatus").innerText = "You said: " + spokenText;
+                document.getElementById("voiceStatus").innerText = "You said / તમે બોલ્યા: " + spokenText;
                 document.getElementById("aiTextInput").value = spokenText;
                 sendQueryToAI(spokenText);
             };
+            
             recognition.onerror = function(event) {
-                document.getElementById("voiceStatus").innerText = "Voice recognition error. Try typing below.";
+                document.getElementById("voiceStatus").innerText = "Voice error or blocked. Please type your query in the box below.";
             };
-            recognition.start();
+            
+            try {
+                recognition.start();
+            } catch(e) {
+                document.getElementById("voiceStatus").innerText = "Microphone busy or permission needed. Try typing below.";
+            }
         }
 
         function sendQueryToAI(queryText) {
@@ -608,17 +624,23 @@ DASHBOARD_HTML = """
             fetch('/api/ai-assistant', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ query: queryText })
+                body: JSON.stringify({ query: queryText, lang: currentLang })
             })
             .then(res => res.json())
             .then(data => {
-                document.getElementById("aiReply").innerText = "🤖 AI Answer: " + data.reply;
+                const replyElem = document.getElementById("aiReply");
+                replyElem.style.display = "block";
+                replyElem.innerText = "🤖 AI Answer: " + data.reply;
+                
+                // Text-to-Speech in selected language
                 let speech = new SpeechSynthesisUtterance(data.reply);
-                speech.lang = 'gu-IN';
+                speech.lang = currentLang === 'gu' ? 'gu-IN' : (currentLang === 'hi' ? 'hi-IN' : 'en-US');
                 window.speechSynthesis.speak(speech);
             })
             .catch(err => {
-                document.getElementById("aiReply").innerText = "Error connecting to AI Assistant.";
+                const replyElem = document.getElementById("aiReply");
+                replyElem.style.display = "block";
+                replyElem.innerText = "Error connecting to AI Assistant.";
             });
         }
     </script>
@@ -687,30 +709,50 @@ def dashboard():
     query_latency = round((time.time() - start_time) * 1000, 2)
     return render_template_string(DASHBOARD_HTML, vouchers=vouchers, kpis=kpis, banks=banks, stock_summary=stock_summary, runway_days=runway_days, sentinel_status=sentinel_status, query_latency=query_latency)
 
-# --- 🤖 AI & VOICE ASSISTANT API ROUTE ---
+# --- 🤖 MULTI-LINGUAL AI & VOICE ASSISTANT API ROUTE ---
 @app.route("/api/ai-assistant", methods=["POST"])
 def ai_assistant():
     data = request.get_json() or {}
     user_query = data.get("query", "").lower()
+    lang = data.get("lang", "en")
     
-    # Fetch real live data from database for intelligent response
     with sqlite3.connect(DB_NAME) as conn:
         rev = conn.execute("SELECT SUM(total_with_gst) FROM vouchers WHERE voucher_type IN ('RECEIPT', 'SALES')").fetchone()[0] or 0.0
         exp = conn.execute("SELECT SUM(amount) FROM expenses").fetchone()[0] or 0.0
         net_profit = rev - exp
         banks_total = conn.execute("SELECT SUM(balance) FROM bank_accounts").fetchone()[0] or 0.0
-        low_stock_count = conn.execute("SELECT COUNT(*) FROM inventory").fetchone()[0] or 0
     
-    response_text = "Maf karjo, hu aa prashna samji sakyo nathi. Tame 'nofo', 'vechan', 'balance' athva 'stock' vishe puchi sako cho."
-    
-    if "profit" in user_query or "nofo" in user_query or "નફો" in user_query:
-        response_text = f"Aaje net profit ₹{net_profit:.2f} thayo chhe."
-    elif "sales" in user_query or "vechan" in user_query or "aavak" in user_query or "revenue" in user_query or "aavak" in user_query:
-        response_text = f"Total revenue / vechan ₹{rev:.2f} chhe."
-    elif "bank" in user_query or "balance" in user_query or "belez" in user_query:
-        response_text = f"Badhi banko mili ne total balance ₹{banks_total:.2f} chhe."
-    elif "stock" in user_query or "stok" in user_query:
-        response_text = f"Live inventory stock ma total items registered chhe. Tamari app ekdam secure chhe."
+    # Language specific smart responses
+    if lang == "gu":
+        response_text = "માફ કરશો, હું આ પ્રશ્ન સમજી શક્યો નથી. તમે 'નફો', 'વેચાણ', 'બેલેન્સ' અથવા 'સ્ટોક' વિશે પૂછી શકો છો."
+        if "profit" in user_query or "nofo" in user_query or "નફો" in user_query:
+            response_text = f"આજે કુલ નેટ નફો ₹{net_profit:.2f} થયો છે."
+        elif "sales" in user_query or "vechan" in user_query or "aavak" in user_query or "revenue" in user_query:
+            response_text = f"કુલ વેચાણ / આવક ₹{rev:.2f} છે."
+        elif "bank" in user_query or "balance" in user_query or "belez" in user_query:
+            response_text = f"બધી બેંકનું કુલ બેલેન્સ ₹{banks_total:.2f} છે."
+        elif "stock" in user_query or "stok" in user_query:
+            response_text = "ઇન્વેન્ટરી સ્ટોક અને માર્કેટ ટ્રેન્ડિંગ ડેટા ડેશબોર્ડ પર ઉપલબ્ધ છે."
+    elif lang == "hi":
+        response_text = "क्षमा करें, मैं इस प्रश्न को समझ नहीं सका। आप 'लाभ', 'बिक्री', 'बैलेंस' या 'स्टॉक' के बारे में पूछ सकते हैं।"
+        if "profit" in user_query or "labh" in user_query or "नफा" in user_query:
+            response_text = f"आज कुल शुद्ध लाभ ₹{net_profit:.2f} हुआ है।"
+        elif "sales" in user_query or "bikri" in user_query or "revenue" in user_query:
+            response_text = f"कुल राजस्व / बिक्री ₹{rev:.2f} है।"
+        elif "bank" in user_query or "balance" in user_query:
+            response_text = f"सभी बैंकों का कुल शेष ₹{banks_total:.2f} है।"
+        elif "stock" in user_query:
+            response_text = "इन्वेंटरी स्टॉक डेटा डैशबोर्ड पर उपलब्ध है।"
+    else:
+        response_text = "Sorry, I could not understand this query. You can ask about 'profit', 'sales', 'balance', or 'stock'."
+        if "profit" in user_query:
+            response_text = f"Today's net profit is ₹{net_profit:.2f}."
+        elif "sales" in user_query or "revenue" in user_query:
+            response_text = f"Total revenue / sales is ₹{rev:.2f}."
+        elif "bank" in user_query or "balance" in user_query:
+            response_text = f"Total bank balance across accounts is ₹{banks_total:.2f}."
+        elif "stock" in user_query:
+            response_text = "Live inventory stock summary is active on the dashboard."
 
     return jsonify({"status": "success", "reply": response_text})
 
