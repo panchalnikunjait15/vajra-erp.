@@ -1151,7 +1151,6 @@ def export_inventory_csv():
     cw.writerows(data)
     return Response(si.getvalue(), mimetype="text/csv", headers={"Content-Disposition": "attachment;filename=inventory.csv"})
 
-@app.route("backup_db") # wait, let's keep /backup_db correct
 @app.route("/backup_db")
 def backup_db():
     if not session.get("logged_in"): return redirect(url_for("login"))
