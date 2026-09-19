@@ -228,7 +228,12 @@ DASHBOARD_HTML = """
             <h3><span><i class="fas fa-book-open"></i> <span data-key="acc_title">Accounting & GST Voucher</span></span></h3>
             <form action="/add_voucher" method="POST">
                 <label data-key="lbl_vtype">Voucher Type:</label>
-                <select name="voucher_type"><option>RECEIPT</option><option>PAYMENT</option><option>SALES</option><option>PURCHASE</option></select>
+                <select name="voucher_type">
+                    <option value="RECEIPT" data-key="opt_receipt">RECEIPT</option>
+                    <option value="PAYMENT" data-key="opt_payment">PAYMENT</option>
+                    <option value="SALES" data-key="opt_sales">SALES</option>
+                    <option value="PURCHASE" data-key="opt_purchase">PURCHASE</option>
+                </select>
                 <label data-key="lbl_party">Party / Ledger Name:</label><input type="text" name="ledger_name" required>
                 <label data-key="lbl_amount">Base Amount (₹):</label><input type="number" step="0.01" name="amount" required>
                 <label data-key="lbl_narration">Narration:</label><input type="text" name="narration">
@@ -246,7 +251,7 @@ DASHBOARD_HTML = """
                         <option value="{{ b[0] }}">{{ b[1] }} (A/C: {{ b[2] }})</option>
                         {% endfor %}
                     {% else %}
-                        <option value="">-- Add Bank First --</option>
+                        <option value="" data-key="opt_add_bank_first">-- Add Bank First --</option>
                     {% endif %}
                 </select>
                 <label data-key="lbl_tx_type">Transaction Type:</label>
@@ -260,7 +265,7 @@ DASHBOARD_HTML = """
                     <option value="NEFT">NEFT</option>
                     <option value="RTGS">RTGS</option>
                     <option value="IMPS">IMPS</option>
-                    <option value="CASH">Cash</option>
+                    <option value="CASH" data-key="opt_cash">Cash</option>
                 </select>
                 <label data-key="lbl_amount">Amount (₹):</label><input type="number" step="0.01" name="amount" required>
                 <label data-key="lbl_ref">Narration / Ref:</label><input type="text" name="narration" placeholder="Txn ID / Ref No">
@@ -288,7 +293,11 @@ DASHBOARD_HTML = """
         <div class="card">
             <h3><span><i class="fas fa-boxes"></i> <span data-key="inv_title">Inventory Control</span></span></h3>
             <form action="/add_inventory" method="POST">
-                <label data-key="lbl_movement">Movement Type:</label><select name="movement_type"><option value="INWARD" data-key="opt_inward">INWARD</option><option value="OUTWARD" data-key="opt_outward">OUTWARD</option></select>
+                <label data-key="lbl_movement">Movement Type:</label>
+                <select name="movement_type">
+                    <option value="INWARD" data-key="opt_inward">INWARD</option>
+                    <option value="OUTWARD" data-key="opt_outward">OUTWARD</option>
+                </select>
                 <label data-key="lbl_item_name">Item Name:</label><input type="text" name="item_name" required>
                 <label data-key="lbl_sku">SKU Code:</label><input type="text" name="sku" required>
                 <label data-key="lbl_market_status">Market Trend Status:</label>
@@ -420,7 +429,16 @@ DASHBOARD_HTML = """
                 btn_profit: "Net Profit",
                 btn_sales: "Total Sales",
                 btn_bank: "Bank Balance",
-                btn_stock: "Stock Summary"
+                btn_stock: "Stock Summary",
+                opt_receipt: "RECEIPT",
+                opt_payment: "PAYMENT",
+                opt_sales: "SALES",
+                opt_purchase: "PURCHASE",
+                opt_add_bank_first: "-- Add Bank First --",
+                opt_cash: "Cash",
+                opt_regular: "Regular Stock",
+                opt_adv_given: "Advance Given",
+                opt_adv_taken: "Advance Taken"
             },
             hi: {
                 header_title: "वज्र संप्रभु ईआरपी ओएस",
@@ -500,7 +518,16 @@ DASHBOARD_HTML = """
                 btn_profit: "शुद्ध लाभ",
                 btn_sales: "कुल बिक्री",
                 btn_bank: "बैंक बैलेंस",
-                btn_stock: "स्टॉक सारांश"
+                btn_stock: "स्टॉक सारांश",
+                opt_receipt: "रसीद (RECEIPT)",
+                opt_payment: "भुगतान (PAYMENT)",
+                opt_sales: "बिक्री (SALES)",
+                opt_purchase: "खरीद (PURCHASE)",
+                opt_add_bank_first: "-- पहले बैंक जोड़ें --",
+                opt_cash: "नकद (Cash)",
+                opt_regular: "नियमित स्टॉक",
+                opt_adv_given: "अग्रिम दिया गया",
+                opt_adv_taken: "अग्रिम लिया गया"
             },
             gu: {
                 header_title: "વજ્ર સોવરિન ઇઆરપી ઓએસ",
@@ -575,12 +602,21 @@ DASHBOARD_HTML = """
                 ai_voice_title: "વજ્ર એઆઈ વોઇસ અને સ્માર્ટ અસિસ્ટન્ટ",
                 speak_btn: "🎤 બોલો",
                 ask_btn: "પૂછો",
-                voice_hint: "માઇક દબાવો, ક્વિક બટન વાપરો અથવા નીચે ટાઈપ કરો:",
+                voice_hint: "માઇક, ક્વિક બટન અથવા નીચે ટાઈપ કરો:",
                 type_query_placeholder: "તમારો પ્રશ્ન અહીં ટાઈપ કરો...",
                 btn_profit: "નેટ નફો",
                 btn_sales: "કુલ વેચાણ",
                 btn_bank: "બેંક બેલેન્સ",
-                btn_stock: "સ્ટોક રિપોર્ટ"
+                btn_stock: "સ્ટોક રિપોર્ટ",
+                opt_receipt: "રસીદ (RECEIPT)",
+                opt_payment: "ચુકવણી (PAYMENT)",
+                opt_sales: "વેચાણ (SALES)",
+                opt_purchase: "ખરીદી (PURCHASE)",
+                opt_add_bank_first: "-- પહેલા બેંક ઉમેરો --",
+                opt_cash: "રોકડ (Cash)",
+                opt_regular: "સામાન્ય સ્ટોક",
+                opt_adv_given: "એડવાન્સ આપેલું",
+                opt_adv_taken: "એડવાન્સ લીધેલું"
             }
         };
 
@@ -597,12 +633,21 @@ DASHBOARD_HTML = """
                 }
             });
 
-            // Handle placeholders separately
+            // Handle placeholders
             const inputs = document.querySelectorAll('[data-placeholder]');
             inputs.forEach(inp => {
                 const pKey = inp.getAttribute('data-placeholder');
                 if (translations[lang] && translations[lang][pKey]) {
                     inp.placeholder = translations[lang][pKey];
+                }
+            });
+
+            // Handle dropdown options dynamically
+            const optKeys = document.querySelectorAll('[data-key^="opt_"]');
+            optKeys.forEach(opt => {
+                const oKey = opt.getAttribute('data-key');
+                if (translations[lang] && translations[lang][oKey]) {
+                    opt.textContent = translations[lang][oKey];
                 }
             });
         }
