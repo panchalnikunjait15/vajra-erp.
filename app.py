@@ -868,7 +868,7 @@ def dashboard():
     query_latency = round((time.time() - start_time) * 1000, 2)
     return render_template_string(DASHBOARD_HTML, vouchers=vouchers, kpis=kpis, banks=banks, stock_summary=stock_summary, runway_days=runway_days, sentinel_status=sentinel_status, query_latency=query_latency)
 
-# --- 🖨️ PRINT REPORT VIEW ROUTE (WEBVIEW & MOBILE FRIENDLY WITH HTML2PDF JS) ---
+# --- 🖨️ PRINT REPORT VIEW ROUTE (WEBVIEW & MOBILE FRIENDLY WITH DIRECT HTML DOWNLOAD) ---
 @app.route("/print_report_view")
 def print_report_view():
     if not session.get("logged_in"): return redirect(url_for("login"))
@@ -884,8 +884,6 @@ def print_report_view():
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>Vajra ERP - Print Report</title>
-            <!-- Include html2pdf.js CDN for robust client-side PDF generation on mobile and PC -->
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
             <style>
                 body { background: white; color: black; font-family: sans-serif; padding: 20px; }
                 h2 { color: #0f172a; border-bottom: 2px solid #2563eb; padding-bottom: 8px; }
@@ -901,45 +899,63 @@ def print_report_view():
         <body>
             <div class="btn-container">
                 <button class="action-btn" onclick="window.print()">🖨️ Print Page</button>
-                <button class="action-btn download-btn" onclick="downloadAsPDF()">📥 Download Real PDF</button>
+                <a href="/download_report_file" class="action-btn download-btn">📥 Download Report File</a>
             </div>
 
-            <div id="pdfContent">
-                <h2>⚡ Vajra ERP - Official Business Report</h2>
-                
-                <h3>Recent Vouchers</h3>
-                <table>
-                    <tr><th>ID</th><th>Date</th><th>Type</th><th>Party</th><th>Total (Inc. GST)</th></tr>
-                    {% for v in vouchers %}
-                    <tr><td>{{ v[0] }}</td><td>{{ v[1] }}</td><td>{{ v[2] }}</td><td>{{ v[3] }}</td><td>₹{{ "%.2f"|format(v[6]) }}</td></tr>
-                    {% endfor %}
-                </table>
+            <h2>⚡ Vajra ERP - Official Business Report</h2>
+            
+            <h3>Recent Vouchers</h3>
+            <table>
+                <tr><th>ID</th><th>Date</th><th>Type</th><th>Party</th><th>Total (Inc. GST)</th></tr>
+                {% for v in vouchers %}
+                <tr><td>{{ v[0] }}</td><td>{{ v[1] }}</td><td>{{ v[2] }}</td><td>{{ v[3] }}</td><td>₹{{ "%.2f"|format(v[6]) }}</td></tr>
+                {% endfor %}
+            </table>
 
-                <h3>Bank Accounts</h3>
-                <table>
-                    <tr><th>Bank Name</th><th>Account No</th><th>Balance</th></tr>
-                    {% for b in banks %}
-                    <tr><td>{{ b[1] }}</td><td>{{ b[2] }}</td><td>₹{{ "%.2f"|format(b[3]) }}</td></tr>
-                    {% endfor %}
-                </table>
-            </div>
-
-            <script>
-                function downloadAsPDF() {
-                    const element = document.getElementById('pdfContent');
-                    const options = {
-                        margin:       10,
-                        filename:     'Vajra_ERP_Official_Report.pdf',
-                        image:        { type: 'jpeg', quality: 0.98 },
-                        html2canvas:  { scale: 2, useCORS: true },
-                        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
-                    };
-                    html2pdf().from(element).set(options).save();
-                }
-            </script>
+            <h3>Bank Accounts</h3>
+            <table>
+                <tr><th>Bank Name</th><th>Account No</th><th>Balance</th></tr>
+                {% for b in banks %}
+                <tr><td>{{ b[1] }}</td><td>{{ b[2] }}</td><td>₹{{ "%.2f"|format(b[3]) }}</td></tr>
+                {% endfor %}
+            </table>
         </body>
         </html>
     ''', vouchers=vouchers, banks=banks, inventory=inventory)
+
+# --- 📥 DOWNLOAD REPORT FILE ROUTE ---
+@app.route("/download_report_file")
+def download_report_file():
+    if not session.get("logged_in"): return redirect(url_for("login"))
+    with sqlite3.connect(DB_NAME) as conn:
+        vouchers = conn.execute("SELECT * FROM vouchers ORDER BY id DESC").fetchall()
+        banks = conn.execute("SELECT * FROM bank_accounts").fetchall()
+        inventory = conn.execute("SELECT * FROM inventory").fetchall()
+    
+    html_content = f"""
+    <!DOCTYPE html>
+    <html>
+    <head><meta charset="UTF-8"><title>Vajra ERP Report</title></head>
+    <body style="font-family: sans-serif; padding: 20px;">
+        <h2>⚡ Vajra ERP - Official Business Report</h2>
+        <h3>Recent Vouchers</h3>
+        <table border="1" style="border-collapse: collapse; width: 100%;">
+            <tr><th>ID</th><th>Date</th><th>Type</th><th>Party</th><th>Total (Inc. GST)</th></tr>
+            {''.join(f"<tr><td>{v[0]}</td><td>{v[1]}</td><td>{v[2]}</td><td>{v[3]}</td><td>₹{v[6]:.2f}</td></tr>" for v in vouchers)}
+        </table>
+        <h3 style="margin-top: 20px;">Bank Accounts</h3>
+        <table border="1" style="border-collapse: collapse; width: 100%;">
+            <tr><th>Bank Name</th><th>Account No</th><th>Balance</th></tr>
+            {''.join(f"<tr><td>{b[1]}</td><td>{b[2]}</td><td>₹{b[3]:.2f}</td></tr>" for b in banks)}
+        </table>
+    </body>
+    </html>
+    """
+    return Response(
+        html_content,
+        mimetype="text/html",
+        headers={"Content-Disposition": "attachment;filename=Vajra_ERP_Report.html"}
+    )
 
 # --- 🤖 MULTI-LINGUAL AI ASSISTANT API ROUTE ---
 @app.route("/api/ai-assistant", methods=["POST", "GET"])
