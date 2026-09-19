@@ -138,8 +138,7 @@ DASHBOARD_HTML = """
     <div class="btn-row">
         <a href="/backup_db"><i class="fas fa-database"></i> <span data-key="backup_db">Backup DB</span></a>
         <a href="/export_inventory_csv"><i class="fas fa-download"></i> <span data-key="export_csv">Export CSV</span></a>
-        <!-- MOBILE FRIENDLY PRINT LINK (WITHOUT target=_blank) -->
-        <a href="/print_report_view" style="background: #2563eb;"><i class="fas fa-print"></i> <span data-key="print_report">Print / Save PDF</span></a>
+        <a href="/print_report_view"><i class="fas fa-print"></i> <span data-key="print_report">Print / Save PDF</span></a>
     </div>
 
     <!-- 🤖 VAJRA AI VOICE & SMART ASSISTANT WIDGET -->
@@ -891,13 +890,18 @@ def print_report_view():
                 table { width: 100%; border-collapse: collapse; margin-top: 15px; margin-bottom: 25px; font-size: 0.9em; }
                 th, td { border: 1px solid #cbd5e1; padding: 8px; text-align: left; }
                 th { background: #f1f5f9; color: #1e293b; }
-                .print-btn { background: #2563eb; color: white; border: none; padding: 12px 24px; border-radius: 6px; font-size: 1em; cursor: pointer; display: block; margin: 20px auto; font-weight: bold; }
-                @media print { .print-btn { display: none; } }
+                .btn-container { display: flex; gap: 15px; justify-content: center; margin: 20px 0; flex-wrap: wrap; }
+                .action-btn { background: #2563eb; color: white; border: none; padding: 12px 24px; border-radius: 6px; font-size: 1em; cursor: pointer; font-weight: bold; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
+                .download-btn { background: #10b981; }
+                @media print { .btn-container { display: none; } }
             </style>
         </head>
         <body>
             <h2>⚡ Vajra ERP - Official Business Report</h2>
-            <button class="print-btn" onclick="window.print()">🖨️ Print / Save as PDF</button>
+            <div class="btn-container">
+                <button class="action-btn" onclick="window.print()">🖨️ Print / Save as PDF</button>
+                <a href="/download_report_file" class="action-btn download-btn">📥 Download Report File</a>
+            </div>
             
             <h3>Recent Vouchers</h3>
             <table>
@@ -917,6 +921,40 @@ def print_report_view():
         </body>
         </html>
     ''', vouchers=vouchers, banks=banks, inventory=inventory)
+
+# --- 📥 DOWNLOAD REPORT ROUTE ---
+@app.route("/download_report_file")
+def download_report_file():
+    if not session.get("logged_in"): return redirect(url_for("login"))
+    with sqlite3.connect(DB_NAME) as conn:
+        vouchers = conn.execute("SELECT * FROM vouchers ORDER BY id DESC").fetchall()
+        banks = conn.execute("SELECT * FROM bank_accounts").fetchall()
+        inventory = conn.execute("SELECT * FROM inventory").fetchall()
+    
+    html_content = f"""
+    <!DOCTYPE html>
+    <html>
+    <head><meta charset="UTF-8"><title>Vajra ERP Report</title></head>
+    <body style="font-family: sans-serif; padding: 20px;">
+        <h2>⚡ Vajra ERP - Official Business Report</h2>
+        <h3>Recent Vouchers</h3>
+        <table border="1" style="border-collapse: collapse; width: 100%;">
+            <tr><th>ID</th><th>Date</th><th>Type</th><th>Party</th><th>Total (Inc. GST)</th></tr>
+            {''.join(f"<tr><td>{v[0]}</td><td>{v[1]}</td><td>{v[2]}</td><td>{v[3]}</td><td>₹{v[6]:.2f}</td></tr>" for v in vouchers)}
+        </table>
+        <h3>Bank Accounts</h3>
+        <table border="1" style="border-collapse: collapse; width: 100%; margin-top: 15px;">
+            <tr><th>Bank Name</th><th>Account No</th><th>Balance</th></tr>
+            {''.join(f"<tr><td>{b[1]}</td><td>{b[2]}</td><td>₹{b[3]:.2f}</td></tr>" for b in banks)}
+        </table>
+    </body>
+    </html>
+    """
+    return Response(
+        html_content,
+        mimetype="text/html",
+        headers={"Content-Disposition": "attachment;filename=Vajra_ERP_Report.html"}
+    )
 
 # --- 🤖 MULTI-LINGUAL AI ASSISTANT API ROUTE ---
 @app.route("/api/ai-assistant", methods=["POST", "GET"])
@@ -959,7 +997,9 @@ def ai_assistant():
         elif "sales" in user_query or "revenue" in user_query:
             response_text = f"Total revenue / sales is ₹{rev:.2f}."
         elif "bank" in user_query or "balance" in user_query:
-            response_text = f"Total bank balance across accounts is ₹{total_items} registered."
+            response_text = f"Total bank balance across accounts is ₹{banks_total:.2f}."
+        elif "stock" in user_query:
+            response_text = f"Live inventory stock summary: {total_items} items registered."
 
     return jsonify({"status": "success", "reply": response_text})
 
@@ -1011,7 +1051,7 @@ def add_voucher():
                      (datetime.now().strftime("%Y-%m-%d %H:%M"), v_type, ledger, amount, gst, total, request.form.get("narration", ""), crypto_hash))
     return redirect(url_for("dashboard"))
 
-@app.route("/add_inventory", methods=["POST"])
+@app.route("/add_inventory", methods=["Post"])
 def add_inventory():
     if not session.get("logged_in"): return redirect(url_for("login"))
     with sqlite3.connect(DB_NAME) as conn:
@@ -1023,7 +1063,7 @@ def add_inventory():
 @app.route("/export_inventory_csv")
 def export_inventory_csv():
     if not session.get("logged_in"): return redirect(url_for("login"))
-    with sqlite3.connect(DB_NAME) as conn:
+    with sqlite3.connect(DB_Name) as conn:
         data = conn.execute("SELECT * FROM inventory").fetchall()
     si = io.StringIO()
     cw = csv.writer(si)
