@@ -149,12 +149,12 @@ DASHBOARD_HTML = """
         <button onclick="window.print()"><i class="fas fa-print"></i> <span data-key="print_report">Print Report</span></button>
     </div>
 
-    <!-- 🤖 PREMIUM STYLISH AI VOICE ASSISTANT WIDGET WITH TIMEOUT SAFEGUARD -->
+    <!-- 🤖 FOOLPROOF STYLISH AI ASSISTANT WIDGET -->
     <div class="card" style="margin-bottom: 25px; border: 1.5px solid #818cf8; background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%); box-shadow: 0 12px 30px rgba(99,102,241,0.25);">
-        <h3><span><i class="fas fa-microphone-alt" style="color: #818cf8;"></i> <span data-key="ai_voice_title">Vajra AI Voice & Smart Assistant</span></span></h3>
-        <p id="voiceStatus" style="color: #38bdf8; margin: 8px 0; font-size: 0.95em;" data-key="voice_hint">Click mic or type query (e.g. profit, sales, stock) / માઇક દબાવો અથવા ટાઈપ કરો...</p>
+        <h3><span><i class="fas fa-robot" style="color: #818cf8;"></i> <span data-key="ai_voice_title">Vajra AI Smart Assistant</span></span></h3>
+        <p id="voiceStatus" style="color: #38bdf8; margin: 8px 0; font-size: 0.95em;" data-key="voice_hint">Type your query below (e.g. profit, sales, stock, balance)...</p>
         <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-            <button onclick="startVoiceRecognition()" style="background: linear-gradient(135deg, #2563eb, #1d4ed8); width: auto; padding: 10px 22px; margin-top: 0; border-radius: 8px; box-shadow: 0 4px 12px rgba(37,99,235,0.4);"><i class="fas fa-microphone"></i> <span data-key="speak_btn">🎤 Speak / બોલો</span></button>
+            <button onclick="startVoiceRecognition()" id="micBtn" style="background: linear-gradient(135deg, #2563eb, #1d4ed8); width: auto; padding: 10px 22px; margin-top: 0; border-radius: 8px; box-shadow: 0 4px 12px rgba(37,99,235,0.4);"><i class="fas fa-microphone"></i> <span data-key="speak_btn">🎤 Speak / બોલો</span></button>
             <input type="text" id="aiTextInput" placeholder="Type your business query here..." style="flex: 1; margin-top: 0; padding: 11px; background: #030712; border: 1px solid #4f46e5; border-radius: 8px; color: #fff;" onkeypress="if(event.key==='Enter') sendQueryToAI(this.value)">
             <button onclick="sendQueryToAI(document.getElementById('aiTextInput').value)" style="background: linear-gradient(135deg, #10b981, #059669); width: auto; padding: 10px 22px; margin-top: 0; border-radius: 8px; box-shadow: 0 4px 12px rgba(16,185,129,0.4);"><span data-key="ask_btn">Ask AI</span></button>
         </div>
@@ -410,10 +410,10 @@ DASHBOARD_HTML = """
                 th_total: "Total (Inc. GST)",
                 th_action: "Action",
                 send: "Send",
-                ai_voice_title: "Vajra AI Voice & Smart Assistant",
+                ai_voice_title: "Vajra AI Smart Assistant",
                 speak_btn: "🎤 Speak / બોલો",
                 ask_btn: "Ask AI",
-                voice_hint: "Click mic or type query (e.g. profit, sales, stock)"
+                voice_hint: "Type your query below (e.g. profit, sales, stock, balance)"
             },
             hi: {
                 header_title: "वज्र संप्रभु ईआरपी ओएस",
@@ -485,10 +485,10 @@ DASHBOARD_HTML = """
                 th_total: "कुल (जीएसटी सहित)",
                 th_action: "कार्रवाई",
                 send: "भेजें",
-                ai_voice_title: "वज्र एआई वॉयस और स्मार्ट असिस्टेंट",
+                ai_voice_title: "वज्र एआई स्मार्ट असिस्टेंट",
                 speak_btn: "🎤 Speak / बोलें",
                 ask_btn: "पूछें",
-                voice_hint: "माइक दबाएं या टाइप करें (उदा. लाभ, बिक्री, स्टॉक)"
+                voice_hint: "नीचे अपना प्रश्न टाइप करें (उदा. लाभ, बिक्री, स्टॉक)"
             },
             gu: {
                 header_title: "વજ્ર સોવરિન ઇઆરપી ઓએસ",
@@ -560,10 +560,10 @@ DASHBOARD_HTML = """
                 th_total: "કુલ (જીએસટી સાથે)",
                 th_action: "એક્શન",
                 send: "મોકલો",
-                ai_voice_title: "વજ્ર એઆઈ વોઇસ અને સ્માર્ટ અસિસ્ટન્ટ",
+                ai_voice_title: "વજ્ર એઆઈ સ્માર્ટ અસિસ્ટન્ટ",
                 speak_btn: "🎤 Speak / બોલો",
                 ask_btn: "પૂછો",
-                voice_hint: "માઈક દબાવો અથવા ટાઈપ કરો (જેવા કે નફો, વેચાણ, સ્ટોક)"
+                voice_hint: "તમારો પ્રશ્ન નીચે ટાઈપ કરો (જેવા કે નફો, વેચાણ, સ્ટોક, બેલેન્સ)"
             }
         };
 
@@ -585,12 +585,12 @@ DASHBOARD_HTML = """
             });
         }
 
-        // 🎙️ Robust Voice Recognition with Auto-Timeout Safeguard
+        // 🎙️ Bulletproof Voice Recognition with Instant Fallback for Mobile Apps
         let recognition = null;
         function startVoiceRecognition() {
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             if (!SpeechRecognition) {
-                alert("Voice recognition is not supported in this browser. Please type your query below.");
+                alert(currentLang === 'gu' ? "આ એપમાં વોઇસ સપોર્ટ નથી. કૃપા કરીને નીચે ટાઇપ કરો." : "Voice recognition not supported in this view. Please type below.");
                 return;
             }
             
@@ -608,14 +608,14 @@ DASHBOARD_HTML = """
 
                 document.getElementById("voiceStatus").innerText = currentLang === 'gu' ? "સંભળાઈ રહ્યું છે... બોલો!" : "Listening... Speak now!";
                 
-                // Safety Timeout: If mic doesn't catch speech in 6 seconds, reset it so it never hangs
-                let speechTimer = setTimeout(() => {
-                    try { recognition.stop(); } catch(e){}
-                    document.getElementById("voiceStatus").innerText = currentLang === 'gu' ? "ટાઇમઆઉટ: કૃપા કરીને નીચે ટાઇપ કરો." : "Timeout. Please type your query below.";
-                }, 6000);
+                // 4-Second Force Timeout so it never hangs on mobile APK
+                let safetyTimer = setTimeout(() => {
+                    try { recognition.abort(); } catch(e){}
+                    document.getElementById("voiceStatus").innerText = currentLang === 'gu' ? "મોબાઈલ એપમાં માઇક બ્લોક છે. કૃપા કરીને નીચે ટાઈપ કરો." : "Mic busy in app view. Please type your query below.";
+                }, 4000);
 
                 recognition.onresult = function(event) {
-                    clearTimeout(speechTimer);
+                    clearTimeout(safetyTimer);
                     const spokenText = event.results[0][0].transcript;
                     document.getElementById("voiceStatus").innerText = "You said: " + spokenText;
                     document.getElementById("aiTextInput").value = spokenText;
@@ -623,17 +623,17 @@ DASHBOARD_HTML = """
                 };
                 
                 recognition.onerror = function(event) {
-                    clearTimeout(speechTimer);
-                    document.getElementById("voiceStatus").innerText = currentLang === 'gu' ? "માઇક બ્લોક અથવા એરર. કૃપા કરીને ટાઇપ કરો." : "Mic error or blocked. Please type below.";
+                    clearTimeout(safetyTimer);
+                    document.getElementById("voiceStatus").innerText = currentLang === 'gu' ? "માઇક એરર. કૃપા કરીને નીચે ટાઇપ કરો." : "Mic error. Please type query in box below.";
                 };
 
                 recognition.onend = function() {
-                    clearTimeout(speechTimer);
+                    clearTimeout(safetyTimer);
                 };
                 
                 recognition.start();
             } catch(e) {
-                document.getElementById("voiceStatus").innerText = currentLang === 'gu' ? "માઇક શરૂ કરવામાં ભૂલ. કૃપા કરીને ટાઇપ કરો." : "Microphone error. Please type query below.";
+                document.getElementById("voiceStatus").innerText = currentLang === 'gu' ? "મોબાઈલ એપમાં માઇક સપોર્ટ નથી. નીચે ટાઈપ કરો." : "Mic not allowed in app. Please type below.";
             }
         }
 
@@ -648,7 +648,10 @@ DASHBOARD_HTML = """
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ query: queryText, lang: currentLang })
             })
-            .then(res => res.json())
+            .then(res => {
+                if (!res.ok) throw new Error("Server error");
+                return res.json();
+            })
             .then(data => {
                 replyElem.innerText = "🤖 AI Answer: " + data.reply;
                 let speech = new SpeechSynthesisUtterance(data.reply);
@@ -656,7 +659,7 @@ DASHBOARD_HTML = """
                 window.speechSynthesis.speak(speech);
             })
             .catch(err => {
-                replyElem.innerText = currentLang === 'gu' ? "એરર: સર્વર કનેક્શન તપાસો." : "Error connecting to AI Assistant.";
+                replyElem.innerText = currentLang === 'gu' ? "જવાબ મેળવવામાં સફળ. કૃપા કરીને ફરી ટ્રાય કરો." : "Error connecting to AI Assistant. Please try again.";
             });
         }
     </script>
@@ -725,7 +728,7 @@ def dashboard():
     query_latency = round((time.time() - start_time) * 1000, 2)
     return render_template_string(DASHBOARD_HTML, vouchers=vouchers, kpis=kpis, banks=banks, stock_summary=stock_summary, runway_days=runway_days, sentinel_status=sentinel_status, query_latency=query_latency)
 
-# --- 🤖 MULTI-LINGUAL AI & VOICE ASSISTANT API ROUTE ---
+# --- 🤖 MULTI-LINGUAL AI ASSISTANT API ROUTE ---
 @app.route("/api/ai-assistant", methods=["POST"])
 def ai_assistant():
     data = request.get_json() or {}
