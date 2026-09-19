@@ -275,14 +275,14 @@ DASHBOARD_HTML = """
             <form action="/add_bank" method="POST" style="margin-top:20px; border-top:1px solid #1f2937; padding-top:15px;">
                 <label style="color:#38bdf8;" data-key="lbl_add_bank">+ Add Indian Bank Account:</label>
                 <select name="bank_name" required>
-                    <option value="State Bank of India (SBI)">State Bank of India (SBI)</option>
-                    <option value="HDFC Bank">HDFC Bank</option>
-                    <option value="ICICI Bank">ICICI Bank</option>
-                    <option value="Axis Bank">Axis Bank</option>
-                    <option value="Punjab National Bank (PNB)">Punjab National Bank (PNB)</option>
-                    <option value="Bank of Baroda">Bank of Baroda</option>
-                    <option value="Kotak Mahindra Bank">Kotak Mahindra Bank</option>
-                    <option value="Canara Bank">Canara Bank</option>
+                    <option value="State Bank of India (SBI)" data-key="bank_sbi">State Bank of India (SBI)</option>
+                    <option value="HDFC Bank" data-key="bank_hdfc">HDFC Bank</option>
+                    <option value="ICICI Bank" data-key="bank_icici">ICICI Bank</option>
+                    <option value="Axis Bank" data-key="bank_axis">Axis Bank</option>
+                    <option value="Punjab National Bank (PNB)" data-key="bank_pnb">Punjab National Bank (PNB)</option>
+                    <option value="Bank of Baroda" data-key="bank_bob">Bank of Baroda</option>
+                    <option value="Kotak Mahindra Bank" data-key="bank_kotak">Kotak Mahindra Bank</option>
+                    <option value="Canara Bank" data-key="bank_canara">Canara Bank</option>
                 </select>
                 <label data-key="lbl_acc_num">Account Number:</label><input type="text" name="account_no" placeholder="Enter A/C No" required>
                 <label data-key="lbl_opening_bal">Opening Balance (₹):</label><input type="number" step="0.01" name="balance" value="0.0" required>
@@ -426,6 +426,7 @@ DASHBOARD_HTML = """
                 ask_btn: "Ask AI",
                 voice_hint: "Click mic to speak or use quick buttons below:",
                 type_query_placeholder: "Type query here...",
+                ai_prefix: "🤖 AI Answer: ",
                 btn_profit: "Net Profit",
                 btn_sales: "Total Sales",
                 btn_bank: "Bank Balance",
@@ -438,7 +439,15 @@ DASHBOARD_HTML = """
                 opt_cash: "Cash",
                 opt_regular: "Regular Stock",
                 opt_adv_given: "Advance Given",
-                opt_adv_taken: "Advance Taken"
+                opt_adv_taken: "Advance Taken",
+                bank_sbi: "State Bank of India (SBI)",
+                bank_hdfc: "HDFC Bank",
+                bank_icici: "ICICI Bank",
+                bank_axis: "Axis Bank",
+                bank_pnb: "Punjab National Bank (PNB)",
+                bank_bob: "Bank of Baroda",
+                bank_kotak: "Kotak Mahindra Bank",
+                bank_canara: "Canara Bank"
             },
             hi: {
                 header_title: "वज्र संप्रभु ईआरपी ओएस",
@@ -515,19 +524,28 @@ DASHBOARD_HTML = """
                 ask_btn: "पूछें",
                 voice_hint: "माइक दबाएं, क्विक बटन उपयोग करें या नीचे टाइप करें:",
                 type_query_placeholder: "यहाँ अपना प्रश्न टाइप करें...",
+                ai_prefix: "🤖 एआई उत्तर: ",
                 btn_profit: "शुद्ध लाभ",
                 btn_sales: "कुल बिक्री",
                 btn_bank: "बैंक बैलेंस",
                 btn_stock: "स्टॉक सारांश",
-                opt_receipt: "रसीद (RECEIPT)",
-                opt_payment: "भुगतान (PAYMENT)",
-                opt_sales: "बिक्री (SALES)",
-                opt_purchase: "खरीद (PURCHASE)",
+                opt_receipt: "रसीद (रसीद)",
+                opt_payment: "भुगतान (भुगतान)",
+                opt_sales: "बिक्री (बिक्री)",
+                opt_purchase: "खरीद (खरीद)",
                 opt_add_bank_first: "-- पहले बैंक जोड़ें --",
-                opt_cash: "नकद (Cash)",
+                opt_cash: "नकद",
                 opt_regular: "नियमित स्टॉक",
                 opt_adv_given: "अग्रिम दिया गया",
-                opt_adv_taken: "अग्रिम लिया गया"
+                opt_adv_taken: "अग्रिम लिया गया",
+                bank_sbi: "भारतीय स्टेट बैंक (SBI)",
+                bank_hdfc: "एचडीएफसी बैंक",
+                bank_icici: "आईसीआईसीआई बैंक",
+                bank_axis: "एक्सिस बैंक",
+                bank_pnb: "पंजाब नेशनल बैंक (PNB)",
+                bank_bob: "बैंक ऑफ बड़ौदा",
+                bank_kotak: "कोटक महिंद्रा बैंक",
+                bank_canara: "केनरा बैंक"
             },
             gu: {
                 header_title: "વજ્ર સોવરિન ઇઆરપી ઓએસ",
@@ -604,6 +622,7 @@ DASHBOARD_HTML = """
                 ask_btn: "પૂછો",
                 voice_hint: "માઇક, ક્વિક બટન અથવા નીચે ટાઈપ કરો:",
                 type_query_placeholder: "તમારો પ્રશ્ન અહીં ટાઈપ કરો...",
+                ai_prefix: "🤖 એઆઈ જવાબ: ",
                 btn_profit: "નેટ નફો",
                 btn_sales: "કુલ વેચાણ",
                 btn_bank: "બેંક બેલેન્સ",
@@ -616,7 +635,15 @@ DASHBOARD_HTML = """
                 opt_cash: "રોકડ (Cash)",
                 opt_regular: "સામાન્ય સ્ટોક",
                 opt_adv_given: "એડવાન્સ આપેલું",
-                opt_adv_taken: "એડવાન્સ લીધેલું"
+                opt_adv_taken: "એડવાન્સ લીધેલું",
+                bank_sbi: "સ્ટેટ બેંક ઓફ ઇન્ડિયા (SBI)",
+                bank_hdfc: "એચડીએફસી બેંક",
+                bank_icici: "આઈસીઆઈસીઆઈ બેંક",
+                bank_axis: "એક્સિસ બેંક",
+                bank_pnb: "પંજાબ નેશનલ બેંક (PNB)",
+                bank_bob: "બેંક ઓફ બરોડા",
+                bank_kotak: "કોટક મહિન્દ્રા બેંક",
+                bank_canara: "કેનરા બેંક"
             }
         };
 
@@ -643,7 +670,7 @@ DASHBOARD_HTML = """
             });
 
             // Handle dropdown options dynamically
-            const optKeys = document.querySelectorAll('[data-key^="opt_"]');
+            const optKeys = document.querySelectorAll('[data-key^="opt_"], [data-key^="bank_"]');
             optKeys.forEach(opt => {
                 const oKey = opt.getAttribute('data-key');
                 if (translations[lang] && translations[lang][oKey]) {
@@ -725,7 +752,8 @@ DASHBOARD_HTML = """
                 return res.json();
             })
             .then(data => {
-                replyElem.innerText = "🤖 AI Answer: " + data.reply;
+                const prefix = translations[currentLang].ai_prefix || "🤖 AI Answer: ";
+                replyElem.innerText = prefix + data.reply;
                 
                 if ('speechSynthesis' in window) {
                     try {
@@ -870,7 +898,7 @@ def ai_assistant():
         total_items = conn.execute("SELECT COUNT(*) FROM inventory").fetchone()[0] or 0
     
     if lang == "gu":
-        response_text = "માફ કરશો, હું આ પ્રશ્ન સમજી શક્યો નથી. તમે 'નફો', 'વેચાણ', 'બેલેન્સ' અથવા 'સ્ટોક' વિશે પૂછી શકો છો."
+        response_text = f"આજે કુલ આવક / વેચાણ ₹{rev:.2f} છે."
         if "profit" in user_query or "nofo" in user_query or "નફો" in user_query or "nafa" in user_query:
             response_text = f"આજે કુલ નેટ નફો ₹{net_profit:.2f} થયો છે."
         elif "sales" in user_query or "vechan" in user_query or "aavak" in user_query or "revenue" in user_query:
@@ -880,7 +908,7 @@ def ai_assistant():
         elif "stock" in user_query or "stok" in user_query:
             response_text = f"ઇન્વેન્ટરી સ્ટોક મેનેજમેન્ટમાં કુલ {total_items} આઇટમ્સ રજીસ્ટર થયેલી છે."
     elif lang == "hi":
-        response_text = "क्षमा करें, मैं इस प्रश्न को समझ नहीं सका। आप 'लाभ', 'बिक्री', 'बैलेंस' या 'स्टॉक' के बारे में पूछ सकते हैं।"
+        response_text = f"कुल राजस्व / बिक्री ₹{rev:.2f} है।"
         if "profit" in user_query or "labh" in user_query or "नफा" in user_query:
             response_text = f"आज कुल शुद्ध लाभ ₹{net_profit:.2f} हुआ है।"
         elif "sales" in user_query or "bikri" in user_query or "revenue" in user_query:
@@ -890,7 +918,7 @@ def ai_assistant():
         elif "stock" in user_query:
             response_text = f"इन्वेंट्री स्टॉक में कुल {total_items} आइटम पंजीकृत हैं।"
     else:
-        response_text = "Sorry, I could not understand this query. You can ask about 'profit', 'sales', 'balance', or 'stock'."
+        response_text = f"Total revenue / sales is ₹{rev:.2f}."
         if "profit" in user_query:
             response_text = f"Today's net profit is ₹{net_profit:.2f}."
         elif "sales" in user_query or "revenue" in user_query:
