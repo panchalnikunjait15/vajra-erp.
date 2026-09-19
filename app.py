@@ -292,19 +292,30 @@ DASHBOARD_HTML = """
                     <option value="Federal Bank" data-key="bank_federal">Federal Bank</option>
                     <option value="IDFC First Bank" data-key="bank_idfc">IDFC First Bank</option>
                     
-                    <!-- Regional / State / Co-operative Banks (Gujarat, Mumbai, UP, MP, Delhi) -->
-                    <option value="Saraswat Co-operative Bank" data-key="bank_saraswat">Saraswat Co-operative Bank</option>
-                    <option value="Cosmos Co-operative Bank" data-key="bank_cosmos">Cosmos Co-operative Bank</option>
+                    <!-- Gujarat Co-operative & Regional Banks -->
                     <option value="The Kalupur Commercial Co-op Bank" data-key="bank_kalupur">The Kalupur Commercial Co-op Bank</option>
                     <option value="Surat People's Co-operative Bank" data-key="bank_surat">Surat People's Co-operative Bank</option>
+                    <option value="Mehsana Urban Co-operative Bank" data-key="bank_mehsana_urban">Mehsana Urban Co-operative Bank</option>
+                    <option value="Ahmedabad Mercantile Co-operative Bank" data-key="bank_amco">Ahmedabad Mercantile Co-operative Bank</option>
+                    <option value="Nutan Nagarik Sahakari Bank" data-key="bank_nutan">Nutan Nagarik Sahakari Bank</option>
+                    <option value="Rajkot Peoples Co-operative Bank" data-key="bank_rajkot_peoples">Rajkot Peoples Co-operative Bank</option>
                     <option value="Baroda Gujarat Gramin Bank" data-key="bank_bggb">Baroda Gujarat Gramin Bank</option>
-                    <option value="Uttar Pradesh Cooperative Bank" data-key="bank_up_coop">Uttar Pradesh Cooperative Bank</option>
-                    <option value="Madhya Pradesh Rajya Sahakari Bank" data-key="bank_mp_coop">Madhya Pradesh Rajya Sahakari Bank</option>
-                    <option value="Delhi State Cooperative Bank" data-key="bank_delhi_coop">Delhi State Cooperative Bank</option>
-                    <option value="Aryavart Bank (UP)" data-key="bank_aryavart">Aryavart Bank (UP)</option>
-                    <option value="Madhya Pradesh Gramin Bank" data-key="bank_mp_gramin">Madhya Pradesh Gramin Bank</option>
+                    <option value="Saurashtra Gramin Bank" data-key="bank_saurashtra_gramin">Saurashtra Gramin Bank</option>
+                    <option value="Gandhinagar Nagarik Sahakari Bank" data-key="bank_gandhinagar">Gandhinagar Nagarik Sahakari Bank</option>
+                    <option value="Anand Mercantile Co-op Bank" data-key="bank_anand">Anand Mercantile Co-op Bank</option>
+                    <option value="Sabarkantha District Cooperative Bank" data-key="bank_sabarkantha">Sabarkantha District Cooperative Bank</option>
+                    <option value="Banaskantha District Central Cooperative Bank" data-key="bank_banaskantha">Banaskantha District Central Cooperative Bank</option>
+                    
+                    <!-- Mumbai, UP, MP, Delhi Co-operative & Regional Banks -->
+                    <option value="Saraswat Co-operative Bank" data-key="bank_saraswat">Saraswat Co-operative Bank</option>
+                    <option value="Cosmos Co-operative Bank" data-key="bank_cosmos">Cosmos Co-operative Bank</option>
                     <option value="Abhyudaya Co-operative Bank (Mumbai)" data-key="bank_abhyudaya">Abhyudaya Co-operative Bank (Mumbai)</option>
                     <option value="Greater Bombay Co-operative Bank" data-key="bank_greater_bombay">Greater Bombay Co-operative Bank</option>
+                    <option value="Uttar Pradesh Cooperative Bank" data-key="bank_up_coop">Uttar Pradesh Cooperative Bank</option>
+                    <option value="Aryavart Bank (UP)" data-key="bank_aryavart">Aryavart Bank (UP)</option>
+                    <option value="Madhya Pradesh Rajya Sahakari Bank" data-key="bank_mp_coop">Madhya Pradesh Rajya Sahakari Bank</option>
+                    <option value="Madhya Pradesh Gramin Bank" data-key="bank_mp_gramin">Madhya Pradesh Gramin Bank</option>
+                    <option value="Delhi State Cooperative Bank" data-key="bank_delhi_coop">Delhi State Cooperative Bank</option>
                 </select>
                 <label data-key="lbl_acc_num">Account Number:</label><input type="text" name="account_no" placeholder="Enter A/C No" required>
                 <label data-key="lbl_opening_bal">Opening Balance (₹):</label><input type="number" step="0.01" name="balance" value="0.0" required>
@@ -483,18 +494,27 @@ DASHBOARD_HTML = """
                 bank_yes: "Yes Bank",
                 bank_federal: "Federal Bank",
                 bank_idfc: "IDFC First Bank",
-                bank_saraswat: "Saraswat Co-operative Bank",
-                bank_cosmos: "Cosmos Co-operative Bank",
                 bank_kalupur: "The Kalupur Commercial Co-op Bank",
                 bank_surat: "Surat People's Co-operative Bank",
+                bank_mehsana_urban: "Mehsana Urban Co-operative Bank",
+                bank_amco: "Ahmedabad Mercantile Co-operative Bank",
+                bank_nutan: "Nutan Nagarik Sahakari Bank",
+                bank_rajkot_peoples: "Rajkot Peoples Co-operative Bank",
                 bank_bggb: "Baroda Gujarat Gramin Bank",
-                bank_up_coop: "Uttar Pradesh Cooperative Bank",
-                bank_mp_coop: "Madhya Pradesh Rajya Sahakari Bank",
-                bank_delhi_coop: "Delhi State Cooperative Bank",
-                bank_aryavart: "Aryavart Bank (UP)",
-                bank_mp_gramin: "Madhya Pradesh Gramin Bank",
+                bank_saurashtra_gramin: "Saurashtra Gramin Bank",
+                bank_gandhinagar: "Gandhinagar Nagarik Sahakari Bank",
+                bank_anand: "Anand Mercantile Co-op Bank",
+                bank_sabarkantha: "Sabarkantha District Cooperative Bank",
+                bank_banaskantha: "Banaskantha District Central Cooperative Bank",
+                bank_saraswat: "Saraswat Co-operative Bank",
+                bank_cosmos: "Cosmos Co-operative Bank",
                 bank_abhyudaya: "Abhyudaya Co-operative Bank (Mumbai)",
-                bank_greater_bombay: "Greater Bombay Co-operative Bank"
+                bank_greater_bombay: "Greater Bombay Co-operative Bank",
+                bank_up_coop: "Uttar Pradesh Cooperative Bank",
+                bank_aryavart: "Aryavart Bank (UP)",
+                bank_mp_coop: "Madhya Pradesh Rajya Sahakari Bank",
+                bank_mp_gramin: "Madhya Pradesh Gramin Bank",
+                bank_delhi_coop: "Delhi State Cooperative Bank"
             },
             hi: {
                 header_title: "वज्र संप्रभु ईआरपी ओएस",
@@ -611,18 +631,27 @@ DASHBOARD_HTML = """
                 bank_yes: "यस बैंक",
                 bank_federal: "फेडरल बैंक",
                 bank_idfc: "आईडीएफसी फर्स्ट बैंक",
-                bank_saraswat: "सारस्वत को-ऑपरेटिव बैंक",
-                bank_cosmos: "कॉसमॉस को-ऑपरेटिव बैंक",
                 bank_kalupur: "कालूपुर कमर्शियल को-ऑपरेटिव बैंक",
                 bank_surat: "सूरत पीपल्स को-ऑपरेटिव बैंक",
+                bank_mehsana_urban: "मेहसाणा अर्बन को-ऑपरेटिव बैंक",
+                bank_amco: "अहमदाबाद मर्केंटाइल को-ऑपरेटिव बैंक",
+                bank_nutan: "नूतन नागरिक सहकारी बैंक",
+                bank_rajkot_peoples: "राजकोट पीपल्स को-ऑपरेटिव बैंक",
                 bank_bggb: "बड़ौदा गुजरात ग्रामीण बैंक",
-                bank_up_coop: "उत्तर प्रदेश सहकारी बैंक",
-                bank_mp_coop: "मध्य प्रदेश राज्य सहकारी बैंक",
-                bank_delhi_coop: "दिल्ली राज्य सहकारी बैंक",
-                bank_aryavart: "आर्यावर्त बैंक (यूपी)",
-                bank_mp_gramin: "मध्य प्रदेश ग्रामीण बैंक",
+                bank_saurashtra_gramin: "सौराष्ट्र ग्रामीण बैंक",
+                bank_gandhinagar: "गांधीनगर नागरिक सहकारी बैंक",
+                bank_anand: "आनंद मर्केंटाइल को-ऑप बैंक",
+                bank_sabarkantha: "साबरकांठा जिला सहकारी बैंक",
+                bank_banaskantha: "बनासकांठा जिला केंद्रीय सहकारी बैंक",
+                bank_saraswat: "सारस्वत को-ऑपरेटिव बैंक",
+                bank_cosmos: "कॉसमॉस को-ऑपरेटिव बैंक",
                 bank_abhyudaya: "अभ्युदय को-ऑपरेटिव बैंक (मुंबई)",
-                bank_greater_bombay: "ग्रेटर बॉम्बे को-ऑपरेटिव बैंक"
+                bank_greater_bombay: "ग्रेटर बॉम्बे को-ऑपरेटिव बैंक",
+                bank_up_coop: "उत्तर प्रदेश सहकारी बैंक",
+                bank_aryavart: "आर्यावर्त बैंक (यूपी)",
+                bank_mp_coop: "मध्य प्रदेश राज्य सहकारी बैंक",
+                bank_mp_gramin: "मध्य प्रदेश ग्रामीण बैंक",
+                bank_delhi_coop: "दिल्ली राज्य सहकारी बैंक"
             },
             gu: {
                 header_title: "વજ્ર સોવરિન ઇઆરપી ઓએસ",
@@ -739,18 +768,27 @@ DASHBOARD_HTML = """
                 bank_yes: "યસ બેંક",
                 bank_federal: "ફેડરલ બેંક",
                 bank_idfc: "આઈડીએફસી ફર્સ્ટ બેંક",
-                bank_saraswat: "સારસ્વત કો-ઓપરેટીવ બેંક",
-                bank_cosmos: "કોસ્મોસ કો-ઓપરેટીવ બેંક",
                 bank_kalupur: "કાલુપુર કમર્શિયલ કો-ઓપરેટિવ બેંક",
                 bank_surat: "સूरत પીપલ્સ કો-ઓપરેટિવ બેંક",
+                bank_mehsana_urban: "મહેસાણા અર્બન કો-ઓપરેટિવ બેંક",
+                bank_amco: "અમદાવાદ મર્કેન્ટાઈલ કો-ઓપરેટિવ બેંક",
+                bank_nutan: "નૂતન નાગરિક સહકારી બેંક",
+                bank_rajkot_peoples: "રાજકોટ પીપલ્સ કો-ઓપરેટિવ બેંક",
                 bank_bggb: "બરોડા ગુજરાત ગ્રામીણ બેંક",
-                bank_up_coop: "ઉત્તર પ્રદેશ સહકારી બેંક",
-                bank_mp_coop: "મધ્ય પ્રદેશ રાજ્ય સહકારી બેંક",
-                bank_delhi_coop: "દિલ્હી રાજ્ય સહકારી બેંક",
-                bank_aryavart: "આર્યાવર્ત બેંક (યુપી)",
-                bank_mp_gramin: "મધ્ય પ્રદેશ ગ્રામીણ બેંક",
+                bank_saurashtra_gramin: "सौराष्ट्र ग्रामीण बैंक",
+                bank_gandhinagar: "ગાંધીનગર નાગરિક સહકારી બેંક",
+                bank_anand: "આણંદ મર્કેન્ટાઈલ કો-ઓપ બેંક",
+                bank_sabarkantha: "સાબરકાંઠા જિલ્લા સહકારી બેંક",
+                bank_banaskantha: "બનાસકાંઠા જિલ્લા મધ્યસ્થ સહકારી બેંક",
+                bank_saraswat: "સારસ્વત કો-ઓપરેટીવ બેંક",
+                bank_cosmos: "કોસ્મોસ કો-ઓપરેટીવ બેંક",
                 bank_abhyudaya: "अभ्युदय को-ऑपरेटिव बैंक (મુંબઈ)",
-                bank_greater_bombay: "ગ્રેટર બોમ્બે કો-ઓપરેટિવ બેંક"
+                bank_greater_bombay: "ગ્રેટર બોમ્બે કો-ઓપરેટિવ બેંક",
+                bank_up_coop: "ઉત્તર પ્રદેશ સહકારી બેંક",
+                bank_aryavart: "આર્યાવર્ત બેંક (યુપી)",
+                bank_mp_coop: "મધ્ય પ્રદેશ રાજ્ય સહકારી બેંક",
+                bank_mp_gramin: "મધ્ય પ્રદેશ ગ્રામીણ બેંક",
+                bank_delhi_coop: "દિલ્હી રાજ્ય સહકારી બેંક"
             }
         };
 
