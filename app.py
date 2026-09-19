@@ -138,8 +138,8 @@ DASHBOARD_HTML = """
     <div class="btn-row">
         <a href="/backup_db"><i class="fas fa-database"></i> <span data-key="backup_db">Backup DB</span></a>
         <a href="/export_inventory_csv"><i class="fas fa-download"></i> <span data-key="export_csv">Export CSV</span></a>
-        <!-- 📥 PDF REPORT DOWNLOAD BUTTON -->
-        <a href="/download_pdf_report" style="background: #2563eb;"><i class="fas fa-file-pdf"></i> <span data-key="download_pdf">Download PDF Report</span></a>
+        <!-- 🖨️ PRINT & PDF VIEW BUTTON -->
+        <a href="/print_report_view" target="_blank" style="background: #2563eb;"><i class="fas fa-print"></i> <span data-key="print_report">Print / Save PDF</span></a>
     </div>
 
     <!-- 🤖 VAJRA AI VOICE & SMART ASSISTANT WIDGET -->
@@ -348,7 +348,7 @@ DASHBOARD_HTML = """
                 logout: "Logout",
                 backup_db: "Backup DB",
                 export_csv: "Export CSV",
-                download_pdf: "Download PDF Report",
+                print_report: "Print / Save PDF",
                 sentinel_title: "Sovereign Multi-Lingual Sentinel",
                 runway_label: "Estimated Liquidity Runway",
                 sentinel_status: "Status",
@@ -427,7 +427,7 @@ DASHBOARD_HTML = """
                 logout: "लॉग आउट",
                 backup_db: "डेटाबेस बैकअप",
                 export_csv: "इन्वेंट्री एक्सपोर्ट",
-                download_pdf: "PDF रिपोर्ट डाउनलोड करें",
+                print_report: "प्रिंट / पीडीएफ सेव करें",
                 sentinel_title: "संप्रभु बहुभाषी प्रहरी",
                 runway_label: "अनुमानित तरलता रनवे",
                 sentinel_status: "स्थिति",
@@ -506,7 +506,7 @@ DASHBOARD_HTML = """
                 logout: "લોગઆઉટ",
                 backup_db: "બેકઅપ ડીબી",
                 export_csv: "ઇન્વેન્ટરી એક્સપોર્ટ",
-                download_pdf: "PDF રિપોર્ટ ડાઉનલોડ કરો",
+                print_report: "પ્રિન્ટ / PDF સેવ કરો",
                 sentinel_title: "સોવરિન મલ્ટી-લિંગ્વેજ સેન્ટિનલ",
                 runway_label: "અંદાજિત લિક્વિડિટી રનવે",
                 sentinel_status: "સ્થિતિ",
@@ -754,49 +754,54 @@ def dashboard():
     query_latency = round((time.time() - start_time) * 1000, 2)
     return render_template_string(DASHBOARD_HTML, vouchers=vouchers, kpis=kpis, banks=banks, stock_summary=stock_summary, runway_days=runway_days, sentinel_status=sentinel_status, query_latency=query_latency)
 
-# --- 📥 DOWNLOAD PDF REPORT ROUTE (MOBILE APK & WEBVIEW FRIENDLY) ---
-@app.route("/download_pdf_report")
-def download_pdf_report():
+# --- 🖨️ PRINT REPORT VIEW ROUTE (WEBVIEW & MOBILE FRIENDLY) ---
+@app.route("/print_report_view")
+def print_report_view():
     if not session.get("logged_in"): return redirect(url_for("login"))
     with sqlite3.connect(DB_NAME) as conn:
         vouchers = conn.execute("SELECT * FROM vouchers ORDER BY id DESC").fetchall()
         banks = conn.execute("SELECT * FROM bank_accounts").fetchall()
         inventory = conn.execute("SELECT * FROM inventory").fetchall()
     
-    html_content = f"""
-    <!DOCTYPE html>
-    <html>
-    <head>
-        <meta charset="UTF-8">
-        <title>Vajra ERP Report</title>
-        <style>
-            body {{ background: white; color: black; font-family: sans-serif; padding: 20px; }}
-            h2 {{ color: #0f172a; border-bottom: 2px solid #2563eb; padding-bottom: 8px; }}
-            table {{ width: 100%; border-collapse: collapse; margin-top: 15px; margin-bottom: 25px; font-size: 0.9em; }}
-            th, td {{ border: 1px solid #cbd5e1; padding: 8px; text-align: left; }}
-            th {{ background: #f1f5f9; color: #1e293b; }}
-        </style>
-    </head>
-    <body>
-        <h2>⚡ Vajra ERP - Official Business Report</h2>
-        <h3>Recent Vouchers</h3>
-        <table>
-            <tr><th>ID</th><th>Date</th><th>Type</th><th>Party</th><th>Total (Inc. GST)</th></tr>
-            {''.join(f"<tr><td>{v[0]}</td><td>{v[1]}</td><td>{v[2]}</td><td>{v[3]}</td><td>₹{v[6]:.2f}</td></tr>" for v in vouchers)}
-        </table>
-        <h3>Bank Accounts</h3>
-        <table>
-            <tr><th>Bank Name</th><th>Account No</th><th>Balance</th></tr>
-            {''.join(f"<tr><td>{b[1]}</td><td>{b[2]}</td><td>₹{b[3]:.2f}</td></tr>" for b in banks)}
-        </table>
-    </body>
-    </html>
-    """
-    return Response(
-        html_content,
-        mimetype="application/pdf",
-        headers={"Content-Disposition": "attachment;filename=Vajra_ERP_Report.pdf"}
-    )
+    return render_template_string('''
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Vajra ERP - Print Report</title>
+            <style>
+                body { background: white; color: black; font-family: sans-serif; padding: 20px; }
+                h2 { color: #0f172a; border-bottom: 2px solid #2563eb; padding-bottom: 8px; }
+                table { width: 100%; border-collapse: collapse; margin-top: 15px; margin-bottom: 25px; font-size: 0.9em; }
+                th, td { border: 1px solid #cbd5e1; padding: 8px; text-align: left; }
+                th { background: #f1f5f9; color: #1e293b; }
+                .print-btn { background: #2563eb; color: white; border: none; padding: 12px 24px; border-radius: 6px; font-size: 1em; cursor: pointer; display: block; margin: 20px auto; font-weight: bold; }
+                @media print { .print-btn { display: none; } }
+            </style>
+        </head>
+        <body>
+            <h2>⚡ Vajra ERP - Official Business Report</h2>
+            <button class="print-btn" onclick="window.print()">🖨️ Print / Save as PDF</button>
+            
+            <h3>Recent Vouchers</h3>
+            <table>
+                <tr><th>ID</th><th>Date</th><th>Type</th><th>Party</th><th>Total (Inc. GST)</th></tr>
+                {% for v in vouchers %}
+                <tr><td>{{ v[0] }}</td><td>{{ v[1] }}</td><td>{{ v[2] }}</td><td>{{ v[3] }}</td><td>₹{{ "%.2f"|format(v[6]) }}</td></tr>
+                {% endfor %}
+            </table>
+
+            <h3>Bank Accounts</h3>
+            <table>
+                <tr><th>Bank Name</th><th>Account No</th><th>Balance</th></tr>
+                {% for b in banks %}
+                <tr><td>{{ b[1] }}</td><td>{{ b[2] }}</td><td>₹{{ "%.2f"|format(b[3]) }}</td></tr>
+                {% endfor %}
+            </table>
+        </body>
+        </html>
+    ''', vouchers=vouchers, banks=banks, inventory=inventory)
 
 # --- 🤖 MULTI-LINGUAL AI ASSISTANT API ROUTE ---
 @app.route("/api/ai-assistant", methods=["POST", "GET"])
