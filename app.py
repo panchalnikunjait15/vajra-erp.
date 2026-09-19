@@ -166,11 +166,11 @@ DASHBOARD_HTML = """
     <div class="ai-banner">
         <div>
             <h3 data-key="sentinel_title"><i class="fas fa-shield-alt"></i> Sovereign Multi-Lingual Sentinel</h3>
-            <p><span data-key="runway_label">Estimated Liquidity Runway</span>: <strong style="color:#34d399;">{{ runway_days }} Days</strong> | <span data-key="sentinel_status">Status</span>: <strong style="color:#38bdf8;">{{ sentinel_status }}</strong></p>
+            <p><span data-key="runway_label">Estimated Liquidity Runway</span>: <strong style="color:#34d399;">{{ runway_days }} Days</strong> | <span data-key="sentinel_status">Status</span>: <strong style="color:#38bdf8;" data-key="sentinel_val">{{ sentinel_status }}</strong></p>
         </div>
         <div style="background: rgba(0,0,0,0.4); padding: 15px 20px; border-radius: 8px; text-align: center; border: 1px solid #6366f1;">
             <div style="font-size: 0.75em; text-transform: uppercase; color: #c7d2fe;" data-key="cloud_status">Cloud Status</div>
-            <div style="font-size: 1.1em; font-weight: bold; color: #34d399;">Live & Secure</div>
+            <div style="font-size: 1.1em; font-weight: bold; color: #34d399;" data-key="cloud_val">Live & Secure</div>
         </div>
     </div>
 
@@ -360,7 +360,9 @@ DASHBOARD_HTML = """
                 sentinel_title: "Sovereign Multi-Lingual Sentinel",
                 runway_label: "Estimated Liquidity Runway",
                 sentinel_status: "Status",
+                sentinel_val: "Optimal Liquidity",
                 cloud_status: "Cloud Status",
+                cloud_val: "Live & Secure",
                 kpi_revenue: "Total Revenue",
                 kpi_profit: "Net Profit (P&L)",
                 kpi_bank: "Total Bank Balance",
@@ -458,7 +460,9 @@ DASHBOARD_HTML = """
                 sentinel_title: "संप्रभु बहुभाषी प्रहरी",
                 runway_label: "अनुमानित तरलता रनवे",
                 sentinel_status: "स्थिति",
+                sentinel_val: "नकद संरक्षण चेतावनी",
                 cloud_status: "क्लाउड स्थिति",
+                cloud_val: "लाइव और सुरक्षित",
                 kpi_revenue: "कुल राजस्व",
                 kpi_profit: "शुद्ध लाभ (P&L)",
                 kpi_bank: "कुल बैंक शेष",
@@ -543,11 +547,11 @@ DASHBOARD_HTML = """
                 opt_outward: "जावक",
                 opt_deposit: "जमा",
                 opt_withdraw: "निकासी",
-                bank_sbi: "भारतीय स्टेट बैंक (SBI)",
+                bank_sbi: "भारतीय स्टेट बैंक (एसबीआई)",
                 bank_hdfc: "एचडीएफसी बैंक",
                 bank_icici: "आईसीआईसीआई बैंक",
                 bank_axis: "एक्सिस बैंक",
-                bank_pnb: "पंजाब नेशनल बैंक (PNB)",
+                bank_pnb: "पंजाब नेशनल बैंक (पीएनबी)",
                 bank_bob: "बैंक ऑफ बड़ौदा",
                 bank_kotak: "कोटक महिंद्रा बैंक",
                 bank_canara: "केनरा बैंक"
@@ -561,7 +565,9 @@ DASHBOARD_HTML = """
                 sentinel_title: "સોવરિન મલ્ટી-લિંગ્વેજ સેન્ટિનલ",
                 runway_label: "અંદાજિત લિક્વિડિટી રનવે",
                 sentinel_status: "સ્થિતિ",
+                sentinel_val: "રોકડ સંરક્ષણ ચેતવણી",
                 cloud_status: "ક્લાઉડ સ્ટેટસ",
+                cloud_val: "લાઇવ અને સુરક્ષિત",
                 kpi_revenue: "કુલ આવક",
                 kpi_profit: "નેટ પ્રોફિટ (નફો)",
                 kpi_bank: "કુલ બેંક બેલેન્સ",
@@ -680,7 +686,7 @@ DASHBOARD_HTML = """
             });
 
             // Handle dropdown options dynamically
-            const optKeys = document.querySelectorAll('[data-key^="opt_"], [data-key^="bank_"]');
+            const optKeys = document.querySelectorAll('[data-key^="opt_"], [data-key^="bank_"], [data-key="sentinel_val"], [data-key="cloud_val"]');
             optKeys.forEach(opt => {
                 const oKey = opt.getAttribute('data-key');
                 if (translations[lang] && translations[lang][oKey]) {
@@ -763,12 +769,18 @@ DASHBOARD_HTML = """
             })
             .then(data => {
                 const prefix = translations[currentLang].ai_prefix || "🤖 AI Answer: ";
-                replyElem.innerText = prefix + data.reply;
+                let localizedReply = data.reply;
+                if (currentLang === 'gu') {
+                    localizedReply = localizedReply.replace("Total revenue / sales is", "કુલ વેચાણ / આવક").replace("Today's net profit is", "આજે કુલ નેટ નફો").replace("Total bank balance across accounts is", "બધી બેંકનું કુલ બેલેન્સ").replace("Live inventory stock summary:", "ઇન્વેન્ટરી સ્ટોક મેનેજમેન્ટમાં કુલ").replace("items registered.", "આઇટમ્સ રજીસ્ટર થયેલી છે.");
+                } else if (currentLang === 'hi') {
+                    localizedReply = localizedReply.replace("Total revenue / sales is", "कुल राजस्व / बिक्री").replace("Today's net profit is", "आज कुल शुद्ध लाभ").replace("Total bank balance across accounts is", "सभी बैंकों का कुल शेष").replace("Live inventory stock summary:", "इन्वेंट्री स्टॉक में कुल").replace("items registered.", "आइटम पंजीकृत हैं।");
+                }
+                replyElem.innerText = prefix + localizedReply;
                 
                 if ('speechSynthesis' in window) {
                     try {
                         window.speechSynthesis.cancel();
-                        let speech = new SpeechSynthesisUtterance(data.reply);
+                        let speech = new SpeechSynthesisUtterance(localizedReply);
                         speech.lang = currentLang === 'gu' ? 'gu-IN' : (currentLang === 'hi' ? 'hi-IN' : 'en-US');
                         window.speechSynthesis.speak(speech);
                     } catch(ex) {}
@@ -1013,7 +1025,7 @@ def backup_db():
     if not session.get("logged_in"): return redirect(url_for("login"))
     return send_file(os.path.abspath(DB_NAME), as_attachment=True)
 
-@app.route("/logout")
+@app.route("", methods=["GET"])
 def logout():
     session.clear()
     return redirect(url_for("login"))
