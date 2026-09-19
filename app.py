@@ -149,7 +149,7 @@ DASHBOARD_HTML = """
         <button onclick="window.print()"><i class="fas fa-print"></i> <span data-key="print_report">Print Report</span></button>
     </div>
 
-    <!-- 🤖 PREMIUM STYLISH AI VOICE ASSISTANT WIDGET -->
+    <!-- 🤖 PREMIUM STYLISH AI VOICE ASSISTANT WIDGET WITH TIMEOUT SAFEGUARD -->
     <div class="card" style="margin-bottom: 25px; border: 1.5px solid #818cf8; background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%); box-shadow: 0 12px 30px rgba(99,102,241,0.25);">
         <h3><span><i class="fas fa-microphone-alt" style="color: #818cf8;"></i> <span data-key="ai_voice_title">Vajra AI Voice & Smart Assistant</span></span></h3>
         <p id="voiceStatus" style="color: #38bdf8; margin: 8px 0; font-size: 0.95em;" data-key="voice_hint">Click mic or type query (e.g. profit, sales, stock) / માઇક દબાવો અથવા ટાઈપ કરો...</p>
@@ -585,42 +585,64 @@ DASHBOARD_HTML = """
             });
         }
 
-        // 🎙️ Robust Voice Recognition with Multi-lingual Support & Fallback
+        // 🎙️ Robust Voice Recognition with Auto-Timeout Safeguard
+        let recognition = null;
         function startVoiceRecognition() {
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             if (!SpeechRecognition) {
-                alert("Voice recognition is not supported in this browser/app view. Please type your query below.");
+                alert("Voice recognition is not supported in this browser. Please type your query below.");
                 return;
             }
-            const recognition = new SpeechRecognition();
-            
-            // Set language based on active UI language selection
-            if(currentLang === 'gu') recognition.lang = 'gu-IN';
-            else if(currentLang === 'hi') recognition.lang = 'hi-IN';
-            else recognition.lang = 'en-US';
-
-            document.getElementById("voiceStatus").innerText = currentLang === 'gu' ? "સાંભળી રહ્યું છે... બોલો!" : (currentLang === 'hi' ? "सुन रहा है... बोलें!" : "Listening... Speak now!");
-            
-            recognition.onresult = function(event) {
-                const spokenText = event.results[0][0].transcript;
-                document.getElementById("voiceStatus").innerText = "You said / તમે બોલ્યા: " + spokenText;
-                document.getElementById("aiTextInput").value = spokenText;
-                sendQueryToAI(spokenText);
-            };
-            
-            recognition.onerror = function(event) {
-                document.getElementById("voiceStatus").innerText = "Voice error or blocked. Please type your query in the box below.";
-            };
             
             try {
+                if (recognition) {
+                    recognition.abort();
+                }
+                recognition = new SpeechRecognition();
+                recognition.continuous = false;
+                recognition.interimResults = false;
+                
+                if(currentLang === 'gu') recognition.lang = 'gu-IN';
+                else if(currentLang === 'hi') recognition.lang = 'hi-IN';
+                else recognition.lang = 'en-US';
+
+                document.getElementById("voiceStatus").innerText = currentLang === 'gu' ? "સંભળાઈ રહ્યું છે... બોલો!" : "Listening... Speak now!";
+                
+                // Safety Timeout: If mic doesn't catch speech in 6 seconds, reset it so it never hangs
+                let speechTimer = setTimeout(() => {
+                    try { recognition.stop(); } catch(e){}
+                    document.getElementById("voiceStatus").innerText = currentLang === 'gu' ? "ટાઇમઆઉટ: કૃપા કરીને નીચે ટાઇપ કરો." : "Timeout. Please type your query below.";
+                }, 6000);
+
+                recognition.onresult = function(event) {
+                    clearTimeout(speechTimer);
+                    const spokenText = event.results[0][0].transcript;
+                    document.getElementById("voiceStatus").innerText = "You said: " + spokenText;
+                    document.getElementById("aiTextInput").value = spokenText;
+                    sendQueryToAI(spokenText);
+                };
+                
+                recognition.onerror = function(event) {
+                    clearTimeout(speechTimer);
+                    document.getElementById("voiceStatus").innerText = currentLang === 'gu' ? "માઇક બ્લોક અથવા એરર. કૃપા કરીને ટાઇપ કરો." : "Mic error or blocked. Please type below.";
+                };
+
+                recognition.onend = function() {
+                    clearTimeout(speechTimer);
+                };
+                
                 recognition.start();
             } catch(e) {
-                document.getElementById("voiceStatus").innerText = "Microphone busy or permission needed. Try typing below.";
+                document.getElementById("voiceStatus").innerText = currentLang === 'gu' ? "માઇક શરૂ કરવામાં ભૂલ. કૃપા કરીને ટાઇપ કરો." : "Microphone error. Please type query below.";
             }
         }
 
         function sendQueryToAI(queryText) {
             if(!queryText.trim()) return;
+            const replyElem = document.getElementById("aiReply");
+            replyElem.style.display = "block";
+            replyElem.innerText = currentLang === 'gu' ? "પ્રોસેસ થઈ રહ્યું છે..." : "Processing...";
+
             fetch('/api/ai-assistant', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -628,19 +650,13 @@ DASHBOARD_HTML = """
             })
             .then(res => res.json())
             .then(data => {
-                const replyElem = document.getElementById("aiReply");
-                replyElem.style.display = "block";
                 replyElem.innerText = "🤖 AI Answer: " + data.reply;
-                
-                // Text-to-Speech in selected language
                 let speech = new SpeechSynthesisUtterance(data.reply);
                 speech.lang = currentLang === 'gu' ? 'gu-IN' : (currentLang === 'hi' ? 'hi-IN' : 'en-US');
                 window.speechSynthesis.speak(speech);
             })
             .catch(err => {
-                const replyElem = document.getElementById("aiReply");
-                replyElem.style.display = "block";
-                replyElem.innerText = "Error connecting to AI Assistant.";
+                replyElem.innerText = currentLang === 'gu' ? "એરર: સર્વર કનેક્શન તપાસો." : "Error connecting to AI Assistant.";
             });
         }
     </script>
@@ -722,10 +738,9 @@ def ai_assistant():
         net_profit = rev - exp
         banks_total = conn.execute("SELECT SUM(balance) FROM bank_accounts").fetchone()[0] or 0.0
     
-    # Language specific smart responses
     if lang == "gu":
         response_text = "માફ કરશો, હું આ પ્રશ્ન સમજી શક્યો નથી. તમે 'નફો', 'વેચાણ', 'બેલેન્સ' અથવા 'સ્ટોક' વિશે પૂછી શકો છો."
-        if "profit" in user_query or "nofo" in user_query or "નફો" in user_query:
+        if "profit" in user_query or "nofo" in user_query or "નફો" in user_query or "nafa" in user_query:
             response_text = f"આજે કુલ નેટ નફો ₹{net_profit:.2f} થયો છે."
         elif "sales" in user_query or "vechan" in user_query or "aavak" in user_query or "revenue" in user_query:
             response_text = f"કુલ વેચાણ / આવક ₹{rev:.2f} છે."
