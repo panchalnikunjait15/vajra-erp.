@@ -1025,7 +1025,7 @@ def backup_db():
     if not session.get("logged_in"): return redirect(url_for("login"))
     return send_file(os.path.abspath(DB_NAME), as_attachment=True)
 
-@app.route("", methods=["GET"])
+@app.route("/logout", methods=["GET"])
 def logout():
     session.clear()
     return redirect(url_for("login"))
