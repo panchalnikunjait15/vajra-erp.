@@ -3,6 +3,7 @@ import os
 import sqlite3
 import hashlib
 import time
+import random
 from datetime import datetime
 from flask import Flask, render_template_string, request, redirect, url_for, session, Response, send_file, jsonify
 import csv
@@ -44,28 +45,42 @@ LOGIN_HTML = """
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vajra Cloud OS - Login</title>
+    <title>Vajra Sovereign ERP OS - Secure Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body { background: #030712; color: #fff; font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; padding: 20px; box-sizing: border-box; }
-        .card { background: #111827; padding: 35px; border-radius: 14px; width: 100%; max-width: 380px; border: 1px solid #1f2937; text-align: center; box-shadow: 0 25px 50px rgba(0,0,0,0.8); }
-        h2 { color: #38bdf8; margin-top: 0; }
-        input { width: 100%; padding: 12px; margin: 10px 0; background: #030712; border: 1px solid #374151; color: #fff; border-radius: 6px; box-sizing: border-box; font-size: 1em; }
-        button { background: #3b82f6; color: white; border: none; padding: 13px; width: 100%; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 1em; box-shadow: 0 0 15px rgba(59,130,246,0.4); }
-        .error { color: #f43f5e; background: rgba(244,63,94,0.1); padding: 10px; border-radius: 6px; font-size: 0.9em; margin-bottom: 15px; border: 1px solid #f43f5e; }
-        .hint { font-size: 0.8em; color: #64748b; margin-top: 20px; font-family: monospace; }
+        .card { background: linear-gradient(135deg, #111827 0%, #0f172a 100%); padding: 40px 30px; border-radius: 16px; width: 100%; max-width: 400px; border: 1px solid #1f2937; text-align: center; box-shadow: 0 25px 60px rgba(0,0,0,0.9), 0 0 30px rgba(59,130,246,0.15); }
+        .logo-box { width: 75px; height: 75px; background: linear-gradient(135deg, #3b82f6, #1d4ed8); border-radius: 50%; display: flex; justify-content: center; align-items: center; margin: 0 auto 20px auto; box-shadow: 0 0 20px rgba(59,130,246,0.5); border: 2px solid #60a5fa; }
+        .logo-box i { font-size: 2.2em; color: #fff; }
+        h2 { color: #38bdf8; margin: 0 0 5px 0; font-size: 1.6em; letter-spacing: 1px; }
+        p { color: #94a3b8; font-size: 0.9em; margin-bottom: 25px; }
+        input { width: 100%; padding: 13px; margin: 10px 0; background: #030712; border: 1px solid #374151; color: #fff; border-radius: 8px; box-sizing: border-box; font-size: 0.95em; transition: 0.2s; }
+        input:focus { border-color: #3b82f6; outline: none; box-shadow: 0 0 10px rgba(59,130,246,0.3); }
+        .captcha-box { background: #0f172a; border: 1px dashed #374151; padding: 10px; border-radius: 8px; margin: 12px 0; display: flex; justify-content: space-between; align-items: center; font-family: monospace; font-size: 1.1em; color: #38bdf8; letter-spacing: 2px; }
+        button { background: linear-gradient(135deg, #3b82f6, #2563eb); color: white; border: none; padding: 14px; width: 100%; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 1em; margin-top: 15px; box-shadow: 0 4px 15px rgba(59,130,246,0.4); transition: 0.2s; }
+        button:hover { background: linear-gradient(135deg, #2563eb, #1d4ed8); }
+        .error { color: #f43f5e; background: rgba(244,63,94,0.1); padding: 10px; border-radius: 8px; font-size: 0.85em; margin-bottom: 15px; border: 1px solid #f43f5e; text-align: left; }
     </style>
 </head>
 <body>
     <div class="card">
-        <h2>Vajra ERP</h2>
-        <p style="color: #94a3b8; font-size: 0.95em; margin-bottom: 25px;">Sovereign Multi-Lingual OS</p>
-        {% if error %}<div class="error">{{ error }}</div>{% endif %}
+        <div class="logo-box">
+            <i class="fas fa-shield-alt"></i>
+        </div>
+        <h2>Vajra Sovereign OS</h2>
+        <p>Enterprise Secure Access Portal</p>
+        {% if error %}<div class="error"><i class="fas fa-exclamation-triangle"></i> {{ error }}</div>{% endif %}
         <form method="POST">
-            <input type="text" name="username" placeholder="Username" required>
+            <input type="text" name="username" placeholder="Username" required autocomplete="off">
             <input type="password" name="password" placeholder="Password" required>
-            <button type="submit">Access System</button>
+            
+            <div class="captcha-box">
+                <span><i class="fas fa-robot" style="color: #64748b; font-size: 0.8em; margin-right: 5px;"></i> Security Code: <strong>{{ captcha_question }}</strong></span>
+            </div>
+            <input type="text" name="captcha_input" placeholder="Enter Security Code Above" required autocomplete="off">
+
+            <button type="submit"><i class="fas fa-lock-open"></i> Authenticate System</button>
         </form>
-        <div class="hint">User: VajraERP | Pass: Vajra@erp</div>
     </div>
 </body>
 </html>
@@ -789,14 +804,14 @@ DASHBOARD_HTML = """
                 bank_rajkot_peoples: "રાજકોટ પીપલ્સ કો-ઓપરેટિવ બેંક",
                 bank_bggb: "બરોડા ગુજરાત ગ્રામીણ બેંક",
                 bank_saurashtra_gramin: "सौराष्ट्र ग्रामीण बैंक",
-                bank_gandhinagar: "ગાંધીનગર નાગરિક સહકારી બેંક",
+                bank_gandhinagar: "ગાंधीનગર નાગરિક સહકારી બેંક",
                 bank_anand: "આણંદ મર્કેન્ટાઈલ કો-ઓપ બેંક",
                 bank_sabarkantha: "સાબરકાંઠા જિલ્લા સહકારી બેંક",
                 bank_banaskantha: "બનાસકાંઠા જિલ્લા મધ્યસ્થ સહકારી બેંક",
                 bank_saraswat: "સારસ્વત કો-ઓપરેટીવ બેંક",
                 bank_cosmos: "કોસ્મોસ કો-ઓપરેટીવ બેંક",
                 bank_abhyudaya: "अभ्युदय को-ऑपरेटिव बैंक (મુંબઈ)",
-                bank_greater_bombay: "ગ્રેટર બોમ્બે કો-ઓપરેટિવ બેંક",
+                bank_greater_bombay: "ગ્રेटर બોમ્બે કો-ઓપરેટિવ બેંક",
                 bank_up_coop: "उत्तर प्रदेश सहकारी बैंक",
                 bank_aryavart: "आर्यावर्त बैंक (यूपी)",
                 bank_mp_coop: "मध्य प्रदेश राज्य सहकारी बैंक",
@@ -940,16 +955,40 @@ DASHBOARD_HTML = """
 @app.route("/", methods=["GET", "POST"])
 def login():
     error = None
+    
+    # Generate a dynamic math captcha challenge
+    if "captcha_ans" not in session:
+        n1 = random.randint(1, 9)
+        n2 = random.randint(1, 9)
+        session["captcha_ans"] = str(n1 + n2)
+        session["captcha_q"] = f"{n1} + {n2} = ?"
+
     if session.get("logged_in"):
         return redirect(url_for("dashboard"))
+        
     if request.method == "POST":
-        if request.form.get("username") == "VajraERP" and request.form.get("password") == "Vajra@erp":
+        user_input_captcha = request.form.get("captcha_input", "").strip()
+        correct_captcha = session.get("captcha_ans", "")
+        
+        # Reset captcha after attempt
+        session.pop("captcha_ans", None)
+        
+        if user_input_captcha != correct_captcha:
+            error = "Security Verification Failed (Invalid Captcha)! Please try again."
+        elif request.form.get("username") == "VajraERP" and request.form.get("password") == "Vajra@erp":
             session["logged_in"] = True
             session.permanent = True
             return redirect(url_for("dashboard"))
         else:
-            error = "Invalid Credentials! Use: VajraERP / Vajra@erp"
-    return render_template_string(LOGIN_HTML, error=error)
+            error = "Invalid Credentials! Access Denied."
+            
+    # Generate new question for render
+    n1 = random.randint(1, 9)
+    n2 = random.randint(1, 9)
+    session["captcha_ans"] = str(n1 + n2)
+    captcha_question = f"{n1} + {n2} = ?"
+
+    return render_template_string(LOGIN_HTML, error=error, captcha_question=captcha_question)
 
 @app.route("/dashboard")
 def dashboard():
