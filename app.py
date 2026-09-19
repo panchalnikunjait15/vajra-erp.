@@ -261,10 +261,10 @@ DASHBOARD_HTML = """
                 </select>
                 <label data-key="lbl_pay_mode">Payment Mode:</label>
                 <select name="payment_mode">
-                    <option value="UPI">UPI</option>
-                    <option value="NEFT">NEFT</option>
-                    <option value="RTGS">RTGS</option>
-                    <option value="IMPS">IMPS</option>
+                    <option value="UPI" data-key="mode_upi">UPI</option>
+                    <option value="NEFT" data-key="mode_neft">NEFT</option>
+                    <option value="RTGS" data-key="mode_rtgs">RTGS</option>
+                    <option value="IMPS" data-key="mode_imps">IMPS</option>
                     <option value="CASH" data-key="opt_cash">Cash</option>
                 </select>
                 <label data-key="lbl_amount">Amount (₹):</label><input type="number" step="0.01" name="amount" required>
@@ -442,6 +442,10 @@ DASHBOARD_HTML = """
                 opt_regular: "Regular Stock",
                 opt_adv_given: "Advance Given",
                 opt_adv_taken: "Advance Taken",
+                mode_upi: "UPI",
+                mode_neft: "NEFT",
+                mode_rtgs: "RTGS",
+                mode_imps: "IMPS",
                 bank_sbi: "State Bank of India (SBI)",
                 bank_hdfc: "HDFC Bank",
                 bank_icici: "ICICI Bank",
@@ -547,6 +551,10 @@ DASHBOARD_HTML = """
                 opt_outward: "जावक",
                 opt_deposit: "जमा",
                 opt_withdraw: "निकासी",
+                mode_upi: "यूपीआई (UPI)",
+                mode_neft: "एनईएफटी (NEFT)",
+                mode_rtgs: "आरटीजीएस (RTGS)",
+                mode_imps: "आईएमपीएस (IMPS)",
                 bank_sbi: "भारतीय स्टेट बैंक (एसबीआई)",
                 bank_hdfc: "एचडीएफसी बैंक",
                 bank_icici: "आईसीआईसीआई बैंक",
@@ -652,6 +660,10 @@ DASHBOARD_HTML = """
                 opt_outward: "જાવક",
                 opt_deposit: "જમા",
                 opt_withdraw: "ઉપાડ",
+                mode_upi: "યુપીઆઈ (UPI)",
+                mode_neft: "એનઇએફટી (NEFT)",
+                mode_rtgs: "આરટીજીએસ (RTGS)",
+                mode_imps: "આઈએમપીએસ (IMPS)",
                 bank_sbi: "સ્ટેટ બેંક ઓફ ઇન્ડિયા (SBI)",
                 bank_hdfc: "એચડીએફસી બેંક",
                 bank_icici: "આઈસીઆઈસીઆઈ બેંક",
@@ -686,7 +698,7 @@ DASHBOARD_HTML = """
             });
 
             // Handle dropdown options dynamically
-            const optKeys = document.querySelectorAll('[data-key^="opt_"], [data-key^="bank_"], [data-key="sentinel_val"], [data-key="cloud_val"]');
+            const optKeys = document.querySelectorAll('[data-key^="opt_"], [data-key^="bank_"], [data-key^="mode_"], [data-key="sentinel_val"], [data-key="cloud_val"]');
             optKeys.forEach(opt => {
                 const oKey = opt.getAttribute('data-key');
                 if (translations[lang] && translations[lang][oKey]) {
