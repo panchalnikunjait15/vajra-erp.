@@ -138,7 +138,8 @@ DASHBOARD_HTML = """
     <div class="btn-row">
         <a href="/backup_db"><i class="fas fa-database"></i> <span data-key="backup_db">Backup DB</span></a>
         <a href="/export_inventory_csv"><i class="fas fa-download"></i> <span data-key="export_csv">Export CSV</span></a>
-        <a href="/print_report_view" target="_blank" style="background: #2563eb;"><i class="fas fa-print"></i> <span data-key="print_report">Print / Save PDF</span></a>
+        <!-- MOBILE FRIENDLY PRINT LINK (WITHOUT target=_blank) -->
+        <a href="/print_report_view" style="background: #2563eb;"><i class="fas fa-print"></i> <span data-key="print_report">Print / Save PDF</span></a>
     </div>
 
     <!-- 🤖 VAJRA AI VOICE & SMART ASSISTANT WIDGET -->
@@ -958,9 +959,7 @@ def ai_assistant():
         elif "sales" in user_query or "revenue" in user_query:
             response_text = f"Total revenue / sales is ₹{rev:.2f}."
         elif "bank" in user_query or "balance" in user_query:
-            response_text = f"Total bank balance across accounts is ₹{banks_total:.2f}."
-        elif "stock" in user_query:
-            response_text = f"Live inventory stock summary: {total_items} items registered."
+            response_text = f"Total bank balance across accounts is ₹{total_items} registered."
 
     return jsonify({"status": "success", "reply": response_text})
 
