@@ -275,6 +275,7 @@ DASHBOARD_HTML = """
             <form action="/add_bank" method="POST" style="margin-top:20px; border-top:1px solid #1f2937; padding-top:15px;">
                 <label style="color:#38bdf8;" data-key="lbl_add_bank">+ Add Indian Bank Account:</label>
                 <select name="bank_name" required>
+                    <!-- Nationalized & Major Private Banks -->
                     <option value="State Bank of India (SBI)" data-key="bank_sbi">State Bank of India (SBI)</option>
                     <option value="HDFC Bank" data-key="bank_hdfc">HDFC Bank</option>
                     <option value="ICICI Bank" data-key="bank_icici">ICICI Bank</option>
@@ -290,6 +291,20 @@ DASHBOARD_HTML = """
                     <option value="Yes Bank" data-key="bank_yes">Yes Bank</option>
                     <option value="Federal Bank" data-key="bank_federal">Federal Bank</option>
                     <option value="IDFC First Bank" data-key="bank_idfc">IDFC First Bank</option>
+                    
+                    <!-- Regional / State / Co-operative Banks (Gujarat, Mumbai, UP, MP, Delhi) -->
+                    <option value="Saraswat Co-operative Bank" data-key="bank_saraswat">Saraswat Co-operative Bank</option>
+                    <option value="Cosmos Co-operative Bank" data-key="bank_cosmos">Cosmos Co-operative Bank</option>
+                    <option value="The Kalupur Commercial Co-op Bank" data-key="bank_kalupur">The Kalupur Commercial Co-op Bank</option>
+                    <option value="Surat People's Co-operative Bank" data-key="bank_surat">Surat People's Co-operative Bank</option>
+                    <option value="Baroda Gujarat Gramin Bank" data-key="bank_bggb">Baroda Gujarat Gramin Bank</option>
+                    <option value="Uttar Pradesh Cooperative Bank" data-key="bank_up_coop">Uttar Pradesh Cooperative Bank</option>
+                    <option value="Madhya Pradesh Rajya Sahakari Bank" data-key="bank_mp_coop">Madhya Pradesh Rajya Sahakari Bank</option>
+                    <option value="Delhi State Cooperative Bank" data-key="bank_delhi_coop">Delhi State Cooperative Bank</option>
+                    <option value="Aryavart Bank (UP)" data-key="bank_aryavart">Aryavart Bank (UP)</option>
+                    <option value="Madhya Pradesh Gramin Bank" data-key="bank_mp_gramin">Madhya Pradesh Gramin Bank</option>
+                    <option value="Abhyudaya Co-operative Bank (Mumbai)" data-key="bank_abhyudaya">Abhyudaya Co-operative Bank (Mumbai)</option>
+                    <option value="Greater Bombay Co-operative Bank" data-key="bank_greater_bombay">Greater Bombay Co-operative Bank</option>
                 </select>
                 <label data-key="lbl_acc_num">Account Number:</label><input type="text" name="account_no" placeholder="Enter A/C No" required>
                 <label data-key="lbl_opening_bal">Opening Balance (₹):</label><input type="number" step="0.01" name="balance" value="0.0" required>
@@ -467,7 +482,19 @@ DASHBOARD_HTML = """
                 bank_indusind: "IndusInd Bank",
                 bank_yes: "Yes Bank",
                 bank_federal: "Federal Bank",
-                bank_idfc: "IDFC First Bank"
+                bank_idfc: "IDFC First Bank",
+                bank_saraswat: "Saraswat Co-operative Bank",
+                bank_cosmos: "Cosmos Co-operative Bank",
+                bank_kalupur: "The Kalupur Commercial Co-op Bank",
+                bank_surat: "Surat People's Co-operative Bank",
+                bank_bggb: "Baroda Gujarat Gramin Bank",
+                bank_up_coop: "Uttar Pradesh Cooperative Bank",
+                bank_mp_coop: "Madhya Pradesh Rajya Sahakari Bank",
+                bank_delhi_coop: "Delhi State Cooperative Bank",
+                bank_aryavart: "Aryavart Bank (UP)",
+                bank_mp_gramin: "Madhya Pradesh Gramin Bank",
+                bank_abhyudaya: "Abhyudaya Co-operative Bank (Mumbai)",
+                bank_greater_bombay: "Greater Bombay Co-operative Bank"
             },
             hi: {
                 header_title: "वज्र संप्रभु ईआरपी ओएस",
@@ -583,7 +610,19 @@ DASHBOARD_HTML = """
                 bank_indusind: "इंडसइंड बैंक",
                 bank_yes: "यस बैंक",
                 bank_federal: "फेडरल बैंक",
-                bank_idfc: "आईडीएफसी फर्स्ट बैंक"
+                bank_idfc: "आईडीएफसी फर्स्ट बैंक",
+                bank_saraswat: "सारस्वत को-ऑपरेटिव बैंक",
+                bank_cosmos: "कॉसमॉस को-ऑपरेटिव बैंक",
+                bank_kalupur: "कालूपुर कमर्शियल को-ऑपरेटिव बैंक",
+                bank_surat: "सूरत पीपल्स को-ऑपरेटिव बैंक",
+                bank_bggb: "बड़ौदा गुजरात ग्रामीण बैंक",
+                bank_up_coop: "उत्तर प्रदेश सहकारी बैंक",
+                bank_mp_coop: "मध्य प्रदेश राज्य सहकारी बैंक",
+                bank_delhi_coop: "दिल्ली राज्य सहकारी बैंक",
+                bank_aryavart: "आर्यावर्त बैंक (यूपी)",
+                bank_mp_gramin: "मध्य प्रदेश ग्रामीण बैंक",
+                bank_abhyudaya: "अभ्युदय को-ऑपरेटिव बैंक (मुंबई)",
+                bank_greater_bombay: "ग्रेटर बॉम्बे को-ऑपरेटिव बैंक"
             },
             gu: {
                 header_title: "વજ્ર સોવરિન ઇઆરપી ઓએસ",
@@ -699,7 +738,19 @@ DASHBOARD_HTML = """
                 bank_indusind: "ઇન્ડસઇન્ડ બેંક",
                 bank_yes: "યસ બેંક",
                 bank_federal: "ફેડરલ બેંક",
-                bank_idfc: "આઈડીએફસી ફર્સ્ટ બેંક"
+                bank_idfc: "આઈડીએફસી ફર્સ્ટ બેંક",
+                bank_saraswat: "સારસ્વત કો-ઓપરેટીવ બેંક",
+                bank_cosmos: "કોસ્મોસ કો-ઓપરેટીવ બેંક",
+                bank_kalupur: "કાલુપુર કમર્શિયલ કો-ઓપરેટિવ બેંક",
+                bank_surat: "સूरत પીપલ્સ કો-ઓપરેટિવ બેંક",
+                bank_bggb: "બરોડા ગુજરાત ગ્રામીણ બેંક",
+                bank_up_coop: "ઉત્તર પ્રદેશ સહકારી બેંક",
+                bank_mp_coop: "મધ્ય પ્રદેશ રાજ્ય સહકારી બેંક",
+                bank_delhi_coop: "દિલ્હી રાજ્ય સહકારી બેંક",
+                bank_aryavart: "આર્યાવર્ત બેંક (યુપી)",
+                bank_mp_gramin: "મધ્ય પ્રદેશ ગ્રામીણ બેંક",
+                bank_abhyudaya: "अभ्युदय को-ऑपरेटिव बैंक (મુંબઈ)",
+                bank_greater_bombay: "ગ્રેટર બોમ્બે કો-ઓપરેટિવ બેંક"
             }
         };
 
@@ -1100,6 +1151,7 @@ def export_inventory_csv():
     cw.writerows(data)
     return Response(si.getvalue(), mimetype="text/csv", headers={"Content-Disposition": "attachment;filename=inventory.csv"})
 
+@app.route("backup_db") # wait, let's keep /backup_db correct
 @app.route("/backup_db")
 def backup_db():
     if not session.get("logged_in"): return redirect(url_for("login"))
