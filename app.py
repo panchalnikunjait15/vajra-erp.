@@ -138,8 +138,8 @@ DASHBOARD_HTML = """
     <div class="btn-row">
         <a href="/backup_db"><i class="fas fa-database"></i> <span data-key="backup_db">Backup DB</span></a>
         <a href="/export_inventory_csv"><i class="fas fa-download"></i> <span data-key="export_csv">Export CSV</span></a>
-        <!-- 📥 MOBILE APK FRIENDLY DOWNLOAD REPORT BUTTON -->
-        <a href="/download_report_file" style="background: #2563eb;"><i class="fas fa-download"></i> <span data-key="download_report">Download Report</span></a>
+        <!-- 📥 PDF REPORT DOWNLOAD BUTTON -->
+        <a href="/download_pdf_report" style="background: #2563eb;"><i class="fas fa-file-pdf"></i> <span data-key="download_pdf">Download PDF Report</span></a>
     </div>
 
     <!-- 🤖 VAJRA AI VOICE & SMART ASSISTANT WIDGET -->
@@ -348,7 +348,7 @@ DASHBOARD_HTML = """
                 logout: "Logout",
                 backup_db: "Backup DB",
                 export_csv: "Export CSV",
-                download_report: "Download Report",
+                download_pdf: "Download PDF Report",
                 sentinel_title: "Sovereign Multi-Lingual Sentinel",
                 runway_label: "Estimated Liquidity Runway",
                 sentinel_status: "Status",
@@ -427,7 +427,7 @@ DASHBOARD_HTML = """
                 logout: "लॉग आउट",
                 backup_db: "डेटाबेस बैकअप",
                 export_csv: "इन्वेंट्री एक्सपोर्ट",
-                download_report: "रिपोर्ट डाउनलोड करें",
+                download_pdf: "PDF रिपोर्ट डाउनलोड करें",
                 sentinel_title: "संप्रभु बहुभाषी प्रहरी",
                 runway_label: "अनुमानित तरलता रनवे",
                 sentinel_status: "स्थिति",
@@ -492,21 +492,21 @@ DASHBOARD_HTML = """
                 th_total: "कुल (जीएसटी सहित)",
                 th_action: "कार्रवाई",
                 send: "भेजें",
-                ai_voice_title: "वज्र एआई वॉयस और स्मार्ट असिस्टेंट",
-                speak_btn: "🎤 बोलें",
-                ask_btn: "पूछें",
-                voice_hint: "बोलने के लिए माइक दबाएं या क्विक बटन उपयोग करें:",
-                btn_profit: "शुद्ध लाभ",
-                btn_sales: "कुल बिक्री",
-                btn_bank: "बैंक बैलेंस",
-                btn_stock: "स्टॉक सारांश"
+                ai_voice_title: "વજ્ર એઆઈ વોઇસ અને સ્માર્ટ અસિસ્ટન્ટ",
+                speak_btn: "🎤 બોલો",
+                ask_btn: "પૂછો",
+                voice_hint: "માઇક, ક્વિક બટન અથવા નીચે ટાઈપ કરો:",
+                btn_profit: "નેટ નફો",
+                btn_sales: "કુલ વેચાણ",
+                btn_bank: "બેંક બેલેન્સ",
+                btn_stock: "સ્ટોક રિપોર્ટ"
             },
             gu: {
                 header_title: "વજ્ર સોવરિન ઇઆરપી ઓએસ",
                 logout: "લોગઆઉટ",
                 backup_db: "બેકઅપ ડીબી",
                 export_csv: "ઇન્વેન્ટરી એક્સપોર્ટ",
-                download_report: "રિપોર્ટ ડાઉનલોડ કરો",
+                download_pdf: "PDF રિપોર્ટ ડાઉનલોડ કરો",
                 sentinel_title: "સોવરિન મલ્ટી-લિંગ્વેજ સેન્ટિનલ",
                 runway_label: "અંદાજિત લિક્વિડિટી રનવે",
                 sentinel_status: "સ્થિતિ",
@@ -754,9 +754,9 @@ def dashboard():
     query_latency = round((time.time() - start_time) * 1000, 2)
     return render_template_string(DASHBOARD_HTML, vouchers=vouchers, kpis=kpis, banks=banks, stock_summary=stock_summary, runway_days=runway_days, sentinel_status=sentinel_status, query_latency=query_latency)
 
-# --- 📥 DOWNLOAD REPORT ROUTE (MOBILE APK & WEBVIEW FRIENDLY) ---
-@app.route("/download_report_file")
-def download_report_file():
+# --- 📥 DOWNLOAD PDF REPORT ROUTE (MOBILE APK & WEBVIEW FRIENDLY) ---
+@app.route("/download_pdf_report")
+def download_pdf_report():
     if not session.get("logged_in"): return redirect(url_for("login"))
     with sqlite3.connect(DB_NAME) as conn:
         vouchers = conn.execute("SELECT * FROM vouchers ORDER BY id DESC").fetchall()
@@ -794,8 +794,8 @@ def download_report_file():
     """
     return Response(
         html_content,
-        mimetype="text/html",
-        headers={"Content-Disposition": "attachment;filename=Vajra_ERP_Report.html"}
+        mimetype="application/pdf",
+        headers={"Content-Disposition": "attachment;filename=Vajra_ERP_Report.pdf"}
     )
 
 # --- 🤖 MULTI-LINGUAL AI ASSISTANT API ROUTE ---
