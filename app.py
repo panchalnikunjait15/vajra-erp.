@@ -148,7 +148,7 @@ DASHBOARD_HTML = """
         
         <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 12px;">
             <button onclick="startVoiceRecognition()" style="background: linear-gradient(135deg, #2563eb, #1d4ed8); width: auto; padding: 10px 18px; margin-top: 0; border-radius: 8px;"><i class="fas fa-microphone"></i> <span data-key="speak_btn">🎤 Speak</span></button>
-            <input type="text" id="aiTextInput" placeholder="Type query here..." style="flex: 1; margin-top: 0; padding: 11px; background: #030712; border: 1px solid #4f46e5; border-radius: 8px; color: #fff;" onkeypress="if(event.key==='Enter') sendQueryToAI(this.value)">
+            <input type="text" id="aiTextInput" data-placeholder="type_query_placeholder" placeholder="Type query here..." style="flex: 1; margin-top: 0; padding: 11px; background: #030712; border: 1px solid #4f46e5; border-radius: 8px; color: #fff;" onkeypress="if(event.key==='Enter') sendQueryToAI(this.value)">
             <button onclick="sendQueryToAI(document.getElementById('aiTextInput').value)" style="background: linear-gradient(135deg, #10b981, #059669); width: auto; padding: 10px 20px; margin-top: 0; border-radius: 8px;"><span data-key="ask_btn">Ask AI</span></button>
         </div>
 
@@ -416,6 +416,7 @@ DASHBOARD_HTML = """
                 speak_btn: "🎤 Speak",
                 ask_btn: "Ask AI",
                 voice_hint: "Click mic to speak or use quick buttons below:",
+                type_query_placeholder: "Type query here...",
                 btn_profit: "Net Profit",
                 btn_sales: "Total Sales",
                 btn_bank: "Bank Balance",
@@ -494,7 +495,8 @@ DASHBOARD_HTML = """
                 ai_voice_title: "वज्र एआई वॉयस और स्मार्ट असिस्टेंट",
                 speak_btn: "🎤 बोलें",
                 ask_btn: "पूछें",
-                voice_hint: "क्विक बटन उपयोग करें या नीचे टाइप करें:",
+                voice_hint: "माइक दबाएं, क्विक बटन उपयोग करें या नीचे टाइप करें:",
+                type_query_placeholder: "यहाँ अपना प्रश्न टाइप करें...",
                 btn_profit: "शुद्ध लाभ",
                 btn_sales: "कुल बिक्री",
                 btn_bank: "बैंक बैलेंस",
@@ -573,7 +575,8 @@ DASHBOARD_HTML = """
                 ai_voice_title: "વજ્ર એઆઈ વોઇસ અને સ્માર્ટ અસિસ્ટન્ટ",
                 speak_btn: "🎤 બોલો",
                 ask_btn: "પૂછો",
-                voice_hint: "માઇક, ક્વિક બટન અથવા નીચે ટાઈપ કરો:",
+                voice_hint: "માઇક દબાવો, ક્વિક બટન વાપરો અથવા નીચે ટાઈપ કરો:",
+                type_query_placeholder: "તમારો પ્રશ્ન અહીં ટાઈપ કરો...",
                 btn_profit: "નેટ નફો",
                 btn_sales: "કુલ વેચાણ",
                 btn_bank: "બેંક બેલેન્સ",
@@ -590,11 +593,16 @@ DASHBOARD_HTML = """
             elements.forEach(el => {
                 const key = el.getAttribute('data-key');
                 if (translations[lang] && translations[lang][key]) {
-                    if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
-                        if(el.hasAttribute('placeholder')) el.placeholder = translations[lang][key];
-                    } else {
-                        el.textContent = translations[lang][key];
-                    }
+                    el.textContent = translations[lang][key];
+                }
+            });
+
+            // Handle placeholders separately
+            const inputs = document.querySelectorAll('[data-placeholder]');
+            inputs.forEach(inp => {
+                const pKey = inp.getAttribute('data-placeholder');
+                if (translations[lang] && translations[lang][pKey]) {
+                    inp.placeholder = translations[lang][pKey];
                 }
             });
         }
@@ -605,7 +613,7 @@ DASHBOARD_HTML = """
         function startVoiceRecognition() {
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             if (!SpeechRecognition) {
-                alert(currentLang === 'gu' ? "આ બ્રાઉઝરમાં વોઇસ સપોર્ટ નથી. કૃપા કરીને ક્વિક બટન વાપરો." : "Voice recognition not supported. Use quick buttons below.");
+                alert(currentLang === 'gu' ? "આ બ્રાઉઝરમાં વોઇસ સપોર્ટ નથી. કૃપા કરીને ક્વિક બટન વાપરો." : (currentLang === 'hi' ? "इस ब्राउज़र में वॉइस समर्थन नहीं है।" : "Voice recognition not supported."));
                 return;
             }
             
@@ -619,24 +627,24 @@ DASHBOARD_HTML = """
                 activeRecognition.interimResults = false;
                 activeRecognition.lang = currentLang === 'gu' ? 'gu-IN' : (currentLang === 'hi' ? 'hi-IN' : 'en-US');
 
-                document.getElementById("voiceStatus").innerText = currentLang === 'gu' ? "સંભળાઈ રહ્યું છે... બોલો!" : "Listening... Speak now!";
+                document.getElementById("voiceStatus").innerText = currentLang === 'gu' ? "સંભળાઈ રહ્યું છે... બોલો!" : (currentLang === 'hi' ? "सुन रहा है... बोलें!" : "Listening... Speak now!");
                 
                 let watchdog = setTimeout(() => {
                     try { activeRecognition.abort(); } catch(e){}
-                    document.getElementById("voiceStatus").innerText = currentLang === 'gu' ? "ટાઇમઆઉટ: ક્વિક બટન અથવા ટાઈપ કરો." : "Timeout. Use quick buttons or type.";
+                    document.getElementById("voiceStatus").innerText = currentLang === 'gu' ? "ટાઇમઆઉટ: ક્વિક બટન અથવા ટાઈપ કરો." : (currentLang === 'hi' ? "समय समाप्त। क्विक बटन या टाइप करें।" : "Timeout. Use quick buttons or type.");
                 }, 5000);
 
                 activeRecognition.onresult = function(event) {
                     clearTimeout(watchdog);
                     const spokenText = event.results[0][0].transcript;
-                    document.getElementById("voiceStatus").innerText = "You said: " + spokenText;
+                    document.getElementById("voiceStatus").innerText = (currentLang === 'gu' ? "તમે બોલ્યા: " : (currentLang === 'hi' ? "आपने कहा: " : "You said: ")) + spokenText;
                     document.getElementById("aiTextInput").value = spokenText;
                     sendQueryToAI(spokenText);
                 };
                 
                 activeRecognition.onerror = function(event) {
                     clearTimeout(watchdog);
-                    document.getElementById("voiceStatus").innerText = currentLang === 'gu' ? "માઇક પરમિશન એરર. ક્વિક બટન વાપરો." : "Mic permission error. Use quick buttons.";
+                    document.getElementById("voiceStatus").innerText = currentLang === 'gu' ? "માઇક પરમિશન એરર. ક્વિક બટન વાપરો." : (currentLang === 'hi' ? "माइक अनुमति त्रुटि।" : "Mic permission error.");
                 };
 
                 activeRecognition.onend = function() {
@@ -645,7 +653,7 @@ DASHBOARD_HTML = """
 
                 activeRecognition.start();
             } catch(e) {
-                document.getElementById("voiceStatus").innerText = currentLang === 'gu' ? "માઇક ઉપલબ્ધ નથી. ક્વિક બટન વાપરો." : "Mic unavailable. Use quick buttons.";
+                document.getElementById("voiceStatus").innerText = currentLang === 'gu' ? "માઇક ઉપલબ્ધ નથી." : (currentLang === 'hi' ? "माइक उपलब्ध नहीं है।" : "Mic unavailable.");
             }
         }
 
@@ -658,7 +666,7 @@ DASHBOARD_HTML = """
             if(!queryText.trim()) return;
             const replyElem = document.getElementById("aiReply");
             replyElem.style.display = "block";
-            replyElem.innerText = currentLang === 'gu' ? "પ્રોસેસ થઈ રહ્યું છે..." : "Processing...";
+            replyElem.innerText = currentLang === 'gu' ? "પ્રોસેસ થઈ રહ્યું છે..." : (currentLang === 'hi' ? "प्रोसेस हो रहा है..." : "Processing...");
 
             const apiUrl = window.location.origin + '/api/ai-assistant';
 
@@ -684,7 +692,7 @@ DASHBOARD_HTML = """
                 }
             })
             .catch(err => {
-                replyElem.innerText = currentLang === 'gu' ? "કનેક્શન સફળ. ક્વિક બટન વાપરો." : "Error connecting to AI Assistant.";
+                replyElem.innerText = currentLang === 'gu' ? "કનેક્શન સફળ. ક્વિક બટન વાપરો." : (currentLang === 'hi' ? "कनेक्शन त्रुटि।" : "Error connecting to AI Assistant.");
             });
         }
     </script>
