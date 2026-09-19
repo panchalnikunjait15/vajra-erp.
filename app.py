@@ -149,15 +149,25 @@ DASHBOARD_HTML = """
         <button onclick="window.print()"><i class="fas fa-print"></i> <span data-key="print_report">Print Report</span></button>
     </div>
 
-    <!-- 🤖 FOOLPROOF STYLISH AI ASSISTANT WIDGET -->
+    <!-- 🤖 FOOLPROOF AI SMART ASSISTANT WIDGET -->
     <div class="card" style="margin-bottom: 25px; border: 1.5px solid #818cf8; background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%); box-shadow: 0 12px 30px rgba(99,102,241,0.25);">
         <h3><span><i class="fas fa-robot" style="color: #818cf8;"></i> <span data-key="ai_voice_title">Vajra AI Smart Assistant</span></span></h3>
-        <p id="voiceStatus" style="color: #38bdf8; margin: 8px 0; font-size: 0.95em;" data-key="voice_hint">Type your query below (e.g. profit, sales, stock, balance)...</p>
-        <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-            <button onclick="startVoiceRecognition()" id="micBtn" style="background: linear-gradient(135deg, #2563eb, #1d4ed8); width: auto; padding: 10px 22px; margin-top: 0; border-radius: 8px; box-shadow: 0 4px 12px rgba(37,99,235,0.4);"><i class="fas fa-microphone"></i> <span data-key="speak_btn">🎤 Speak / બોલો</span></button>
-            <input type="text" id="aiTextInput" placeholder="Type your business query here..." style="flex: 1; margin-top: 0; padding: 11px; background: #030712; border: 1px solid #4f46e5; border-radius: 8px; color: #fff;" onkeypress="if(event.key==='Enter') sendQueryToAI(this.value)">
-            <button onclick="sendQueryToAI(document.getElementById('aiTextInput').value)" style="background: linear-gradient(135deg, #10b981, #059669); width: auto; padding: 10px 22px; margin-top: 0; border-radius: 8px; box-shadow: 0 4px 12px rgba(16,185,129,0.4);"><span data-key="ask_btn">Ask AI</span></button>
+        <p id="voiceStatus" style="color: #38bdf8; margin: 8px 0; font-size: 0.95em;" data-key="voice_hint">Use quick buttons or type query below for instant response:</p>
+        
+        <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 12px;">
+            <button onclick="startVoiceRecognition()" style="background: linear-gradient(135deg, #2563eb, #1d4ed8); width: auto; padding: 10px 16px; margin-top: 0; border-radius: 8px;"><i class="fas fa-microphone"></i> <span data-key="speak_btn">🎤 Speak</span></button>
+            <input type="text" id="aiTextInput" placeholder="Type query here..." style="flex: 1; margin-top: 0; padding: 11px; background: #030712; border: 1px solid #4f46e5; border-radius: 8px; color: #fff;" onkeypress="if(event.key==='Enter') sendQueryToAI(this.value)">
+            <button onclick="sendQueryToAI(document.getElementById('aiTextInput').value)" style="background: linear-gradient(135deg, #10b981, #059669); width: auto; padding: 10px 20px; margin-top: 0; border-radius: 8px;"><span data-key="ask_btn">Ask AI</span></button>
         </div>
+
+        <!-- ⚡ INSTANT QUICK ACTION BUTTONS -->
+        <div style="display: flex; gap: 8px; flex-wrap: wrap; border-top: 1px solid #312e81; padding-top: 12px;">
+            <button onclick="quickAsk('profit')" style="background: #3b82f6; width: auto; padding: 6px 14px; margin-top:0; font-size: 0.85em; border-radius: 6px;"><i class="fas fa-chart-line"></i> <span data-key="btn_profit">Net Profit</span></button>
+            <button onclick="quickAsk('sales')" style="background: #6366f1; width: auto; padding: 6px 14px; margin-top:0; font-size: 0.85em; border-radius: 6px;"><i class="fas fa-rupee-sign"></i> <span data-key="btn_sales">Total Sales</span></button>
+            <button onclick="quickAsk('bank')" style="background: #0ea5e9; width: auto; padding: 6px 14px; margin-top:0; font-size: 0.85em; border-radius: 6px;"><i class="fas fa-university"></i> <span data-key="btn_bank">Bank Balance</span></button>
+            <button onclick="quickAsk('stock')" style="background: #10b981; width: auto; padding: 6px 14px; margin-top:0; font-size: 0.85em; border-radius: 6px;"><i class="fas fa-boxes"></i> <span data-key="btn_stock">Stock Summary</span></button>
+        </div>
+
         <p id="aiReply" style="margin-top: 15px; font-size: 1.05em; font-weight: bold; color: #4ade80; border-left: 4px solid #22c55e; padding-left: 10px; display: none;"></p>
     </div>
 
@@ -410,10 +420,14 @@ DASHBOARD_HTML = """
                 th_total: "Total (Inc. GST)",
                 th_action: "Action",
                 send: "Send",
-                ai_voice_title: "Vajra AI Smart Assistant",
-                speak_btn: "🎤 Speak / બોલો",
+                ai_voice_title: "Vajra AI Voice & Smart Assistant",
+                speak_btn: "🎤 Speak",
                 ask_btn: "Ask AI",
-                voice_hint: "Type your query below (e.g. profit, sales, stock, balance)"
+                voice_hint: "Click mic to speak or use quick buttons below:",
+                btn_profit: "Net Profit",
+                btn_sales: "Total Sales",
+                btn_bank: "Bank Balance",
+                btn_stock: "Stock Summary"
             },
             hi: {
                 header_title: "वज्र संप्रभु ईआरपी ओएस",
@@ -485,10 +499,14 @@ DASHBOARD_HTML = """
                 th_total: "कुल (जीएसटी सहित)",
                 th_action: "कार्रवाई",
                 send: "भेजें",
-                ai_voice_title: "वज्र एआई स्मार्ट असिस्टेंट",
-                speak_btn: "🎤 Speak / बोलें",
+                ai_voice_title: "वज्र एआई वॉयस और स्मार्ट असिस्टेंट",
+                speak_btn: "🎤 बोलें",
                 ask_btn: "पूछें",
-                voice_hint: "नीचे अपना प्रश्न टाइप करें (उदा. लाभ, बिक्री, स्टॉक)"
+                voice_hint: "बोलने के लिए माइक दबाएं या क्विक बटन उपयोग करें:",
+                btn_profit: "शुद्ध लाभ",
+                btn_sales: "कुल बिक्री",
+                btn_bank: "बैंक बैलेंस",
+                btn_stock: "स्टॉक सारांश"
             },
             gu: {
                 header_title: "વજ્ર સોવરિન ઇઆરપી ઓએસ",
@@ -560,10 +578,14 @@ DASHBOARD_HTML = """
                 th_total: "કુલ (જીએસટી સાથે)",
                 th_action: "એક્શન",
                 send: "મોકલો",
-                ai_voice_title: "વજ્ર એઆઈ સ્માર્ટ અસિસ્ટન્ટ",
-                speak_btn: "🎤 Speak / બોલો",
+                ai_voice_title: "વજ્ર એઆઈ વોઇસ અને સ્માર્ટ અસિસ્ટન્ટ",
+                speak_btn: "🎤 બોલો",
                 ask_btn: "પૂછો",
-                voice_hint: "તમારો પ્રશ્ન નીચે ટાઈપ કરો (જેવા કે નફો, વેચાણ, સ્ટોક, બેલેન્સ)"
+                voice_hint: "બોલવા માટે માઇક દબાવો અથવા ક્વિક બટન વાપરો:",
+                btn_profit: "નેટ નફો",
+                btn_sales: "કુલ વેચાણ",
+                btn_bank: "બેંક બેલેન્સ",
+                btn_stock: "સ્ટોક રિપોર્ટ"
             }
         };
 
@@ -585,20 +607,16 @@ DASHBOARD_HTML = """
             });
         }
 
-        // 🎙️ Bulletproof Voice Recognition with Instant Fallback for Mobile Apps
-        let recognition = null;
+        // 🎙️ ROBUST SPEECH RECOGNITION WITH SECURE PERMISSION & ERROR CATCHING
         function startVoiceRecognition() {
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             if (!SpeechRecognition) {
-                alert(currentLang === 'gu' ? "આ એપમાં વોઇસ સપોર્ટ નથી. કૃપા કરીને નીચે ટાઇપ કરો." : "Voice recognition not supported in this view. Please type below.");
+                alert(currentLang === 'gu' ? "આ બ્રાઉઝરમાં વોઇસ સપોર્ટ નથી. કૃપા કરીને Google Chrome બ્રાઉઝરમાં ખોલો." : "Voice recognition not supported. Please open in Google Chrome.");
                 return;
             }
             
             try {
-                if (recognition) {
-                    recognition.abort();
-                }
-                recognition = new SpeechRecognition();
+                const recognition = new SpeechRecognition();
                 recognition.continuous = false;
                 recognition.interimResults = false;
                 
@@ -608,14 +626,7 @@ DASHBOARD_HTML = """
 
                 document.getElementById("voiceStatus").innerText = currentLang === 'gu' ? "સંભળાઈ રહ્યું છે... બોલો!" : "Listening... Speak now!";
                 
-                // 4-Second Force Timeout so it never hangs on mobile APK
-                let safetyTimer = setTimeout(() => {
-                    try { recognition.abort(); } catch(e){}
-                    document.getElementById("voiceStatus").innerText = currentLang === 'gu' ? "મોબાઈલ એપમાં માઇક બ્લોક છે. કૃપા કરીને નીચે ટાઈપ કરો." : "Mic busy in app view. Please type your query below.";
-                }, 4000);
-
                 recognition.onresult = function(event) {
-                    clearTimeout(safetyTimer);
                     const spokenText = event.results[0][0].transcript;
                     document.getElementById("voiceStatus").innerText = "You said: " + spokenText;
                     document.getElementById("aiTextInput").value = spokenText;
@@ -623,18 +634,18 @@ DASHBOARD_HTML = """
                 };
                 
                 recognition.onerror = function(event) {
-                    clearTimeout(safetyTimer);
-                    document.getElementById("voiceStatus").innerText = currentLang === 'gu' ? "માઇક એરર. કૃપા કરીને નીચે ટાઇપ કરો." : "Mic error. Please type query in box below.";
+                    document.getElementById("voiceStatus").innerText = currentLang === 'gu' ? "માઇક એરર. બ્રાઉઝર પરમિશન ચેક કરો." : "Mic error. Check browser permission.";
                 };
 
-                recognition.onend = function() {
-                    clearTimeout(safetyTimer);
-                };
-                
                 recognition.start();
             } catch(e) {
-                document.getElementById("voiceStatus").innerText = currentLang === 'gu' ? "મોબાઈલ એપમાં માઇક સપોર્ટ નથી. નીચે ટાઈપ કરો." : "Mic not allowed in app. Please type below.";
+                alert(currentLang === 'gu' ? "કૃપા કરીને Google Chrome બ્રાઉઝરમાં આ લિંક ખોલો, ત્યાં વોઇસ પરફેક્ટ કામ કરશે!" : "Please open in Google Chrome browser for voice support.");
             }
+        }
+
+        function quickAsk(queryType) {
+            document.getElementById("aiTextInput").value = queryType;
+            sendQueryToAI(queryType);
         }
 
         function sendQueryToAI(queryText) {
@@ -659,7 +670,7 @@ DASHBOARD_HTML = """
                 window.speechSynthesis.speak(speech);
             })
             .catch(err => {
-                replyElem.innerText = currentLang === 'gu' ? "જવાબ મેળવવામાં સફળ. કૃપા કરીને ફરી ટ્રાય કરો." : "Error connecting to AI Assistant. Please try again.";
+                replyElem.innerText = currentLang === 'gu' ? "કનેક્શન એરર. કૃપા કરીને ફરી ટ્રાય કરો." : "Error connecting to AI Assistant. Please try again.";
             });
         }
     </script>
@@ -729,17 +740,18 @@ def dashboard():
     return render_template_string(DASHBOARD_HTML, vouchers=vouchers, kpis=kpis, banks=banks, stock_summary=stock_summary, runway_days=runway_days, sentinel_status=sentinel_status, query_latency=query_latency)
 
 # --- 🤖 MULTI-LINGUAL AI ASSISTANT API ROUTE ---
-@app.route("/api/ai-assistant", methods=["POST"])
+@app.route("/api/ai-assistant", methods=["POST", "GET"])
 def ai_assistant():
-    data = request.get_json() or {}
-    user_query = data.get("query", "").lower()
-    lang = data.get("lang", "en")
+    data = request.get_json(silent=True) or request.form or {}
+    user_query = str(data.get("query", "")).lower()
+    lang = str(data.get("lang", "en"))
     
     with sqlite3.connect(DB_NAME) as conn:
         rev = conn.execute("SELECT SUM(total_with_gst) FROM vouchers WHERE voucher_type IN ('RECEIPT', 'SALES')").fetchone()[0] or 0.0
         exp = conn.execute("SELECT SUM(amount) FROM expenses").fetchone()[0] or 0.0
         net_profit = rev - exp
         banks_total = conn.execute("SELECT SUM(balance) FROM bank_accounts").fetchone()[0] or 0.0
+        total_items = conn.execute("SELECT COUNT(*) FROM inventory").fetchone()[0] or 0
     
     if lang == "gu":
         response_text = "માફ કરશો, હું આ પ્રશ્ન સમજી શક્યો નથી. તમે 'નફો', 'વેચાણ', 'બેલેન્સ' અથવા 'સ્ટોક' વિશે પૂછી શકો છો."
@@ -750,7 +762,7 @@ def ai_assistant():
         elif "bank" in user_query or "balance" in user_query or "belez" in user_query:
             response_text = f"બધી બેંકનું કુલ બેલેન્સ ₹{banks_total:.2f} છે."
         elif "stock" in user_query or "stok" in user_query:
-            response_text = "ઇન્વેન્ટરી સ્ટોક અને માર્કેટ ટ્રેન્ડિંગ ડેટા ડેશબોર્ડ પર ઉપલબ્ધ છે."
+            response_text = f"ઇન્વેન્ટરી સ્ટોક મેનેજમેન્ટમાં કુલ {total_items} આઇટમ્સ રજીસ્ટર થયેલી છે."
     elif lang == "hi":
         response_text = "क्षमा करें, मैं इस प्रश्न को समझ नहीं सका। आप 'लाभ', 'बिक्री', 'बैलेंस' या 'स्टॉक' के बारे में पूछ सकते हैं।"
         if "profit" in user_query or "labh" in user_query or "नफा" in user_query:
@@ -760,7 +772,7 @@ def ai_assistant():
         elif "bank" in user_query or "balance" in user_query:
             response_text = f"सभी बैंकों का कुल शेष ₹{banks_total:.2f} है।"
         elif "stock" in user_query:
-            response_text = "इन्वेंटरी स्टॉक डेटा डैशबोर्ड पर उपलब्ध है।"
+            response_text = f"इन्वेंट्री स्टॉक में कुल {total_items} आइटम पंजीकृत हैं।"
     else:
         response_text = "Sorry, I could not understand this query. You can ask about 'profit', 'sales', 'balance', or 'stock'."
         if "profit" in user_query:
@@ -770,7 +782,7 @@ def ai_assistant():
         elif "bank" in user_query or "balance" in user_query:
             response_text = f"Total bank balance across accounts is ₹{banks_total:.2f}."
         elif "stock" in user_query:
-            response_text = "Live inventory stock summary is active on the dashboard."
+            response_text = f"Live inventory stock summary: {total_items} items registered."
 
     return jsonify({"status": "success", "reply": response_text})
 
