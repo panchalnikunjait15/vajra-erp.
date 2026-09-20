@@ -818,26 +818,26 @@ DASHBOARD_HTML = """
                 bank_federal: "ફેડરલ બેંક",
                 bank_idfc: "આઈડીએફસી ફર્સ્ટ બેંક",
                 bank_kalupur: "કાલુપુર કમર્શિયલ કો-ઓપરેટિવ બેંક",
-                bank_surat: "સूरत પીપલ્સ કો-ઓપરેટિવ બેંક",
+                bank_surat: "સુરત પીપલ્સ કો-ઓપરેટિવ બેંક",
                 bank_mehsana_urban: "મહેસાણા અર્બન કો-ઓપરેટિવ બેંક",
                 bank_amco: "અમદાવાદ મર્કેન્ટાઈલ કો-ઓપરેટિવ બેંક",
                 bank_nutan: "નૂતન નાગરિક સહકારી બેંક",
                 bank_rajkot_peoples: "રાજકોટ પીપલ્સ કો-ઓપરેટિવ બેંક",
                 bank_bggb: "બરોડા ગુજરાત ગ્રામીણ બેંક",
-                bank_saurashtra_gramin: "सौराष्ट्र ग्रामीण बैंक",
+                bank_saurashtra_gramin: "સૌરાષ્ટ્ર ગ્રામીણ બેંક",
                 bank_gandhinagar: "ગાંધીનગર નાગરિક સહકારી બેંક",
                 bank_anand: "આણંદ મર્કેન્ટાઈલ કો-ઓપ બેંક",
                 bank_sabarkantha: "સાબરકાંઠા જિલ્લા સહકારી બેંક",
                 bank_banaskantha: "બનાસકાંઠા જિલ્લા મધ્યસ્થ સહકારી બેંક",
                 bank_saraswat: "સારસ્વત કો-ઓપરેટીવ બેંક",
                 bank_cosmos: "કોસ્મોસ કો-ઓપરેટીવ બેંક",
-                bank_abhyudaya: "अभ्युदय को-ऑपरेटिव बैंक (મુંબઈ)",
-                bank_greater_bombay: "ગ્રेटर બોમ્બે કો-ઓપરેટિવ બેંક",
-                bank_up_coop: "उत्तर प्रदेश सहकारी बैंक",
-                bank_aryavart: "आर्यावर्त बैंक (यूपी)",
-                bank_mp_coop: "मध्य प्रदेश राज्य सहकारी बैंक",
-                bank_mp_gramin: "मध्य प्रदेश ग्रामीण बैंक",
-                bank_delhi_coop: "दिल्ली राज्य सहकारी बैंक"
+                bank_abhyudaya: "અભ્યુદય કો-ઓપરેટિવ બેંક (મુંબઈ)",
+                bank_greater_bombay: "ગ્રેટર બોમ્બે કો-ઓપરેટિવ બેંક",
+                bank_up_coop: "ઉત્તર પ્રદેશ સહકારી બેંક",
+                bank_aryavart: "આર્યાવર્ત બેંક (યુપી)",
+                bank_mp_coop: "મધ્ય પ્રદેશ રાજ્ય સહકારી બેંક",
+                bank_mp_gramin: "મધ્ય પ્રદેશ ગ્રામીણ બેંક",
+                bank_delhi_coop: "દિલ્હી રાજ્ય સહકારી બેંક"
             }
         };
 
@@ -854,7 +854,6 @@ DASHBOARD_HTML = """
                 }
             });
 
-            // Handle placeholders
             const inputs = document.querySelectorAll('[data-placeholder]');
             inputs.forEach(inp => {
                 const pKey = inp.getAttribute('data-placeholder');
@@ -863,7 +862,6 @@ DASHBOARD_HTML = """
                 }
             });
 
-            // Handle dropdown options dynamically
             const optKeys = document.querySelectorAll('[data-key^="opt_"], [data-key^="bank_"], [data-key^="mode_"], [data-key="sentinel_val"], [data-key="cloud_val"]');
             optKeys.forEach(opt => {
                 const oKey = opt.getAttribute('data-key');
@@ -873,7 +871,6 @@ DASHBOARD_HTML = """
             });
         }
 
-        // 🎙️ ROBUST SPEECH RECOGNITION WITH ACTIVE INSTANCE CONTROL & SAFE TIMEOUT
         let activeRecognition = null;
 
         function startVoiceRecognition() {
@@ -1089,7 +1086,6 @@ def dashboard():
     query_latency = round((time.time() - start_time) * 1000, 2)
     return render_template_string(DASHBOARD_HTML, vouchers=vouchers, kpis=kpis, banks=banks, stock_summary=stock_summary, runway_days=runway_days, sentinel_status=sentinel_status, query_latency=query_latency)
 
-# --- 🖨️ PRINT REPORT VIEW ROUTE ---
 @app.route("/print_report_view")
 def print_report_view():
     if not session.get("logged_in"): return redirect(url_for("login"))
@@ -1144,7 +1140,6 @@ def print_report_view():
         </html>
     ''', vouchers=vouchers, banks=banks, inventory=inventory)
 
-# --- 📥 DOWNLOAD REPORT FILE ROUTE ---
 @app.route("/download_report_file")
 def download_report_file():
     if not session.get("logged_in"): return redirect(url_for("login"))
@@ -1178,7 +1173,6 @@ def download_report_file():
         headers={"Content-Disposition": "attachment;filename=Vajra_ERP_Report.html"}
     )
 
-# --- 🤖 MULTI-LINGUAL AI ASSISTANT API ROUTE ---
 @app.route("/api/ai-assistant", methods=["POST", "GET"])
 def ai_assistant():
     data = request.get_json(silent=True) or request.form or {}
