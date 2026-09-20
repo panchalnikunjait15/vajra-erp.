@@ -956,7 +956,9 @@ DASHBOARD_HTML = """
 def login():
     error = None
     
+    # Clear session on every GET visit to the root URL so it always forces login & math captcha
     if request.method == "GET":
+        session.clear()
         n1 = random.randint(1, 15)
         n2 = random.randint(1, 10)
         op = random.choice(['+', '-'])
@@ -967,9 +969,6 @@ def login():
         else:
             session["math_ans"] = str(n1 + n2)
             session["math_q"] = f"{n1} + {n2} = ?"
-
-    if session.get("logged_in"):
-        return redirect(url_for("dashboard"))
         
     if request.method == "POST":
         user_math = request.form.get("math_input", "").strip()
