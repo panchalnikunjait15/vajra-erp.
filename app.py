@@ -56,52 +56,31 @@ LOGIN_HTML = """
         p { color: #94a3b8; font-size: 0.85em; margin-bottom: 20px; }
         input { width: 100%; padding: 12px; margin: 8px 0; background: #030712; border: 1px solid #374151; color: #fff; border-radius: 8px; box-sizing: border-box; font-size: 0.95em; }
         input:focus { border-color: #3b82f6; outline: none; box-shadow: 0 0 10px rgba(59,130,246,0.3); }
-        .captcha-container { background: #0f172a; border: 1px solid #374151; padding: 10px; border-radius: 8px; margin: 10px 0; display: flex; align-items: center; justify-content: center; gap: 15px; }
-        .captcha-img { font-family: monospace; font-size: 1.4em; font-weight: bold; color: #38bdf8; letter-spacing: 5px; background: #1e293b; padding: 5px 15px; border-radius: 6px; text-decoration: line-through; user-select: none; }
+        .captcha-container { background: #0f172a; border: 1px solid #374151; padding: 12px; border-radius: 8px; margin: 12px 0; display: flex; align-items: center; justify-content: space-between; font-size: 1.1em; color: #38bdf8; font-family: monospace; font-weight: bold; }
         button { background: linear-gradient(135deg, #3b82f6, #2563eb); color: white; border: none; padding: 13px; width: 100%; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 1em; margin-top: 12px; box-shadow: 0 4px 15px rgba(59,130,246,0.4); }
         button:hover { background: linear-gradient(135deg, #2563eb, #1d4ed8); }
         .error { color: #f43f5e; background: rgba(244,63,94,0.1); padding: 10px; border-radius: 8px; font-size: 0.85em; margin-bottom: 15px; border: 1px solid #f43f5e; text-align: left; }
-        .info-box { color: #34d399; background: rgba(52,211,153,0.1); padding: 10px; border-radius: 8px; font-size: 0.85em; margin-bottom: 15px; border: 1px solid #34d399; text-align: left; }
     </style>
 </head>
 <body>
     <div class="card">
         <div class="logo-box"><i class="fas fa-shield-alt"></i></div>
         <h2>Vajra Sovereign OS</h2>
-        <p>Enterprise Secure Authentication</p>
+        <p>Enterprise Math Trick Secure Login</p>
         
         {% if error %}<div class="error"><i class="fas fa-exclamation-triangle"></i> {{ error }}</div>{% endif %}
-        {% if info %}<div class="info-box"><i class="fas fa-info-circle"></i> {{ info }}</div>{% endif %}
 
-        {% if step == 'credentials' %}
         <form method="POST">
-            <input type="hidden" name="action" value="verify_credentials">
             <input type="text" name="username" placeholder="Enterprise Username" required autocomplete="off">
-            <input type="password" name="password" placeholder="Master Password" required>
-            <input type="text" name="mobile_no" placeholder="Registered Mobile No (10-digit)" required autocomplete="off">
+            <input type="password" name="password" placeholder="Master Password" required autocomplete="off">
             
             <div class="captcha-container">
-                <span class="captcha-img">{{ captcha_code }}</span>
-                <span style="font-size: 0.8em; color: #94a3b8;">Type exact letters</span>
+                <span><i class="fas fa-calculator" style="margin-right: 8px;"></i> Solve: {{ math_question }}</span>
             </div>
-            <input type="text" name="captcha_input" placeholder="Enter Image Captcha" required autocomplete="off">
+            <input type="number" name="math_input" placeholder="Enter Math Answer" required autocomplete="off">
 
-            <button type="submit"><i class="fas fa-arrow-right"></i> Next: Verify OTP</button>
+            <button type="submit"><i class="fas fa-lock-open"></i> Secure Access Login</button>
         </form>
-        {% elif step == 'otp' %}
-        <form method="POST">
-            <input type="hidden" name="action" value="verify_otp">
-            <p style="color: #cbd5e1; font-size: 0.9em; margin-bottom: 15px;">Secure 2FA OTP codes dispatched to your Mobile & Gmail inbox.</p>
-            
-            <label style="text-align: left; font-size: 0.8em; color: #94a3b8;">Mobile SMS OTP Code: <strong>{{ demo_mob_otp }}</strong></label>
-            <input type="text" name="mobile_otp_input" placeholder="Enter 4-digit Mobile OTP" required autocomplete="off">
-
-            <label style="text-align: left; font-size: 0.8em; color: #94a3b8; margin-top: 10px;">Gmail 2FA OTP Code: <strong>{{ demo_mail_otp }}</strong></label>
-            <input type="text" name="gmail_otp_input" placeholder="Enter 4-digit Gmail OTP" required autocomplete="off">
-
-            <button type="submit" style="background: linear-gradient(135deg, #10b981, #059669);"><i class="fas fa-lock-open"></i> Complete Secure Login</button>
-        </form>
-        {% endif %}
     </div>
 </body>
 </html>
@@ -973,70 +952,47 @@ DASHBOARD_HTML = """
 @app.route("/", methods=["GET", "POST"])
 def login():
     error = None
-    info = None
-    step = session.get("login_step", "credentials")
     
-    if "img_captcha" not in session:
-        session["img_captcha"] = ''.join(random.choices('ABCDEFGHJKLMNPQRSTUVWXYZ23456789', k=5))
+    # Generate Math Trick Captcha every time login page loads
+    if request.method == "GET":
+        n1 = random.randint(1, 15)
+        n2 = random.randint(1, 10)
+        op = random.choice(['+', '-'])
+        if op == '-':
+            if n1 < n2: n1, n2 = n2, n1  # prevent negative result
+            session["math_ans"] = str(n1 - n2)
+            session["math_q"] = f"{n1} - {n2} = ?"
+        else:
+            session["math_ans"] = str(n1 + n2)
+            session["math_q"] = f"{n1} + {n2} = ?"
 
     if session.get("logged_in"):
         return redirect(url_for("dashboard"))
         
     if request.method == "POST":
-        action = request.form.get("action")
+        user_math = request.form.get("math_input", "").strip()
+        correct_math = session.get("math_ans", "")
         
-        if action == "verify_credentials":
-            user_captcha = request.form.get("captcha_input", "").strip().upper()
-            correct_captcha = session.get("img_captcha", "")
-            mobile_no = request.form.get("mobile_no", "").strip()
-            
-            session["img_captcha"] = ''.join(random.choices('ABCDEFGHJKLMNPQRSTUVWXYZ23456789', k=5))
-            
-            if user_captcha != correct_captcha:
-                error = "Security Verification Failed (Invalid Image Captcha)."
-            elif request.form.get("username") == "VajraERP" and request.form.get("password") == "Vajra@erp":
-                mob_otp = str(random.randint(1000, 9999))
-                mail_otp = str(random.randint(1000, 9999))
-                
-                session["pending_mob_otp"] = mob_otp
-                session["pending_mail_otp"] = mail_otp
-                session["user_mobile"] = mobile_no
-                
-                session["login_step"] = "otp"
-                step = "otp"
-                info = f"Secure 2FA dispatched instantly to Mobile ({mobile_no}) & Gmail."
-            else:
-                error = "Invalid Master Credentials! Access Denied."
-                
-        elif action == "verify_otp":
-            entered_mob = request.form.get("mobile_otp_input", "").strip()
-            entered_mail = request.form.get("gmail_otp_input", "").strip()
-            
-            correct_mob = session.get("pending_mob_otp", "")
-            correct_mail = session.get("pending_mail_otp", "")
-            
-            if entered_mob == correct_mob and entered_mail == correct_mail:
-                session["logged_in"] = True
-                session.pop("login_step", None)
-                session.pop("pending_mob_otp", None)
-                session.pop("pending_mail_otp", None)
-                session.pop("user_mobile", None)
-                return redirect(url_for("dashboard"))
-            else:
-                error = "Invalid Mobile or Gmail OTP code entered."
-                step = "otp"
-
-    demo_mob_otp = session.get("pending_mob_otp", "1234")
-    demo_mail_otp = session.get("pending_mail_otp", "5678")
+        if user_math != correct_math:
+            error = "Math Trick Verification Failed! Try again."
+            n1, n2 = random.randint(1, 15), random.randint(1, 10)
+            session["math_ans"] = str(n1 + n2)
+            session["math_q"] = f"{n1} + {n2} = ?"
+        elif request.form.get("username") == "VajraERP" and request.form.get("password") == "Vajra@erp":
+            session["logged_in"] = True
+            # Non-permanent session so closing browser requires re-login
+            session.permanent = False 
+            return redirect(url_for("dashboard"))
+        else:
+            error = "Invalid Master Credentials! Access Denied."
+            n1, n2 = random.randint(1, 15), random.randint(1, 10)
+            session["math_ans"] = str(n1 + n2)
+            session["math_q"] = f"{n1} + {n2} = ?"
 
     return render_template_string(
         LOGIN_HTML, 
         error=error, 
-        info=info, 
-        step=step, 
-        captcha_code=session.get("img_captcha", "VAJRA"),
-        demo_mob_otp=demo_mob_otp,
-        demo_mail_otp=demo_mail_otp
+        math_question=session.get("math_q", "5 + 3 = ?")
     )
 
 @app.route("/dashboard")
