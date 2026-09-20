@@ -48,14 +48,14 @@ LOGIN_HTML = """
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vajra Sovereign ERP Multi System - Secure Login</title>
+    <title>Vajra Sovereign Multi System - Secure Login</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body { background: #030712; color: #fff; font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; padding: 20px; box-sizing: border-box; }
         .card { background: linear-gradient(135deg, #111827 0%, #0f172a 100%); padding: 35px 30px; border-radius: 16px; width: 100%; max-width: 400px; border: 1px solid #1f2937; text-align: center; box-shadow: 0 25px 60px rgba(0,0,0,0.9), 0 0 30px rgba(59,130,246,0.15); }
         .logo-box { width: 70px; height: 70px; background: linear-gradient(135deg, #3b82f6, #1d4ed8); border-radius: 50%; display: flex; justify-content: center; align-items: center; margin: 0 auto 15px auto; box-shadow: 0 0 20px rgba(59,130,246,0.5); border: 2px solid #60a5fa; }
         .logo-box i { font-size: 2em; color: #fff; }
-        h2 { color: #38bdf8; margin: 0 0 5px 0; font-size: 1.3em; letter-spacing: 0.5px; }
+        h2 { color: #38bdf8; margin: 0 0 5px 0; font-size: 1.25em; letter-spacing: 0.5px; }
         p { color: #94a3b8; font-size: 0.85em; margin-bottom: 20px; }
         input { width: 100%; padding: 12px; margin: 8px 0; background: #030712; border: 1px solid #374151; color: #fff; border-radius: 8px; box-sizing: border-box; font-size: 0.95em; }
         input:focus { border-color: #3b82f6; outline: none; box-shadow: 0 0 10px rgba(59,130,246,0.3); }
@@ -71,7 +71,7 @@ LOGIN_HTML = """
 <body>
     <div class="card">
         <div class="logo-box"><i class="fas fa-shield-alt"></i></div>
-        <h2>Vajra Sovereign ERP Multi System</h2>
+        <h2>Vajra Sovereign Multi System</h2>
         <p>Enterprise Secure Login Portal</p>
         
         {% if error %}<div class="error"><i class="fas fa-exclamation-triangle"></i> {{ error }}</div>{% endif %}
@@ -103,14 +103,14 @@ REGISTER_HTML = """
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vajra Sovereign ERP Multi System - User Registration</title>
+    <title>Vajra Sovereign Multi System - User Registration</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body { background: #030712; color: #fff; font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; padding: 20px; box-sizing: border-box; }
         .card { background: linear-gradient(135deg, #111827 0%, #0f172a 100%); padding: 35px 30px; border-radius: 16px; width: 100%; max-width: 400px; border: 1px solid #1f2937; text-align: center; box-shadow: 0 25px 60px rgba(0,0,0,0.9), 0 0 30px rgba(59,130,246,0.15); }
         .logo-box { width: 70px; height: 70px; background: linear-gradient(135deg, #10b981, #059669); border-radius: 50%; display: flex; justify-content: center; align-items: center; margin: 0 auto 15px auto; box-shadow: 0 0 20px rgba(16,185,129,0.5); border: 2px solid #34d399; }
         .logo-box i { font-size: 2em; color: #fff; }
-        h2 { color: #34d399; margin: 0 0 5px 0; font-size: 1.3em; letter-spacing: 0.5px; }
+        h2 { color: #34d399; margin: 0 0 5px 0; font-size: 1.25em; letter-spacing: 0.5px; }
         p { color: #94a3b8; font-size: 0.85em; margin-bottom: 20px; }
         input { width: 100%; padding: 12px; margin: 8px 0; background: #030712; border: 1px solid #374151; color: #fff; border-radius: 8px; box-sizing: border-box; font-size: 0.95em; }
         input:focus { border-color: #10b981; outline: none; box-shadow: 0 0 10px rgba(16,185,129,0.3); }
@@ -124,7 +124,7 @@ REGISTER_HTML = """
 <body>
     <div class="card">
         <div class="logo-box"><i class="fas fa-user-plus"></i></div>
-        <h2>Vajra Sovereign ERP Multi System</h2>
+        <h2>Vajra Sovereign Multi System</h2>
         <p>New Enterprise User Registration</p>
         
         {% if error %}<div class="error"><i class="fas fa-exclamation-triangle"></i> {{ error }}</div>{% endif %}
@@ -152,7 +152,7 @@ DASHBOARD_HTML = """
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vajra ERP - Dashboard</title>
+    <title>Vajra Multi System - Dashboard</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -200,7 +200,7 @@ DASHBOARD_HTML = """
 </head>
 <body>
     <header>
-        <h1><i class="fas fa-globe"></i> <span data-key="header_title">VAJRA SOVEREIGN ERP MULTI SYSTEM</span></h1>
+        <h1><i class="fas fa-globe"></i> <span data-key="header_title">VAJRA SOVEREIGN MULTI SYSTEM</span></h1>
         
         <div class="lang-switcher">
             <button class="lang-btn active" onclick="setLanguage('en')">EN</button>
@@ -467,7 +467,7 @@ DASHBOARD_HTML = """
 
         const translations = {
             en: {
-                header_title: "VAJRA SOVEREIGN ERP MULTI SYSTEM",
+                header_title: "VAJRA SOVEREIGN MULTI SYSTEM",
                 logout: "Logout",
                 backup_db: "Backup DB",
                 export_csv: "Export CSV",
@@ -602,7 +602,7 @@ DASHBOARD_HTML = """
                 bank_delhi_coop: "Delhi State Cooperative Bank"
             },
             hi: {
-                header_title: "वज्र संप्रभु ईआरपी मल्टी सिस्टम",
+                header_title: "वज्र संप्रभु मल्टी सिस्टम",
                 logout: "लॉग आउट",
                 backup_db: "डेटाबेस बैकअप",
                 export_csv: "इन्वेंट्री एक्सपोर्ट",
@@ -742,7 +742,7 @@ DASHBOARD_HTML = """
                 bank_delhi_coop: "दिल्ली राज्य सहकारी बैंक"
             },
             gu: {
-                header_title: "વજ્ર સોવરિન ઇઆરપી મલ્ટી સિસ્ટમ",
+                header_title: "વજ્ર સોવરિન મલ્ટી સિસ્ટમ",
                 logout: "લોગઆઉટ",
                 backup_db: "બેકઅપ ડીબી",
                 export_csv: "ઇન્વેન્ટરી એક્સપોર્ટ",
