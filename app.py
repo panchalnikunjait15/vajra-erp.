@@ -21,6 +21,13 @@ def init_db():
         
         conn.execute('''CREATE TABLE IF NOT EXISTS users (
             id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT UNIQUE, password TEXT, mobile TEXT, email TEXT)''')
+            
+        # Re-add default master admin user so direct login works seamlessly
+        cursor = conn.cursor()
+        cursor.execute("SELECT COUNT(*) FROM users WHERE username = 'VajraERP'")
+        if cursor.fetchone()[0] == 0:
+            cursor.execute("INSERT INTO users (username, password, mobile, email) VALUES (?, ?, ?, ?)",
+                           ("VajraERP", "Vajra@erp", "9876543210", "panchalnikunjait@gmail.com"))
         
         conn.execute('''CREATE TABLE IF NOT EXISTS vouchers (
             id INTEGER PRIMARY KEY AUTOINCREMENT, date TEXT, voucher_type TEXT, 
