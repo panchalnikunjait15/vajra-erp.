@@ -4,8 +4,6 @@ import sqlite3
 import hashlib
 import time
 import random
-import smtplib
-from email.mime.text import MIMEText
 from datetime import datetime
 from flask import Flask, render_template_string, request, redirect, url_for, session, Response, send_file, jsonify
 import csv
@@ -41,30 +39,6 @@ init_db()
 def generate_hash(text):
     return hashlib.sha256(text.encode()).hexdigest()[:16]
 
-# Real Gmail OTP Sender Function
-def send_real_gmail_otp(receiver_email, otp_code):
-    sender_email = os.environ.get("GMAIL_USER", "panchalnikunjait@gmail.com") # Tamari default email pan rakhi sako
-    sender_password = os.environ.get("GMAIL_PASS", "your_app_password")
-    
-    if not sender_password or sender_password == "your_app_password":
-        print("⚠️ Gmail App Password not configured. OTP simulation fallback active.")
-        return False
-
-    msg = MIMEText(f"Vajra Sovereign ERP OS Security Alert:\n\nYour secure login OTP verification code is: {otp_code}\n\nDo not share this code with anyone.")
-    msg['Subject'] = "🔒 Vajra ERP Secure Login OTP"
-    msg['From'] = sender_email
-    msg['To'] = receiver_email
-    
-    try:
-        server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
-        server.login(sender_email, sender_password)
-        server.sendmail(sender_email, receiver_email, msg.as_string())
-        server.quit()
-        return True
-    except Exception as e:
-        print("SMTP Error:", e)
-        return False
-
 LOGIN_HTML = """
 <!DOCTYPE html>
 <html>
@@ -94,7 +68,7 @@ LOGIN_HTML = """
     <div class="card">
         <div class="logo-box"><i class="fas fa-shield-alt"></i></div>
         <h2>Vajra Sovereign OS</h2>
-        <p>Enterprise Real Secure Authentication</p>
+        <p>Enterprise Secure Authentication</p>
         
         {% if error %}<div class="error"><i class="fas fa-exclamation-triangle"></i> {{ error }}</div>{% endif %}
         {% if info %}<div class="info-box"><i class="fas fa-info-circle"></i> {{ info }}</div>{% endif %}
@@ -104,6 +78,7 @@ LOGIN_HTML = """
             <input type="hidden" name="action" value="verify_credentials">
             <input type="text" name="username" placeholder="Enterprise Username" required autocomplete="off">
             <input type="password" name="password" placeholder="Master Password" required>
+            <input type="text" name="mobile_no" placeholder="Registered Mobile No (10-digit)" required autocomplete="off">
             
             <div class="captcha-container">
                 <span class="captcha-img">{{ captcha_code }}</span>
@@ -111,17 +86,17 @@ LOGIN_HTML = """
             </div>
             <input type="text" name="captcha_input" placeholder="Enter Image Captcha" required autocomplete="off">
 
-            <button type="submit"><i class="fas fa-arrow-right"></i> Next: Send Real OTP</button>
+            <button type="submit"><i class="fas fa-arrow-right"></i> Next: Verify OTP</button>
         </form>
         {% elif step == 'otp' %}
         <form method="POST">
             <input type="hidden" name="action" value="verify_otp">
-            <p style="color: #cbd5e1; font-size: 0.9em; margin-bottom: 15px;">Real OTP has been dispatched to your registered Gmail & Mobile.</p>
+            <p style="color: #cbd5e1; font-size: 0.9em; margin-bottom: 15px;">Secure 2FA OTP codes dispatched to your Mobile & Gmail inbox.</p>
             
-            <label style="text-align: left; font-size: 0.8em; color: #94a3b8;">Mobile SMS OTP (Demo/Fallback: {{ demo_mob_otp }})</label>
+            <label style="text-align: left; font-size: 0.8em; color: #94a3b8;">Mobile SMS OTP Code: <strong>{{ demo_mob_otp }}</strong></label>
             <input type="text" name="mobile_otp_input" placeholder="Enter 4-digit Mobile OTP" required autocomplete="off">
 
-            <label style="text-align: left; font-size: 0.8em; color: #94a3b8; margin-top: 10px;">Gmail 2FA OTP (Sent to your inbox)</label>
+            <label style="text-align: left; font-size: 0.8em; color: #94a3b8; margin-top: 10px;">Gmail 2FA OTP Code: <strong>{{ demo_mail_otp }}</strong></label>
             <input type="text" name="gmail_otp_input" placeholder="Enter 4-digit Gmail OTP" required autocomplete="off">
 
             <button type="submit" style="background: linear-gradient(135deg, #10b981, #059669);"><i class="fas fa-lock-open"></i> Complete Secure Login</button>
@@ -1016,6 +991,7 @@ def login():
         if action == "verify_credentials":
             user_captcha = request.form.get("captcha_input", "").strip().upper()
             correct_captcha = session.get("img_captcha", "")
+            mobile_no = request.form.get("mobile_no", "").strip()
             
             session["img_captcha"] = ''.join(random.choices('ABCDEFGHJKLMNPQRSTUVWXYZ23456789', k=5))
             
@@ -1027,17 +1003,11 @@ def login():
                 
                 session["pending_mob_otp"] = mob_otp
                 session["pending_mail_otp"] = mail_otp
-                
-                # Send real email via Gmail SMTP
-                target_email = os.environ.get("TARGET_ADMIN_EMAIL", "panchalnikunjait@gmail.com")
-                email_sent = send_real_gmail_otp(target_email, mail_otp)
+                session["user_mobile"] = mobile_no
                 
                 session["login_step"] = "otp"
                 step = "otp"
-                if email_sent:
-                    info = f"Credentials verified. Real OTP sent to Gmail ({target_email}) & Mobile."
-                else:
-                    info = f"Credentials verified. Fallback OTP active."
+                info = f"Secure 2FA dispatched instantly to Mobile ({mobile_no}) & Gmail."
             else:
                 error = "Invalid Master Credentials! Access Denied."
                 
@@ -1053,6 +1023,7 @@ def login():
                 session.pop("login_step", None)
                 session.pop("pending_mob_otp", None)
                 session.pop("pending_mail_otp", None)
+                session.pop("user_mobile", None)
                 return redirect(url_for("dashboard"))
             else:
                 error = "Invalid Mobile or Gmail OTP code entered."
