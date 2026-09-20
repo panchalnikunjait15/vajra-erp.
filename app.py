@@ -185,7 +185,7 @@ DASHBOARD_HTML = """
     <div class="ai-banner">
         <div>
             <h3 data-key="sentinel_title"><i class="fas fa-shield-alt"></i> Sovereign Multi-Lingual Sentinel</h3>
-            <p><span data-key="runway_label">Estimated Liquidity Runway</span>: <strong style="color:#34d399;">{{ runway_days }} Days</strong> | <span data-key="sentinel_status">Status</span>: <strong style="color:#38bdf8;" data-key="sentinel_val">{{ sentinel_status }}</strong></p>
+            <p><span data-key="runway_label">Estimated Liquidity Runway</span>: <strong style="color:#34d399;">{{ runway_days }} <span data-key="days_unit">Days</span></strong> | <span data-key="sentinel_status">Status</span>: <strong style="color:#38bdf8;" data-key="sentinel_val">{{ sentinel_status }}</strong></p>
         </div>
         <div style="background: rgba(0,0,0,0.4); padding: 15px 20px; border-radius: 8px; text-align: center; border: 1px solid #6366f1;">
             <div style="font-size: 0.75em; text-transform: uppercase; color: #c7d2fe;" data-key="cloud_status">Cloud Status</div>
@@ -414,6 +414,7 @@ DASHBOARD_HTML = """
                 print_report: "Print / Save PDF",
                 sentinel_title: "Sovereign Multi-Lingual Sentinel",
                 runway_label: "Estimated Liquidity Runway",
+                days_unit: "Days",
                 sentinel_status: "Status",
                 sentinel_val: "Optimal Liquidity",
                 cloud_status: "Cloud Status",
@@ -548,6 +549,7 @@ DASHBOARD_HTML = """
                 print_report: "प्रिंट / पीडीएफ सेव करें",
                 sentinel_title: "संप्रभु बहुभाषी प्रहरी",
                 runway_label: "अनुमानित तरलता रनवे",
+                days_unit: "दिन",
                 sentinel_status: "स्थिति",
                 sentinel_val: "नकद संरक्षण चेतावनी",
                 cloud_status: "क्लाउड स्थिति",
@@ -687,6 +689,7 @@ DASHBOARD_HTML = """
                 print_report: "પ્રિન્ટ / PDF સેવ કરો",
                 sentinel_title: "સોવરિન મલ્ટી-લિંગ્વેજ સેન્ટિનલ",
                 runway_label: "અંદાજિત લિક્વિડિટી રનવે",
+                days_unit: "દિવસ",
                 sentinel_status: "સ્થિતિ",
                 sentinel_val: "રોકડ સંરક્ષણ ચેતવણી",
                 cloud_status: "ક્લાઉડ સ્ટેટસ",
@@ -953,13 +956,12 @@ DASHBOARD_HTML = """
 def login():
     error = None
     
-    # Generate Math Trick Captcha every time login page loads
     if request.method == "GET":
         n1 = random.randint(1, 15)
         n2 = random.randint(1, 10)
         op = random.choice(['+', '-'])
         if op == '-':
-            if n1 < n2: n1, n2 = n2, n1  # prevent negative result
+            if n1 < n2: n1, n2 = n2, n1
             session["math_ans"] = str(n1 - n2)
             session["math_q"] = f"{n1} - {n2} = ?"
         else:
@@ -980,7 +982,6 @@ def login():
             session["math_q"] = f"{n1} + {n2} = ?"
         elif request.form.get("username") == "VajraERP" and request.form.get("password") == "Vajra@erp":
             session["logged_in"] = True
-            # Non-permanent session so closing browser requires re-login
             session.permanent = False 
             return redirect(url_for("dashboard"))
         else:
