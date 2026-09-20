@@ -19,6 +19,16 @@ def init_db():
         conn.execute("PRAGMA journal_mode=WAL;")
         conn.execute("PRAGMA synchronous=NORMAL;")
         
+        conn.execute('''CREATE TABLE IF NOT EXISTS users (
+            id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT UNIQUE, password TEXT, mobile TEXT, email TEXT)''')
+            
+        # Insert default admin user if not exists
+        cursor = conn.cursor()
+        cursor.execute("SELECT COUNT(*) FROM users WHERE username = 'VajraERP'")
+        if cursor.fetchone()[0] == 0:
+            cursor.execute("INSERT INTO users (username, password, mobile, email) VALUES (?, ?, ?, ?)",
+                           ("VajraERP", "Vajra@erp", "9876543210", "panchalnikunjait@gmail.com"))
+        
         conn.execute('''CREATE TABLE IF NOT EXISTS vouchers (
             id INTEGER PRIMARY KEY AUTOINCREMENT, date TEXT, voucher_type TEXT, 
             ledger_name TEXT, amount REAL, gst_amount REAL, total_with_gst REAL, narration TEXT, crypto_hash TEXT)''')
@@ -60,15 +70,19 @@ LOGIN_HTML = """
         button { background: linear-gradient(135deg, #3b82f6, #2563eb); color: white; border: none; padding: 13px; width: 100%; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 1em; margin-top: 12px; box-shadow: 0 4px 15px rgba(59,130,246,0.4); }
         button:hover { background: linear-gradient(135deg, #2563eb, #1d4ed8); }
         .error { color: #f43f5e; background: rgba(244,63,94,0.1); padding: 10px; border-radius: 8px; font-size: 0.85em; margin-bottom: 15px; border: 1px solid #f43f5e; text-align: left; }
+        .success { color: #34d399; background: rgba(52,211,153,0.1); padding: 10px; border-radius: 8px; font-size: 0.85em; margin-bottom: 15px; border: 1px solid #34d399; text-align: left; }
+        .link-text { margin-top: 15px; font-size: 0.85em; color: #94a3b8; }
+        .link-text a { color: #38bdf8; text-decoration: none; font-weight: bold; }
     </style>
 </head>
 <body>
     <div class="card">
         <div class="logo-box"><i class="fas fa-shield-alt"></i></div>
         <h2>Vajra Sovereign OS</h2>
-        <p>Enterprise Math Trick Secure Login</p>
+        <p>Enterprise Secure Login Portal</p>
         
         {% if error %}<div class="error"><i class="fas fa-exclamation-triangle"></i> {{ error }}</div>{% endif %}
+        {% if msg %}<div class="success"><i class="fas fa-check-circle"></i> {{ msg }}</div>{% endif %}
 
         <form method="POST">
             <input type="text" name="username" placeholder="Enterprise Username" required autocomplete="off">
@@ -81,6 +95,59 @@ LOGIN_HTML = """
 
             <button type="submit"><i class="fas fa-lock-open"></i> Secure Access Login</button>
         </form>
+        
+        <div class="link-text">
+            Don't have an account? <a href="/register">Register New User</a>
+        </div>
+    </div>
+</body>
+</html>
+"""
+
+REGISTER_HTML = """
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vajra Sovereign ERP OS - User Registration</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { background: #030712; color: #fff; font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; padding: 20px; box-sizing: border-box; }
+        .card { background: linear-gradient(135deg, #111827 0%, #0f172a 100%); padding: 35px 30px; border-radius: 16px; width: 100%; max-width: 400px; border: 1px solid #1f2937; text-align: center; box-shadow: 0 25px 60px rgba(0,0,0,0.9), 0 0 30px rgba(59,130,246,0.15); }
+        .logo-box { width: 70px; height: 70px; background: linear-gradient(135deg, #10b981, #059669); border-radius: 50%; display: flex; justify-content: center; align-items: center; margin: 0 auto 15px auto; box-shadow: 0 0 20px rgba(16,185,129,0.5); border: 2px solid #34d399; }
+        .logo-box i { font-size: 2em; color: #fff; }
+        h2 { color: #34d399; margin: 0 0 5px 0; font-size: 1.5em; letter-spacing: 1px; }
+        p { color: #94a3b8; font-size: 0.85em; margin-bottom: 20px; }
+        input { width: 100%; padding: 12px; margin: 8px 0; background: #030712; border: 1px solid #374151; color: #fff; border-radius: 8px; box-sizing: border-box; font-size: 0.95em; }
+        input:focus { border-color: #10b981; outline: none; box-shadow: 0 0 10px rgba(16,185,129,0.3); }
+        button { background: linear-gradient(135deg, #10b981, #059669); color: white; border: none; padding: 13px; width: 100%; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 1em; margin-top: 12px; box-shadow: 0 4px 15px rgba(16,185,129,0.4); }
+        button:hover { background: linear-gradient(135deg, #059669, #047857); }
+        .error { color: #f43f5e; background: rgba(244,63,94,0.1); padding: 10px; border-radius: 8px; font-size: 0.85em; margin-bottom: 15px; border: 1px solid #f43f5e; text-align: left; }
+        .link-text { margin-top: 15px; font-size: 0.85em; color: #94a3b8; }
+        .link-text a { color: #38bdf8; text-decoration: none; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="logo-box"><i class="fas fa-user-plus"></i></div>
+        <h2>Vajra Sovereign OS</h2>
+        <p>New Enterprise User Registration</p>
+        
+        {% if error %}<div class="error"><i class="fas fa-exclamation-triangle"></i> {{ error }}</div>{% endif %}
+
+        <form method="POST">
+            <input type="text" name="username" placeholder="Choose Username" required autocomplete="off">
+            <input type="password" name="password" placeholder="Create Master Password" required autocomplete="off">
+            <input type="text" name="mobile" placeholder="Mobile Number (10-digit)" required autocomplete="off">
+            <input type="email" name="email" placeholder="Gmail Address" required autocomplete="off">
+
+            <button type="submit"><i class="fas fa-user-check"></i> Register Account</button>
+        </form>
+        
+        <div class="link-text">
+            Already registered? <a href="/">Back to Login</a>
+        </div>
     </div>
 </body>
 </html>
@@ -955,8 +1022,8 @@ DASHBOARD_HTML = """
 @app.route("/", methods=["GET", "POST"])
 def login():
     error = None
+    msg = request.args.get("msg")
     
-    # Clear session on every GET visit to the root URL so it always forces login & math captcha
     if request.method == "GET":
         session.clear()
         n1 = random.randint(1, 15)
@@ -969,31 +1036,66 @@ def login():
         else:
             session["math_ans"] = str(n1 + n2)
             session["math_q"] = f"{n1} + {n2} = ?"
+
+    if session.get("logged_in"):
+        return redirect(url_for("dashboard"))
         
     if request.method == "POST":
         user_math = request.form.get("math_input", "").strip()
         correct_math = session.get("math_ans", "")
+        username = request.form.get("username", "").strip()
+        password = request.form.get("password", "").strip()
         
         if user_math != correct_math:
             error = "Math Trick Verification Failed! Try again."
             n1, n2 = random.randint(1, 15), random.randint(1, 10)
             session["math_ans"] = str(n1 + n2)
             session["math_q"] = f"{n1} + {n2} = ?"
-        elif request.form.get("username") == "VajraERP" and request.form.get("password") == "Vajra@erp":
-            session["logged_in"] = True
-            session.permanent = False 
-            return redirect(url_for("dashboard"))
         else:
-            error = "Invalid Master Credentials! Access Denied."
-            n1, n2 = random.randint(1, 15), random.randint(1, 10)
-            session["math_ans"] = str(n1 + n2)
-            session["math_q"] = f"{n1} + {n2} = ?"
+            with sqlite3.connect(DB_NAME) as conn:
+                cursor = conn.cursor()
+                cursor.execute("SELECT * FROM users WHERE username = ? AND password = ?", (username, password))
+                user = cursor.fetchone()
+                
+            if user:
+                session["logged_in"] = True
+                session["username"] = username
+                session.permanent = False 
+                return redirect(url_for("dashboard"))
+            else:
+                error = "Invalid Username or Password! Access Denied."
+                n1, n2 = random.randint(1, 15), random.randint(1, 10)
+                session["math_ans"] = str(n1 + n2)
+                session["math_q"] = f"{n1} + {n2} = ?"
 
     return render_template_string(
         LOGIN_HTML, 
         error=error, 
+        msg=msg,
         math_question=session.get("math_q", "5 + 3 = ?")
     )
+
+@app.route("/register", methods=["GET", "POST"])
+def register():
+    error = None
+    if request.method == "POST":
+        username = request.form.get("username", "").strip()
+        password = request.form.get("password", "").strip()
+        mobile = request.form.get("mobile", "").strip()
+        email = request.form.get("email", "").strip()
+        
+        if not username or not password or not mobile or not email:
+            error = "All fields are required!"
+        else:
+            try:
+                with sqlite3.connect(DB_NAME) as conn:
+                    conn.execute("INSERT INTO users (username, password, mobile, email) VALUES (?, ?, ?, ?)",
+                                 (username, password, mobile, email))
+                return redirect(url_for("login", msg="Registration successful! Please login."))
+            except sqlite3.IntegrityError:
+                error = "Username already exists! Please choose another."
+                
+    return render_template_string(REGISTER_HTML, error=error)
 
 @app.route("/dashboard")
 def dashboard():
