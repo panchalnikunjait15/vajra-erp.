@@ -22,7 +22,6 @@ def init_db():
         conn.execute('''CREATE TABLE IF NOT EXISTS users (
             id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT UNIQUE, password TEXT, mobile TEXT, email TEXT)''')
             
-        # Re-add default master admin user so direct login works seamlessly
         cursor = conn.cursor()
         cursor.execute("SELECT COUNT(*) FROM users WHERE username = 'VajraERP'")
         if cursor.fetchone()[0] == 0:
@@ -261,10 +260,10 @@ DASHBOARD_HTML = """
     </div>
 
     <div class="kpi-grid">
-        <div class="kpi"><h3 data-key="kpi_revenue">Total Revenue</h3><p>₹{{ "%.2f"|format(kpis.revenue) }}</p></div>
-        <div class="kpi"><h3 data-key="kpi_profit">Net Profit (P&L)</h3><p>₹{{ "%.2f"|format(kpis.profit) }}</p></div>
-        <div class="kpi"><h3 data-key="kpi_bank">Total Bank Balance</h3><p style="color: #34d399;">₹{{ "%.2f"|format(kpis.bank_bal) }}</p></div>
-        <div class="kpi"><h3 data-key="kpi_advances">Net Advances</h3><p>₹{{ "%.2f"|format(kpis.advances) }}</p></div>
+        <div class="kpi"><h3 data-key="kpi_revenue">Total Revenue</h3><p>₹<span class="num-val" data-val="{{ "%.2f"|format(kpis.revenue) }}">{{ "%.2f"|format(kpis.revenue) }}</span></p></div>
+        <div class="kpi"><h3 data-key="kpi_profit">Net Profit (P&L)</h3><p>₹<span class="num-val" data-val="{{ "%.2f"|format(kpis.profit) }}">{{ "%.2f"|format(kpis.profit) }}</span></p></div>
+        <div class="kpi"><h3 data-key="kpi_bank">Total Bank Balance</h3><p style="color: #34d399;">₹<span class="num-val" data-val="{{ "%.2f"|format(kpis.bank_bal) }}">{{ "%.2f"|format(kpis.bank_bal) }}</span></p></div>
+        <div class="kpi"><h3 data-key="kpi_advances">Net Advances</h3><p>₹<span class="num-val" data-val="{{ "%.2f"|format(kpis.advances) }}">{{ "%.2f"|format(kpis.advances) }}</span></p></div>
     </div>
 
     <div class="card" style="margin-bottom: 25px;">
@@ -275,8 +274,8 @@ DASHBOARD_HTML = """
                 {% for b in banks %}
                 <tr>
                     <td><strong>{{ b[1] }}</strong></td>
-                    <td>{{ b[2] }}</td>
-                    <td style="font-weight: bold; color: #34d399;">₹{{ "%.2f"|format(b[3]) }}</td>
+                    <td><span class="num-val" data-val="{{ b[2] }}">{{ b[2] }}</span></td>
+                    <td style="font-weight: bold; color: #34d399;">₹<span class="num-val" data-val="{{ "%.2f"|format(b[3]) }}">{{ "%.2f"|format(b[3]) }}</span></td>
                 </tr>
                 {% endfor %}
             {% else %}
@@ -301,9 +300,9 @@ DASHBOARD_HTML = """
                     {% endif %}
                     {% if s[3] <= 5 %}<span class="badge-alert" data-key="low_stock">Low Stock</span>{% endif %}
                 </td>
-                <td style="font-weight: bold; color: {% if s[3] <= 5 %}#ef4444{% else %}#34d399{% endif %};">{{ s[3] }}</td>
-                <td>₹{{ "%.2f"|format(s[4]) }}</td>
-                <td>₹{{ "%.2f"|format(s[3] * s[4]) }}</td>
+                <td style="font-weight: bold; color: {% if s[3] <= 5 %}#ef4444{% else %}#34d399{% endif %};"><span class="num-val" data-val="{{ s[3] }}">{{ s[3] }}</span></td>
+                <td>₹<span class="num-val" data-val="{{ "%.2f"|format(s[4]) }}">{{ "%.2f"|format(s[4]) }}</span></td>
+                <td>₹<span class="num-val" data-val="{{ "%.2f"|format(s[3] * s[4]) }}">{{ "%.2f"|format(s[3] * s[4]) }}</span></td>
             </tr>
             {% endfor %}
         </table>
@@ -448,9 +447,9 @@ DASHBOARD_HTML = """
             <tr><th data-key="th_type">Type</th><th data-key="th_party">Party</th><th data-key="th_total">Total (Inc. GST)</th><th data-key="th_action">Action</th></tr>
             {% for v in vouchers %}
             <tr>
-                <td>{{ v[2] }}</td>
+                <td><span class="vtype-val" data-val="{{ v[2] }}">{{ v[2] }}</span></td>
                 <td>{{ v[3] }}</td>
-                <td>₹{{ "%.2f"|format(v[6]) }}</td>
+                <td>₹<span class="num-val" data-val="{{ "%.2f"|format(v[6]) }}">{{ "%.2f"|format(v[6]) }}</span></td>
                 <td>
                     <div class="share-group">
                         <a href="https://wa.me/?text=Vajra%20ERP%20Invoice:%20{{ v[2] }}%20for%20{{ v[3] }}%20Amount:%20₹{{ '%.2f'|format(v[6]) }}" target="_blank" class="whatsapp-btn">
@@ -471,6 +470,19 @@ DASHBOARD_HTML = """
 
     <script>
         let currentLang = 'en';
+
+        const hindiDigits = {'0':'०', '1':'१', '2':'२', '3':'३', '4':'४', '5':'५', '6':'६', '7':'७', '8':'८', '9':'९', '.':'.'};
+        const gujaratiDigits = {'0':'૦', '1':'૧', '2':'૨', '3':'૩', '4':'૪', '5':'૫', '6':'૬', '7':'૭', '8':'૮', '9':'૯', '.':'.'};
+
+        function convertDigits(text, lang) {
+            let str = String(text);
+            if (lang === 'hi') {
+                return str.split('').map(char => hindiDigits[char] !== undefined ? hindiDigits[char] : char).join('');
+            } else if (lang === 'gu') {
+                return str.split('').map(char => gujaratiDigits[char] !== undefined ? gujaratiDigits[char] : char).join('');
+            }
+            return str;
+        }
 
         const translations = {
             en: {
@@ -746,7 +758,11 @@ DASHBOARD_HTML = """
                 bank_aryavart: "आर्यावर्त बैंक (यूपी)",
                 bank_mp_coop: "मध्य प्रदेश राज्य सहकारी बैंक",
                 bank_mp_gramin: "मध्य प्रदेश ग्रामीण बैंक",
-                bank_delhi_coop: "दिल्ली राज्य सहकारी बैंक"
+                bank_delhi_coop: "दिल्ली राज्य सहकारी बैंक",
+                vtype_RECEIPT: "रसीद",
+                vtype_PAYMENT: "भुगतान",
+                vtype_SALES: "बिक्री",
+                vtype_PURCHASE: "खरीद"
             },
             gu: {
                 header_title: "વજ્ર સોવરિન મલ્ટી સિસ્ટમ",
@@ -886,7 +902,11 @@ DASHBOARD_HTML = """
                 bank_aryavart: "આર્યાવર્ત બેંક (યુપી)",
                 bank_mp_coop: "મધ્ય પ્રદેશ રાજ્ય સહકારી બેંક",
                 bank_mp_gramin: "મધ્ય પ્રદેશ ગ્રામીણ બેંક",
-                bank_delhi_coop: "દિલ્હી રાજ્ય સહકારી બેંક"
+                bank_delhi_coop: "દિલ્હી રાજ્ય સહકારી બેંક",
+                vtype_RECEIPT: "રસીદ",
+                vtype_PAYMENT: "ચુકવણી",
+                vtype_SALES: "વેચાણ",
+                vtype_PURCHASE: "ખરીદી"
             }
         };
 
@@ -900,6 +920,23 @@ DASHBOARD_HTML = """
                 const key = el.getAttribute('data-key');
                 if (translations[lang] && translations[lang][key]) {
                     el.textContent = translations[lang][key];
+                }
+            });
+
+            // Convert numbers/amounts digits
+            document.querySelectorAll('.num-val').forEach(el => {
+                const rawVal = el.getAttribute('data-val');
+                el.textContent = convertDigits(rawVal, lang);
+            });
+
+            // Convert voucher types
+            document.querySelectorAll('.vtype-val').forEach(el => {
+                const vtype = el.getAttribute('data-val');
+                const tKey = 'vtype_' + vtype;
+                if (translations[lang] && translations[lang][tKey]) {
+                    el.textContent = translations[lang][tKey];
+                } else {
+                    el.textContent = vtype;
                 }
             });
 
