@@ -164,7 +164,7 @@ DASHBOARD_HTML = """
     <style>
         body { background: #030712; color: #f8f9fa; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 20px; }
         header { background: #0f172a; padding: 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #3b82f6; border-radius: 10px; margin-bottom: 25px; flex-wrap: wrap; gap: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
-        h1 { margin: 0; font-size: 1.5em; color: #38bdf8; letter-spacing: 1px; }
+        h1 { margin: 0; font-size: 1.4em; color: #38bdf8; letter-spacing: 1px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
         
         .lang-switcher { display: flex; gap: 5px; background: #030712; padding: 4px; border-radius: 6px; border: 1px solid #1f2937; }
         .lang-btn { background: transparent; border: none; color: #94a3b8; padding: 5px 10px; cursor: pointer; font-size: 0.85em; font-weight: bold; border-radius: 4px; transition: 0.2s; }
@@ -206,7 +206,12 @@ DASHBOARD_HTML = """
 </head>
 <body>
     <header>
-        <h1><i class="fas fa-globe"></i> <span data-key="header_title">VAJRA SOVEREIGN MULTI SYSTEM</span></h1>
+        <h1>
+            <i class="fas fa-globe"></i> <span data-key="header_title">VAJRA SOVEREIGN MULTI SYSTEM</span>
+            <span style="font-size: 0.7em; background: rgba(59,130,246,0.2); border: 1px solid #3b82f6; padding: 3px 10px; border-radius: 20px; color: #38bdf8;">
+                <i class="fas fa-user-circle"></i> {{ username }}
+            </span>
+        </h1>
         
         <div class="lang-switcher">
             <button class="lang-btn active" onclick="setLanguage('en')">EN</button>
@@ -747,7 +752,7 @@ DASHBOARD_HTML = """
                 bank_bggb: "बड़ौदा गुजरात ग्रामीण बैंक",
                 bank_saurashtra_gramin: "सौराष्ट्र ग्रामीण बैंक",
                 bank_gandhinagar: "गांधीनगर नागरिक सहकारी बैंक",
-                bank_anand: "आनंद मर्केंटाइल को-ऑप बैंक",
+                bank_anand: "आनंद મર્કેન્ટાઈલ કો-ઓપ બેંક",
                 bank_sabarkantha: "साबरकांठा जिला सहकारी बैंक",
                 bank_banaskantha: "बनासकांठा जिला केंद्रीय सहकारी बैंक",
                 bank_saraswat: "सारस्वत को-ऑपरेटिव बैंक",
@@ -923,13 +928,11 @@ DASHBOARD_HTML = """
                 }
             });
 
-            // Convert numbers/amounts digits
             document.querySelectorAll('.num-val').forEach(el => {
                 const rawVal = el.getAttribute('data-val');
                 el.textContent = convertDigits(rawVal, lang);
             });
 
-            // Convert voucher types
             document.querySelectorAll('.vtype-val').forEach(el => {
                 const vtype = el.getAttribute('data-val');
                 const tKey = 'vtype_' + vtype;
@@ -1139,6 +1142,7 @@ def dashboard():
     if not session.get("logged_in"):
         return redirect(url_for("login"))
     
+    username = session.get("username", "Admin")
     start_time = time.time()
     with sqlite3.connect(DB_NAME) as conn:
         vouchers = conn.execute("SELECT * FROM vouchers ORDER BY id DESC LIMIT 6").fetchall()
@@ -1179,7 +1183,7 @@ def dashboard():
         kpis = {"revenue": revenue, "expenses": expenses, "profit": profit, "inventory": total_inv_val, "bank_bal": bank_bal, "advances": net_advances}
 
     query_latency = round((time.time() - start_time) * 1000, 2)
-    return render_template_string(DASHBOARD_HTML, vouchers=vouchers, kpis=kpis, banks=banks, stock_summary=stock_summary, runway_days=runway_days, sentinel_status=sentinel_status, query_latency=query_latency)
+    return render_template_string(DASHBOARD_HTML, vouchers=vouchers, kpis=kpis, banks=banks, stock_summary=stock_summary, runway_days=runway_days, sentinel_status=sentinel_status, query_latency=query_latency, username=username)
 
 @app.route("/print_report_view")
 def print_report_view():
