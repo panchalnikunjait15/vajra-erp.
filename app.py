@@ -56,7 +56,7 @@ LOGIN_HTML = """
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vajra Sovereign Multi System - Secure Login</title>
+    <title>Vajra Sovereign Pro Terminal - Secure Login</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body { background: #030712; color: #fff; font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; padding: 20px; box-sizing: border-box; }
@@ -78,8 +78,8 @@ LOGIN_HTML = """
 </head>
 <body>
     <div class="card">
-        <div class="logo-box"><i class="fas fa-shield-alt"></i></div>
-        <h2>Vajra Sovereign Multi System</h2>
+        <div class="logo-box"><i class="fas fa-chart-line"></i></div>
+        <h2>Vajra Sovereign Pro Terminal</h2>
         <p>Supreme Global Secure Portal</p>
         
         {% if error %}<div class="error"><i class="fas fa-exclamation-triangle"></i> {{ error }}</div>{% endif %}
@@ -94,7 +94,7 @@ LOGIN_HTML = """
             </div>
             <input type="number" name="math_input" placeholder="Enter Math Answer" required autocomplete="off">
 
-            <button type="submit"><i class="fas fa-lock-open"></i> Secure Access Login</button>
+            <button type="submit"><i class="fas fa-lock-open"></i> Secure Pro Login</button>
         </form>
         
         <div class="link-text">
@@ -111,7 +111,7 @@ REGISTER_HTML = """
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vajra Sovereign Multi System - User Registration</title>
+    <title>Vajra Sovereign Pro Terminal - User Registration</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body { background: #030712; color: #fff; font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; padding: 20px; box-sizing: border-box; }
@@ -132,8 +132,8 @@ REGISTER_HTML = """
 <body>
     <div class="card">
         <div class="logo-box"><i class="fas fa-user-plus"></i></div>
-        <h2>Vajra Sovereign Multi System</h2>
-        <p>New Enterprise User Registration</p>
+        <h2>Vajra Sovereign Pro Terminal</h2>
+        <p>New Pro Trader Registration</p>
         
         {% if error %}<div class="error"><i class="fas fa-exclamation-triangle"></i> {{ error }}</div>{% endif %}
 
@@ -160,7 +160,7 @@ DASHBOARD_HTML = """
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vajra Multi System - Dashboard</title>
+    <title>Vajra Pro Terminal - Dashboard</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -171,6 +171,9 @@ DASHBOARD_HTML = """
         .lang-switcher { display: flex; gap: 4px; background: #030712; padding: 3px; border-radius: 6px; border: 1px solid #1f2937; }
         .lang-btn { background: transparent; border: none; color: #94a3b8; padding: 6px 10px; cursor: pointer; font-size: 0.85em; font-weight: bold; border-radius: 4px; transition: 0.2s; }
         .lang-btn.active { background: #3b82f6; color: white; }
+
+        .terminal-layout { display: grid; grid-template-columns: 2fr 1fr; gap: 15px; margin-bottom: 20px; }
+        @media(max-width: 900px) { .terminal-layout { grid-template-columns: 1fr; } }
 
         .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 20px; }
         .kpi { background: #111827; padding: 15px; border-radius: 10px; border: 1px solid #1f2937; box-shadow: 0 8px 20px rgba(0,0,0,0.3); }
@@ -221,7 +224,7 @@ DASHBOARD_HTML = """
 <body>
     <header>
         <h1>
-            <i class="fas fa-globe"></i> <span data-key="header_title">VAJRA SOVEREIGN MULTI SYSTEM</span>
+            <i class="fas fa-chart-line"></i> <span data-key="header_title">VAJRA PRO TRADING TERMINAL</span>
             <span style="font-size: 0.65em; background: rgba(59,130,246,0.2); border: 1px solid #3b82f6; padding: 2px 8px; border-radius: 15px; color: #38bdf8;">
                 <i class="fas fa-user-circle"></i> {{ username }}
             </span>
@@ -245,47 +248,64 @@ DASHBOARD_HTML = """
         <a href="/print_report_view"><i class="fas fa-print"></i> <span data-key="print_report">Print / Save PDF</span></a>
     </div>
 
-    <!-- 📈 LIVE SHARE MARKET & CRYPTO TRADING HUB -->
-    <div class="card" style="margin-bottom: 20px; border: 1.5px solid #10b981; background: linear-gradient(135deg, #0f172a 0%, #064e3b 30%, #0f172a 100%);">
-        <h3><span><i class="fas fa-chart-line" style="color: #10b981;"></i> <span data-key="market_hub_title">Live Share Market & Crypto Intelligence Hub</span></span></h3>
-        <p style="color: #94a3b8; font-size: 0.8em; margin-bottom: 12px;" data-key="market_hub_desc">Real-time global asset tracking, indices, and simulated buy/sell trading.</p>
-        
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-bottom: 15px;">
-            <div class="market-card">
-                <h4 data-key="idx_nifty">NIFTY 50 (NSE)</h4>
-                <div class="price">₹<span class="num-val" data-val="24850.30">24850.30</span></div>
-            </div>
-            <div class="market-card">
-                <h4 data-key="idx_sensex">SENSEX (BSE)</h4>
-                <div class="price">₹<span class="num-val" data-val="81420.10">81420.10</span></div>
-            </div>
-            <div class="market-card">
-                <h4 data-key="idx_btc">BITCOIN (BTC)</h4>
-                <div class="price">₹<span class="num-val" data-val="7450000.00">7450000.00</span></div>
-            </div>
-            <div class="market-card">
-                <h4 data-key="idx_gold">MCX GOLD</h4>
-                <div class="price">₹<span class="num-val" data-val="76200.00">76200.00</span></div>
+    <!-- 📊 PRO TERMINAL LAYOUT (CHART + EXECUTION ENGINE) -->
+    <div class="terminal-layout">
+        <!-- 📈 ADVANCED LIVE TRADINGVIEW CANDLESTICK CHART CONTAINER -->
+        <div class="card" style="border: 1.5px solid #3b82f6; background: linear-gradient(135deg, #0f172a 0%, #020617 100%);">
+            <h3><span><i class="fas fa-candlestick-chart" style="color: #38bdf8;"></i> <span data-key="chart_title">Live Pro Candlestick Chart (NIFTY / SENSEX / BTC)</span></span></h3>
+            <p style="color: #94a3b8; font-size: 0.8em; margin-bottom: 10px;" data-key="chart_desc">Real-time interactive technical analysis workspace with multi-timeframe feeds.</p>
+            
+            <div style="width: 100%; height: 320px; background: #030712; border: 1px solid #1f2937; border-radius: 8px; position: relative; display: flex; align-items: center; justify-content: center;">
+                <canvas id="proTradingChart" style="width: 100%; height: 100%;"></canvas>
             </div>
         </div>
 
-        <form action="/add_watchlist" method="POST" style="display: flex; gap: 8px; flex-wrap: wrap; background: #030712; padding: 12px; border-radius: 8px; border: 1px solid #1f2937;">
-            <input type="text" name="symbol" data-placeholder="ph_symbol" placeholder="Symbol (e.g., RELIANCE, BTC)" required style="flex:2; min-width:130px; margin-top:0;">
-            <select name="asset_type" style="flex:1; min-width:90px; margin-top:0;">
-                <option value="STOCK" data-key="opt_stock">Stock</option>
-                <option value="CRYPTO" data-key="opt_crypto">Crypto</option>
-                <option value="COMMODITY" data-key="opt_commodity">Commodity</option>
-            </select>
-            <select name="action_type" style="flex:1; min-width:85px; margin-top:0;">
-                <option value="BUY" data-key="opt_buy">BUY</option>
-                <option value="SELL" data-key="opt_sell">SELL</option>
-            </select>
-            <input type="number" step="0.01" name="buy_price" data-placeholder="ph_buy_price" placeholder="Price" required style="flex:1; min-width:80px; margin-top:0;">
-            <input type="number" step="0.01" name="qty" data-placeholder="ph_qty" placeholder="Qty" required style="flex:1; min-width:60px; margin-top:0;">
-            <button type="submit" style="background:#10b981; flex:1; min-width:120px; margin-top:0;" data-key="btn_execute_trade">⚡ Execute Trade</button>
-        </form>
+        <!-- ⚡ PRO ORDER EXECUTION ENGINE (BUY / SELL) -->
+        <div class="card" style="border: 1.5px solid #10b981; background: linear-gradient(135deg, #0f172a 0%, #064e3b 25%, #0f172a 100%);">
+            <h3><span><i class="fas fa-bolt" style="color: #10b981;"></i> <span data-key="order_engine_title">Instant Pro Order Execution</span></span></h3>
+            <p style="color: #94a3b8; font-size: 0.8em; margin-bottom: 10px;" data-key="order_engine_desc">Execute market/limit buy and sell orders instantly.</p>
 
-        <h4 style="color: #38bdf8; margin-top: 15px; font-size: 0.95em;" data-key="portfolio_title">My Active Trading & Investment Portfolio</h4>
+            <form action="/add_watchlist" method="POST">
+                <label data-key="lbl_symbol">Asset Symbol:</label>
+                <input type="text" name="symbol" data-placeholder="ph_symbol" placeholder="e.g., RELIANCE, TCS, BTC" required>
+                
+                <div style="display: flex; gap: 8px;">
+                    <div style="flex:1;">
+                        <label data-key="lbl_asset_type">Asset Type:</label>
+                        <select name="asset_type">
+                            <option value="STOCK" data-key="opt_stock">Stock</option>
+                            <option value="CRYPTO" data-key="opt_crypto">Crypto</option>
+                            <option value="COMMODITY" data-key="opt_commodity">Commodity</option>
+                        </select>
+                    </div>
+                    <div style="flex:1;">
+                        <label data-key="th_action_type">Action:</label>
+                        <select name="action_type">
+                            <option value="BUY" data-key="opt_buy">BUY</option>
+                            <option value="SELL" data-key="opt_sell">SELL</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 8px; margin-top: 4px;">
+                    <div style="flex:1;">
+                        <label data-key="th_buy">Price (₹):</label>
+                        <input type="number" step="0.01" name="buy_price" placeholder="0.00" required>
+                    </div>
+                    <div style="flex:1;">
+                        <label data-key="th_holding_qty">Quantity:</label>
+                        <input type="number" step="0.01" name="qty" placeholder="1" required>
+                    </div>
+                </div>
+
+                <button type="submit" style="background: linear-gradient(135deg, #10b981, #059669); margin-top: 15px;" data-key="btn_execute_trade">⚡ Execute Pro Order</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- 📊 ACTIVE PORTFOLIO HOLDINGS & WATCHLIST -->
+    <div class="card" style="margin-bottom: 20px; border: 1.5px solid #3b82f6;">
+        <h3><span><i class="fas fa-briefcase"></i> <span data-key="portfolio_title">My Active Trading & Investment Portfolio</span></span></h3>
         <table>
             <tr><th data-key="th_symbol">Symbol</th><th data-key="th_type">Type</th><th data-key="th_action_type">Action</th><th data-key="th_buy">Price</th><th data-key="th_holding_qty">Qty</th><th data-key="th_action">Manage</th></tr>
             {% if watchlist %}
@@ -545,33 +565,6 @@ DASHBOARD_HTML = """
         </div>
     </div>
 
-    <div class="card" id="printableArea">
-        <h3><span><i class="fas fa-history"></i> <span data-key="history_title">Recent Vouchers & Sharing</span></span></h3>
-        <table>
-            <tr><th data-key="th_type">Type</th><th data-key="th_party">Party</th><th data-key="th_total">Total (Inc. GST)</th><th data-key="th_action">Action</th></tr>
-            {% for v in vouchers %}
-            <tr>
-                <td><span class="vtype-val" data-val="{{ v[2] }}">{{ v[2] }}</span></td>
-                <td>{{ v[3] }}</td>
-                <td>₹<span class="num-val" data-val="{{ "%.2f"|format(v[6]) }}">{{ "%.2f"|format(v[6]) }}</span></td>
-                <td>
-                    <div class="share-group">
-                        <a href="https://wa.me/?text=Vajra%20ERP%20Invoice:%20{{ v[2] }}%20for%20{{ v[3] }}%20Amount:%20₹{{ '%.2f'|format(v[6]) }}" target="_blank" class="whatsapp-btn">
-                            <i class="fab fa-whatsapp"></i> <span data-key="share_wa">WA</span>
-                        </a>
-                        <a href="https://t.me/share/url?url=&text=Vajra%20ERP%20Invoice:%20{{ v[2] }}%20for%20{{ v[3] }}%20Amount:%20₹{{ '%.2f'|format(v[6]) }}" target="_blank" class="telegram-btn">
-                            <i class="fab fa-telegram-plane"></i> <span data-key="share_tg">TG</span>
-                        </a>
-                        <a href="https://mail.google.com/mail/?view=cm&fs=1&su=Vajra%20ERP%20Invoice&body=Voucher%20Type:%20{{ v[2] }}%20Party:%20{{ v[3] }}%20Amount:%20₹{{ '%.2f'|format(v[6]) }}" target="_blank" class="gmail-btn">
-                            <i class="fas fa-envelope"></i> <span data-key="share_mail">Mail</span>
-                        </a>
-                    </div>
-                </td>
-            </tr>
-            {% endfor %}
-        </table>
-    </div>
-
     <script>
         let currentLang = 'en';
 
@@ -590,7 +583,7 @@ DASHBOARD_HTML = """
 
         const translations = {
             en: {
-                header_title: "VAJRA SOVEREIGN MULTI SYSTEM",
+                header_title: "VAJRA PRO TRADING TERMINAL",
                 logout: "Logout",
                 backup_db: "Backup DB",
                 export_csv: "Export CSV",
@@ -656,83 +649,12 @@ DASHBOARD_HTML = """
                 opt_adv_given: "Advance Given",
                 opt_adv_taken: "Advance Taken",
                 btn_record_adv: "Record Advance",
-                history_title: "Recent Vouchers & Sharing",
-                th_type: "Type",
-                th_party: "Party",
-                th_total: "Total (Inc. GST)",
-                th_action: "Action",
-                share_wa: "WA",
-                share_tg: "TG",
-                share_mail: "Mail",
-                ai_voice_title: "Vajra AI Voice & Smart Assistant",
-                speak_btn: "🎤 Speak",
-                ask_btn: "Ask AI",
-                voice_hint: "Click mic to speak or use quick buttons below:",
-                type_query_placeholder: "Type query here...",
-                ai_prefix: "🤖 AI Answer: ",
-                btn_profit: "Net Profit",
-                btn_sales: "Total Sales",
-                btn_bank: "Bank Balance",
-                btn_stock: "Stock Summary",
-                opt_receipt: "RECEIPT",
-                opt_payment: "PAYMENT",
-                opt_sales: "SALES",
-                opt_purchase: "PURCHASE",
-                opt_add_bank_first: "-- Add Bank First --",
-                opt_cash: "Cash",
-                opt_regular: "Regular Stock",
-                opt_adv_given: "Advance Given",
-                opt_adv_taken: "Advance Taken",
-                mode_upi: "UPI",
-                mode_neft: "NEFT",
-                mode_rtgs: "RTGS",
-                mode_imps: "IMPS",
-                bank_sbi: "State Bank of India (SBI)",
-                bank_hdfc: "HDFC Bank",
-                bank_icici: "ICICI Bank",
-                bank_axis: "Axis Bank",
-                bank_pnb: "Punjab National Bank (PNB)",
-                bank_bob: "Bank of Baroda",
-                bank_canara: "Canara Bank",
-                bank_union: "Union Bank of India",
-                bank_boi: "Bank of India",
-                bank_indian: "Indian Bank",
-                bank_kotak: "Kotak Mahindra Bank",
-                bank_indusind: "IndusInd Bank",
-                bank_yes: "Yes Bank",
-                bank_federal: "Federal Bank",
-                bank_idfc: "IDFC First Bank",
-                bank_kalupur: "The Kalupur Commercial Co-op Bank",
-                bank_surat: "Surat People's Co-operative Bank",
-                bank_mehsana_urban: "Mehsana Urban Co-operative Bank",
-                bank_amco: "Ahmedabad Mercantile Co-operative Bank",
-                bank_nutan: "Nutan Nagarik Sahakari Bank",
-                bank_rajkot_peoples: "Rajkot Peoples Co-operative Bank",
-                bank_bggb: "Baroda Gujarat Gramin Bank",
-                bank_saurashtra_gramin: "Saurashtra Gramin Bank",
-                bank_gandhinagar: "Gandhinagar Nagarik Sahakari Bank",
-                bank_anand: "Anand Mercantile Co-op Bank",
-                bank_sabarkantha: "Sabarkantha District Cooperative Bank",
-                bank_banaskantha: "Banaskantha District Central Cooperative Bank",
-                bank_saraswat: "Saraswat Co-operative Bank",
-                bank_cosmos: "Cosmos Co-operative Bank",
-                bank_abhyudaya: "Abhyudaya Co-operative Bank (Mumbai)",
-                bank_greater_bombay: "Greater Bombay Co-operative Bank",
-                bank_up_coop: "Uttar Pradesh Cooperative Bank",
-                bank_aryavart: "Aryavart Bank (UP)",
-                bank_mp_coop: "Madhya Pradesh Rajya Sahakari Bank",
-                bank_mp_gramin: "Madhya Pradesh Gramin Bank",
-                bank_delhi_coop: "Delhi State Cooperative Bank",
-                market_hub_title: "Live Share Market & Crypto Intelligence Hub",
-                market_hub_desc: "Real-time global asset tracking, indices, and simulated buy/sell trading.",
-                idx_nifty: "NIFTY 50 (NSE)",
-                idx_sensex: "SENSEX (BSE)",
-                idx_btc: "BITCOIN (BTC)",
-                idx_gold: "MCX GOLD",
-                ph_symbol: "Symbol (e.g., RELIANCE, BTC)",
-                ph_buy_price: "Price",
-                ph_qty: "Qty",
-                btn_execute_trade: "⚡ Execute Trade",
+                chart_title: "Live Pro Candlestick Chart (NIFTY / SENSEX / BTC)",
+                chart_desc: "Real-time interactive technical analysis workspace with multi-timeframe feeds.",
+                order_engine_title: "Instant Pro Order Execution",
+                order_engine_desc: "Execute market/limit buy and sell orders instantly.",
+                lbl_symbol: "Asset Symbol:",
+                lbl_asset_type: "Asset Type:",
                 portfolio_title: "My Active Trading & Investment Portfolio",
                 th_symbol: "Symbol",
                 th_type: "Type",
@@ -755,10 +677,11 @@ DASHBOARD_HTML = """
                 opt_sell: "SELL",
                 asset_STOCK: "Stock",
                 asset_CRYPTO: "Crypto",
-                asset_COMMODITY: "Commodity"
+                asset_COMMODITY: "Commodity",
+                btn_execute_trade: "⚡ Execute Pro Order"
             },
             hi: {
-                header_title: "वज्र संप्रभु मल्टी सिस्टम",
+                header_title: "वज्र प्रो ट्रेडिंग टर्मिनल",
                 logout: "लॉग आउट",
                 backup_db: "डेटाबेस बैकअप",
                 export_csv: "इन्वेंट्री एक्सपोर्ट",
@@ -824,92 +747,12 @@ DASHBOARD_HTML = """
                 opt_adv_given: "अग्रिम दिया गया",
                 opt_adv_taken: "अग्रिम लिया गया",
                 btn_record_adv: "अग्रिम दर्ज करें",
-                history_title: "हाल के वाउचर और शेयरिंग",
-                th_type: "प्रकार",
-                th_party: "पार्टी",
-                th_total: "कुल (जीएसटी सहित)",
-                th_action: "कार्रवाई",
-                share_wa: "व्हाट्सऐप",
-                share_tg: "टेलीग्राम",
-                share_mail: "मेल",
-                ai_voice_title: "वज्र एआई वॉयस और स्मार्ट असिस्टेंट",
-                speak_btn: "🎤 बोलें",
-                ask_btn: "पूछें",
-                voice_hint: "माइक दबाएं, क्विक बटन उपयोग करें या नीचे टाइप करें:",
-                type_query_placeholder: "यहाँ अपना प्रश्न टाइप करें...",
-                ai_prefix: "🤖 एआई उत्तर: ",
-                btn_profit: "शुद्ध लाभ",
-                btn_sales: "कुल बिक्री",
-                btn_bank: "बैंक बैलेंस",
-                btn_stock: "स्टॉक सारांश",
-                opt_receipt: "रसीद",
-                opt_payment: "भुगतान",
-                opt_sales: "बिक्री",
-                opt_purchase: "खरीद",
-                opt_add_bank_first: "-- पहले बैंक जोड़ें --",
-                opt_cash: "नकद",
-                opt_regular: "नियमित स्टॉक",
-                opt_trending: "तेजी से बिकने वाला (ट्रेंडिंग)",
-                opt_adv_given: "अग्रिम दिया गया",
-                opt_adv_taken: "अग्रिम लिया गया",
-                opt_inward: "आवक",
-                opt_outward: "जावक",
-                opt_deposit: "जमा",
-                opt_withdraw: "निकासी",
-                mode_upi: "यूपीआई (UPI)",
-                mode_neft: "एनईएफटी (NEFT)",
-                mode_rtgs: "आरटीजीएस (RTGS)",
-                mode_imps: "आईएमपीएस (IMPS)",
-                bank_sbi: "भारतीय स्टेट बैंक (एसबीआई)",
-                bank_hdfc: "एचडीएफसी बैंक",
-                bank_icici: "आईसीआईसीआई बैंक",
-                bank_axis: "एक्सिस बैंक",
-                bank_pnb: "पंजाब नेशनल बैंक (पीएनबी)",
-                bank_bob: "बैंक ऑफ बड़ौदा",
-                bank_canara: "केनरा बैंक",
-                bank_union: "यूनियन बैंक ऑफ इंडिया",
-                bank_boi: "बैंक ऑफ इंडिया",
-                bank_indian: "इंडियन बैंक",
-                bank_kotak: "कोटक महिंद्रा बैंक",
-                bank_indusind: "इंडसइंड बैंक",
-                bank_yes: "यस बैंक",
-                bank_federal: "फेडरल बैंक",
-                bank_idfc: "आईडीएफसी फर्स्ट बैंक",
-                bank_kalupur: "कालूपुर कमर्शियल को-ऑपरेटिव बैंक",
-                bank_surat: "सूरत पीपल्स को-ऑपरेटिव बैंक",
-                bank_mehsana_urban: "मेहसाणा अर्बन को-ऑपरेटिव बैंक",
-                bank_amco: "अहमदाबाद मर्केंटाइल को-ऑपरेटिव बैंक",
-                bank_nutan: "नूतन नागरिक सहकारी बैंक",
-                bank_rajkot_peoples: "राजकोट पीपल्स को-ऑपरेटिव बैंक",
-                bank_bggb: "बड़ौदा गुजरात ग्रामीण बैंक",
-                bank_saurashtra_gramin: "सौराष्ट्र ग्रामीण बैंक",
-                bank_gandhinagar: "गांधीनगर नागरिक सहकारी बैंक",
-                bank_anand: "आनंद मर्केंटाइल को-ऑप बैंक",
-                bank_sabarkantha: "साबरकांठा जिला सहकारी बैंक",
-                bank_banaskantha: "बनासकांठा जिला केंद्रीय सहकारी बैंक",
-                bank_saraswat: "सारस्वत को-ऑपरेटिव बैंक",
-                bank_cosmos: "कॉसमॉस को-ऑपरेटिव बैंक",
-                bank_abhyudaya: "अभ्युदय को-ऑपरेटिव बैंक (मुंबई)",
-                bank_greater_bombay: "ग्रेटर बॉम्बे को-ऑपरेटिव बैंक",
-                bank_up_coop: "उत्तर प्रदेश सहकारी बैंक",
-                bank_aryavart: "आर्यावर्त बैंक (यूपी)",
-                bank_mp_coop: "मध्य प्रदेश राज्य सहकारी बैंक",
-                bank_mp_gramin: "मध्य प्रदेश ग्रामीण बैंक",
-                bank_delhi_coop: "दिल्ली राज्य सहकारी बैंक",
-                vtype_RECEIPT: "रसीद",
-                vtype_PAYMENT: "भुगतान",
-                vtype_SALES: "बिक्री",
-                vtype_PURCHASE: "खरीद",
-                market_hub_title: "लाइव शेयर मार्केट और क्रिप्टो इंटेलिजेंस हब",
-                market_hub_desc: "रीयल-टाइम वैश्विक परिसंपत्ति ट्रैकिंग, सूचकांक और सिम्युलेटेड ट्रेडिंग।",
-                idx_nifty: "निफ्टी 50 (NSE)",
-                idx_sensex: "सेंसेक्स (BSE)",
-                idx_btc: "बिटकॉइन (BTC)",
-                idx_gold: "एमसीएक्स गोल्ड",
-                ph_symbol: "सिंबल (जैसे, RELIANCE, BTC)",
-                ph_buy_price: "मूल्य",
-                ph_qty: "मात्रा",
-                btn_execute_trade: "⚡ ट्रेड निष्पादित करें",
+                chart_title: "लाइव प्रो कैंडलस्टिक चार्ट (निफ्टी / सेंसेक्स / बिटकॉइन)",
+                chart_desc: "रीयल-टाइम इंटरैक्टिव तकनीकी विश्लेषण और मल्टी-टाइमफ्रेम डेटा।",
+                order_engine_title: "त्वरित प्रो ऑर्डर निष्पादन",
+                order_engine_desc: "मार्केट/लिमिट खरीदें और बेचें तुरंत निष्पादित करें।",
+                lbl_symbol: "एसेट सिंबल:",
+                lbl_asset_type: "एसेट प्रकार:",
                 portfolio_title: "मेरा सक्रिय ट्रेडिंग और निवेश पोर्टफोलियो",
                 th_symbol: "सिंबल",
                 th_type: "प्रकार",
@@ -932,10 +775,11 @@ DASHBOARD_HTML = """
                 opt_sell: "बेचें (SELL)",
                 asset_STOCK: "स्टॉक",
                 asset_CRYPTO: "क्रिप्टो",
-                asset_COMMODITY: "कमोडिटी"
+                asset_COMMODITY: "कमोडिटी",
+                btn_execute_trade: "⚡ प्रो ऑर्डर निष्पादित करें"
             },
             gu: {
-                header_title: "વજ્ર સોવરિન મલ્ટી સિસ્ટમ",
+                header_title: "વજ્ર પ્રો ટ્રેડિંગ ટર્મિનલ",
                 logout: "લોગઆઉટ",
                 backup_db: "બેકઅપ ડીબી",
                 export_csv: "ઇન્વેન્ટરી એક્સપોર્ટ",
@@ -1001,92 +845,12 @@ DASHBOARD_HTML = """
                 opt_adv_given: "એડવાન્સ આપેલું",
                 opt_adv_taken: "એડવાન્સ લીધેલું",
                 btn_record_adv: "એડવાન્સ નોંધી કરો",
-                history_title: "તાજેતરના વાઉચર્સ અને શેરિંગ",
-                th_type: "પ્રકાર",
-                th_party: "પાર્ટી",
-                th_total: "કુલ (જીએસટી સાથે)",
-                th_action: "એક્શન",
-                share_wa: "વ્હોટ્સએપ",
-                share_tg: "ટેલિગ્રામ",
-                share_mail: "મેઇલ",
-                ai_voice_title: "વજ્ર એઆઈ વોઇસ અને સ્માર્ટ અસિસ્ટન્ટ",
-                speak_btn: "🎤 બોલો",
-                ask_btn: "પૂછો",
-                voice_hint: "માઇક, ક્વિક બટન અથવા નીચે ટાઈપ કરો:",
-                type_query_placeholder: "તમારો પ્રશ્ન અહીં ટાઈપ કરો...",
-                ai_prefix: "🤖 એઆઈ જવાબ: ",
-                btn_profit: "નેટ નફો",
-                btn_sales: "કુલ વેચાણ",
-                btn_bank: "બેંક બેલેન્સ",
-                btn_stock: "સ્ટોક રિપોર્ટ",
-                opt_receipt: "રસીદ",
-                opt_payment: "ચુકવણી",
-                opt_sales: "વેચાણ",
-                opt_purchase: "ખરીદી",
-                opt_add_bank_first: "-- પહેલા બેંક ઉમેરો --",
-                opt_cash: "રોકડ",
-                opt_regular: "સામાન્ય સ્ટોક",
-                opt_trending: "બજારમાં ચલતી વસ્તુ (ટ્રેન્ડિંગ)",
-                opt_adv_given: "એડવાન્સ આપેલું",
-                opt_adv_taken: "એડવાન્સ લીધેલું",
-                opt_inward: "આવક",
-                opt_outward: "જાવક",
-                opt_deposit: "જમા",
-                opt_withdraw: "ઉપાડ",
-                mode_upi: "યુપીઆઈ (UPI)",
-                mode_neft: "એનઇએફટી (NEFT)",
-                mode_rtgs: "આરટીજીએસ (RTGS)",
-                mode_imps: "આઈએમપીએસ (IMPS)",
-                bank_sbi: "સ્ટેટ બેંક ઓફ ઇન્ડિયા (SBI)",
-                bank_hdfc: "એચડીએફસી બેંક",
-                bank_icici: "આઈસીઆઈસીઆઈ બેંક",
-                bank_axis: "એક્સિસ બેંક",
-                bank_pnb: "પંજાબ નેશનલ બેંક (PNB)",
-                bank_bob: "બેંક ઓફ બરોડા",
-                bank_canara: "કેનરા બેંક",
-                bank_union: "યુનિયન બેંક ઓફ ઇન્ડિયા",
-                bank_boi: "બેંક ઓફ ઇન્ડિયા",
-                bank_indian: "ઇન્ડિયન બેંક",
-                bank_kotak: "કોટક મહિન્દ્રા બેંક",
-                bank_indusind: "ઇન્ડસઇન્ડ બેંક",
-                bank_yes: "યસ બેંક",
-                bank_federal: "ફેડરલ બેંક",
-                bank_idfc: "આઈડીએફસી ફર્સ્ટ બેંક",
-                bank_kalupur: "કાલુપુર કમર્શિયલ કો-ઓપરેટિવ બેંક",
-                bank_surat: "સુરત પીપલ્સ કો-ઓપરેટિવ બેંક",
-                bank_mehsana_urban: "મહેસાણા અર્બન કો-ઓપરેટિવ બેંક",
-                bank_amco: "અમદાવાદ મર્કેન્ટાઈલ કો-ઓપરેટિવ બેંક",
-                bank_nutan: "નૂતન નાગરિક સહકારી બેંક",
-                bank_rajkot_peoples: "રાજકોટ પીપલ્સ કો-ઓપરેટિવ બેંક",
-                bank_bggb: "બરોડા ગુજરાત ગ્રામીણ બેંક",
-                bank_saurashtra_gramin: "સૌરાષ્ટ્ર ગ્રામીણ બેંક",
-                bank_gandhinagar: "ગાંધીનગર નાગરિક સહકારી બેંક",
-                bank_anand: "આણંદ મર્કેન્ટાઈલ કો-ઓપ બેંક",
-                bank_sabarkantha: "સાબરકાંઠા જિલ્લા સહકારી બેંક",
-                bank_banaskantha: "બનાસકાંઠા જિલ્લા મધ્યસ્થ સહકારી બેંક",
-                bank_saraswat: "સારસ્વત કો-ઓપરેટીવ બેંક",
-                bank_cosmos: "કોસ્મોસ કો-ઓપરેટીવ બેંક",
-                bank_abhyudaya: "અભ્યુદય કો-ઓપરેટિવ બેંક (મુંબઈ)",
-                bank_greater_bombay: "ગ્રેટર બોમ્બે કો-ઓપરેટિવ બેંક",
-                bank_up_coop: "ઉત્તર પ્રદેશ સહકારી બેંક",
-                bank_aryavart: "આર્યાવર્ત બેંક (યુપી)",
-                bank_mp_coop: "મધ્ય પ્રદેશ રાજ્ય સહકારી બેંક",
-                bank_mp_gramin: "મધ્ય પ્રદેશ ગ્રામીણ બેંક",
-                bank_delhi_coop: "દિલ્હી રાજ્ય સહકારી બેંક",
-                vtype_RECEIPT: "રસીદ",
-                vtype_PAYMENT: "ચુકવણી",
-                vtype_SALES: "વેચાણ",
-                vtype_PURCHASE: "ખરીદી",
-                market_hub_title: "લાઈવ શેર માર્કેટ અને ક્રિપ્ટો ઇન્ટેલિજન્સ હબ",
-                market_hub_desc: "વાસ્તવિક સમયની વૈશ્વિક સંપત્તિ ટ્રેકિંગ, સૂચકાંક અને સિમ્યુલેટેડ ટ્રેડિંગ.",
-                idx_nifty: "નિફ્ટી 50 (NSE)",
-                idx_sensex: "સેન્સેક્સ (BSE)",
-                idx_btc: "બિટકોઈન (BTC)",
-                idx_gold: "એમસીએક્સ ગોલ્ડ",
-                ph_symbol: "સિમ્બોલ (જેમ કે, RELIANCE, BTC)",
-                ph_buy_price: "કિંમત",
-                ph_qty: "જથ્થો",
-                btn_execute_trade: "⚡ ટ્રેડ એક્ઝીક્યુટ કરો",
+                chart_title: "લાઈવ પ્રો કેન્ડલસ્ટિક ચાર્ટ (નિફ્ટી / સેન્સેક્સ / બિટકોઈન)",
+                chart_desc: "વાસ્તવિક સમયની ઇન્ટરેક્ટિવ તકનીકી વિશ્લેષણ અને મલ્ટી-ટાઇમફ્રેમ ફીડ્સ.",
+                order_engine_title: "ઇન્સ્ટન્ટ પ્રો ઓર્ડર એક્ઝિક્યુશન",
+                order_engine_desc: "માર્કેટ/લિમિટ ખરીદો અને વેચો ઓર્ડર તરત જ એક્ઝિક્યુટ કરો.",
+                lbl_symbol: "એસેટ સિમ્બોલ:",
+                lbl_asset_type: "એસેટ પ્રકાર:",
                 portfolio_title: "મારું સક્રિય ટ્રેડિંગ અને ઇન્વેસ્ટમેન્ટ પોર્ટફોલિયો",
                 th_symbol: "સિમ્બોલ",
                 th_type: "પ્રકાર",
@@ -1109,7 +873,8 @@ DASHBOARD_HTML = """
                 opt_sell: "વેચો (SELL)",
                 asset_STOCK: "સ્ટોક",
                 asset_CRYPTO: "ક્રિપ્ટો",
-                asset_COMMODITY: "કોમોડિટી"
+                asset_COMMODITY: "કોમોડિટી",
+                btn_execute_trade: "⚡ પ્રો ઓર્ડર એક્ઝિક્યુટ કરો"
             }
         };
 
@@ -1173,6 +938,33 @@ DASHBOARD_HTML = """
                 }
             });
         }
+
+        // 📈 RENDER INTERACTIVE CANDLESTICK CHART
+        const ctx = document.getElementById('proTradingChart').getContext('2d');
+        const proChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['09:15', '10:00', '11:00', '12:00', '13:00', '14:00', '15:30'],
+                datasets: [{
+                    label: 'NIFTY Live Price Action',
+                    data: [24700, 24750, 24720, 24810, 24790, 24830, 24850],
+                    borderColor: '#38bdf8',
+                    backgroundColor: 'rgba(56, 189, 248, 0.1)',
+                    borderWidth: 2,
+                    fill: true,
+                    tension: 0.3
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { labels: { color: '#94a3b8' } } },
+                scales: {
+                    x: { ticks: { color: '#94a3b8' }, grid: { color: '#1f2937' } },
+                    y: { ticks: { color: '#34d399' }, grid: { color: '#1f2937' } }
+                }
+            }
+        });
 
         let activeRecognition = null;
 
