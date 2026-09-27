@@ -175,6 +175,10 @@ DASHBOARD_HTML = """
         .terminal-layout { display: grid; grid-template-columns: 2fr 1fr; gap: 15px; margin-bottom: 20px; }
         @media(max-width: 900px) { .terminal-layout { grid-template-columns: 1fr; } }
 
+        .pro-nav-bar { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 10px; margin-bottom: 20px; }
+        .pro-nav-btn { background: linear-gradient(135deg, #1e293b, #0f172a); border: 1px solid #3b82f6; color: #38bdf8; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; text-align: center; font-size: 0.9em; transition: 0.2s; display: flex; flex-direction: column; align-items: center; gap: 5px; }
+        .pro-nav-btn:hover { background: #3b82f6; color: #fff; transform: translateY(-2px); }
+
         .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 20px; }
         .kpi { background: #111827; padding: 15px; border-radius: 10px; border: 1px solid #1f2937; box-shadow: 0 8px 20px rgba(0,0,0,0.3); }
         .kpi h3 { margin: 0; font-size: 0.7em; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; }
@@ -248,7 +252,26 @@ DASHBOARD_HTML = """
         <a href="/print_report_view"><i class="fas fa-print"></i> <span data-key="print_report">Print / Save PDF</span></a>
     </div>
 
-    <!-- 🔥 TOP GAINERS & SMARTLIST MODULE (UPSTOX / ANGEL ONE STYLE) -->
+    <!-- 🚀 UPSTOX / COINDCX STYLE PRO NAVIGATION DRAWER -->
+    <div class="pro-nav-bar">
+        <div class="pro-nav-btn" onclick="alert(currentLang === 'gu' ? 'ફ્યુચર્સ એન્ડ ઓપ્શન્સ ટ્રેડિંગ એક્ટિવ છે!' : 'Futures & Options Trading Active!')">
+            <i class="fas fa-rocket fa-lg"></i> <span data-key="nav_futures">Futures</span>
+        </div>
+        <div class="pro-nav-btn" onclick="alert(currentLang === 'gu' ? 'ઓપ્શન ચેઈન એનાલિસિસ એક્ટિવ છે!' : 'Option Chain Analysis Active!')">
+            <i class="fas fa-table-cells fa-lg"></i> <span data-key="nav_options">Option Chain</span>
+        </div>
+        <div class="pro-nav-btn" onclick="alert(currentLang === 'gu' ? 'આઈડીઆઈ / એસઆઈપી ઇન્વેસ્ટમેન્ટ એક્ટિવ છે!' : 'SIP / Mutual Fund Active!')">
+            <i class="fas fa-piggy-bank fa-lg"></i> <span data-key="nav_sip">SIP / Earn</span>
+        </div>
+        <div class="pro-nav-btn" onclick="alert(currentLang === 'gu' ? 'ઓર્ડર બુક સ્ટેటસ સક્રિય છે!' : 'Live Orders Book Active!')">
+            <i class="fas fa-receipt fa-lg"></i> <span data-key="nav_orders">Orders</span>
+        </div>
+        <div class="pro-nav-btn" onclick="alert(currentLang === 'gu' ? 'ગ્લોબલ ફ્યુચર્સ (GOOGL, TSLA, NVDA) 24x7 લાઈવ છે!' : 'Global Futures (GOOGL, TSLA) Live!')">
+            <i class="fas fa-globe fa-lg"></i> <span data-key="nav_global">Global Futures</span>
+        </div>
+    </div>
+
+    <!-- 🔥 TOP GAINERS & SMARTLIST MODULE -->
     <div class="card" style="margin-bottom: 20px; border: 1.5px solid #10b981; background: linear-gradient(135deg, #0f172a 0%, #064e3b 30%, #0f172a 100%);">
         <h3><span><i class="fas fa-fire" style="color: #10b981;"></i> <span data-key="smartlist_title">MTF Smartlist & Top Gainers (Live 1100+ Stocks)</span></span></h3>
         <p style="color: #94a3b8; font-size: 0.8em; margin-bottom: 12px;" data-key="smartlist_desc">High momentum stocks with 4X leverage calculation simulation.</p>
@@ -712,7 +735,12 @@ DASHBOARD_HTML = """
                 th_stock_name: "Stock / Corp Name",
                 th_segment: "Segment",
                 th_ltp: "LTP (₹)",
-                th_change: "24h Change"
+                th_change: "24h Change",
+                nav_futures: "Futures",
+                nav_options: "Option Chain",
+                nav_sip: "SIP / Earn",
+                nav_orders: "Orders",
+                nav_global: "Global Futures"
             },
             hi: {
                 header_title: "वज्र प्रो ट्रेडिंग टर्मिनल",
@@ -816,7 +844,12 @@ DASHBOARD_HTML = """
                 th_stock_name: "स्टॉक / कॉर्प नाम",
                 th_segment: "सेगमेंट",
                 th_ltp: "एलटीपी (₹)",
-                th_change: "२४घं बदलाव"
+                th_change: "२४घं बदलाव",
+                nav_futures: "फ्यूचर्स",
+                nav_options: "ऑप्शन चेन",
+                nav_sip: "एसआईपी / अर्न",
+                nav_orders: "ऑर्डर्स",
+                nav_global: "ग्लोबल फ्यूचर्स"
             },
             gu: {
                 header_title: "વજ્ર પ્રો ટ્રેડિંગ ટર્મિનલ",
@@ -920,7 +953,12 @@ DASHBOARD_HTML = """
                 th_stock_name: "સ્ટોક / કોર્પ નામ",
                 th_segment: "સેગમેન્ટ",
                 th_ltp: "એલટીપી (₹)",
-                th_change: "૨૪કલાક ફેરફાર"
+                th_change: "૨૪કલાક ફેરફાર",
+                nav_futures: "ફ્યુચર્સ",
+                nav_options: "ઓપ્શન ચેઈન",
+                nav_sip: "SIP / અર્ન",
+                nav_orders: "ઓર્ડર્સ",
+                nav_global: "ગ્લોબલ ફ્યુચર્સ"
             }
         };
 
