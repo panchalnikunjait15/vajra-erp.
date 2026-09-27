@@ -10,7 +10,7 @@ import csv
 import io
 
 app = Flask(__name__)
-app.secret_key = "VAJRA_PRO_ERP_2026"
+app.secret_key = "VAJRA_PRO_SUPREME_2026"
 
 DB_NAME = "vajra_erp.db"
 
@@ -42,6 +42,8 @@ def init_db():
             id INTEGER PRIMARY KEY AUTOINCREMENT, bank_id INTEGER, tx_type TEXT, amount REAL, payment_mode TEXT, narration TEXT, date TEXT)''')
         conn.execute('''CREATE TABLE IF NOT EXISTS advances (
             id INTEGER PRIMARY KEY AUTOINCREMENT, party_name TEXT, adv_type TEXT, amount REAL, status TEXT DEFAULT 'PENDING', date TEXT)''')
+        conn.execute('''CREATE TABLE IF NOT EXISTS watchlist (
+            id INTEGER PRIMARY KEY AUTOINCREMENT, symbol TEXT, asset_type TEXT, buy_price REAL, qty REAL)''')
 
 init_db()
 
@@ -78,7 +80,7 @@ LOGIN_HTML = """
     <div class="card">
         <div class="logo-box"><i class="fas fa-shield-alt"></i></div>
         <h2>Vajra Sovereign Multi System</h2>
-        <p>Enterprise Secure Login Portal</p>
+        <p>Supreme Global Secure Portal</p>
         
         {% if error %}<div class="error"><i class="fas fa-exclamation-triangle"></i> {{ error }}</div>{% endif %}
         {% if msg %}<div class="success"><i class="fas fa-check-circle"></i> {{ msg }}</div>{% endif %}
@@ -131,7 +133,7 @@ REGISTER_HTML = """
     <div class="card">
         <div class="logo-box"><i class="fas fa-user-plus"></i></div>
         <h2>Vajra Sovereign Multi System</h2>
-        <p>New Enterprise User Registration</p>
+        <p>New Supreme User Registration</p>
         
         {% if error %}<div class="error"><i class="fas fa-exclamation-triangle"></i> {{ error }}</div>{% endif %}
 
@@ -202,6 +204,9 @@ DASHBOARD_HTML = """
         .whatsapp-btn { background: #25d366; color: white; padding: 5px 8px; border-radius: 4px; text-decoration: none; font-size: 0.75em; display: inline-flex; align-items: center; gap: 4px; font-weight: bold; }
         .telegram-btn { background: #0088cc; color: white; padding: 5px 8px; border-radius: 4px; text-decoration: none; font-size: 0.75em; display: inline-flex; align-items: center; gap: 4px; font-weight: bold; }
         .gmail-btn { background: #ea4335; color: white; padding: 5px 8px; border-radius: 4px; text-decoration: none; font-size: 0.75em; display: inline-flex; align-items: center; gap: 4px; font-weight: bold; }
+        .market-card { background: #0f172a; border: 1px solid #374151; padding: 15px; border-radius: 8px; text-align: center; margin-bottom: 10px; }
+        .market-card h4 { margin: 0 0 5px 0; color: #38bdf8; font-size: 0.9em; }
+        .market-card .price { font-size: 1.2em; font-weight: bold; color: #34d399; }
     </style>
 </head>
 <body>
@@ -229,6 +234,80 @@ DASHBOARD_HTML = """
         <a href="/backup_db"><i class="fas fa-database"></i> <span data-key="backup_db">Backup DB</span></a>
         <a href="/export_inventory_csv"><i class="fas fa-download"></i> <span data-key="export_csv">Export CSV</span></a>
         <a href="/print_report_view"><i class="fas fa-print"></i> <span data-key="print_report">Print / Save PDF</span></a>
+    </div>
+
+    <!-- 📈 LIVE SHARE MARKET & CRYPTO HUB -->
+    <div class="card" style="margin-bottom: 25px; border: 1.5px solid #10b981; background: linear-gradient(135deg, #0f172a 0%, #064e3b 30%, #0f172a 100%);">
+        <h3><span><i class="fas fa-chart-line" style="color: #10b981;"></i> <span data-key="market_hub_title">Live Share Market & Crypto Intelligence Hub</span></span></h3>
+        <p style="color: #94a3b8; font-size: 0.85em; margin-bottom: 15px;" data-key="market_hub_desc">Real-time global asset tracking, indices, and portfolio simulation.</p>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 20px;">
+            <div class="market-card">
+                <h4 data-key="idx_nifty">NIFTY 50 (NSE)</h4>
+                <div class="price">₹24,850.30 <span style="font-size: 0.75em; color: #34d399;">(+1.2%)</span></div>
+            </div>
+            <div class="market-card">
+                <h4 data-key="idx_sensex">SENSEX (BSE)</h4>
+                <div class="price">₹81,420.10 <span style="font-size: 0.75em; color: #34d399;">(+0.9%)</span></div>
+            </div>
+            <div class="market-card">
+                <h4 data-key="idx_btc">BITCOIN (BTC/INR)</h4>
+                <div class="price">₹74,50,000 <span style="font-size: 0.75em; color: #34d399;">(+2.4%)</span></div>
+            </div>
+            <div class="market-card">
+                <h4 data-key="idx_gold">MCX GOLD (10g)</h4>
+                <div class="price">₹76,200.00 <span style="font-size: 0.75em; color: #34d399;">(+0.5%)</span></div>
+            </div>
+        </div>
+
+        <form action="/add_watchlist" method="POST" style="display: flex; gap: 10px; flex-wrap: wrap; background: #030712; padding: 15px; border-radius: 8px; border: 1px solid #1f2937;">
+            <input type="text" name="symbol" data-placeholder="ph_symbol" placeholder="Symbol (e.g., RELIANCE, ETH)" required style="flex:2; margin-top:0;">
+            <select name="asset_type" style="flex:1; margin-top:0;">
+                <option value="STOCK">Stock</option>
+                <option value="CRYPTO">Crypto</option>
+                <option value="COMMODITY">Commodity</option>
+            </select>
+            <input type="number" step="0.01" name="buy_price" data-placeholder="ph_buy_price" placeholder="Buy Price (₹)" required style="flex:1; margin-top:0;">
+            <input type="number" step="0.01" name="qty" data-placeholder="ph_qty" placeholder="Quantity" required style="flex:1; margin-top:0;">
+            <button type="submit" style="background:#10b981; flex:1; margin-top:0;" data-key="btn_add_watchlist">+ Add to Portfolio</button>
+        </form>
+
+        <h4 style="color: #38bdf8; margin-top: 20px;" data-key="portfolio_title">My Simulated Portfolio Holdings</h4>
+        <table>
+            <tr><th data-key="th_symbol">Asset Symbol</th><th data-key="th_type">Type</th><th data-key="th_buy">Buy Price</th><th data-key="th_holding_qty">Qty</th><th data-key="th_action">Action</th></tr>
+            {% if watchlist %}
+                {% for w in watchlist %}
+                <tr>
+                    <td><strong>{{ w[1] }}</strong></td>
+                    <td>{{ w[2] }}</td>
+                    <td>₹<span class="num-val" data-val="{{ "%.2f"|format(w[3]) }}">{{ "%.2f"|format(w[3]) }}</span></td>
+                    <td><span class="num-val" data-val="{{ w[4] }}">{{ w[4] }}</span></td>
+                    <td><a href="/delete_watchlist/{{ w[0] }}" style="color:#f43f5e; text-decoration:none; font-weight:bold;"><i class="fas fa-trash"></i> <span data-key="del">Delete</span></a></td>
+                </tr>
+                {% endfor %}
+            {% else %}
+                <tr><td colspan="5" style="text-align: center; color: #94a3b8;" data-key="no_watchlist">No assets added to portfolio yet.</td></tr>
+            {% endif %}
+        </table>
+    </div>
+
+    <!-- 🌐 WORLD INTELLIGENCE & NEWS HUB -->
+    <div class="card" style="margin-bottom: 25px; border: 1.5px solid #3b82f6; background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 30%, #0f172a 100%);">
+        <h3><span><i class="fas fa-globe-americas" style="color: #3b82f6;"></i> <span data-key="global_news_title">Global Intelligence & Economic Calendar</span></span></h3>
+        <p style="color: #94a3b8; font-size: 0.85em; margin-bottom: 15px;" data-key="global_news_desc">Live international financial updates, monetary policy alerts, and sovereign announcements.</p>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px;">
+            <div style="background: #030712; padding: 15px; border-radius: 8px; border: 1px solid #1f2937;">
+                <span style="font-size: 0.75em; color: #38bdf8; font-weight: bold;">RBI POLICY UPDATE</span>
+                <h4 style="margin: 5px 0; color: #fff; font-size: 0.95em;" data-key="news_1_title">Repo Rate Maintained at 6.5% for Stable Liquidity Flow</h4>
+                <p style="font-size: 0.8em; color: #94a3b8; margin: 0;" data-key="news_1_desc">Central bank emphasizes robust credit growth and inflation containment across Indian markets.</p>
+            </div>
+            <div style="background: #030712; padding: 15px; border-radius: 8px; border: 1px solid #1f2937;">
+                <span style="font-size: 0.75em; color: #10b981; font-weight: bold;">GLOBAL TECH & AI</span>
+                <h4 style="margin: 5px 0; color: #fff; font-size: 0.95em;" data-key="news_2_title">Enterprise Cloud Infrastructures Shift Towards Zero-Latency WAL</h4>
+                <p style="font-size: 0.8em; color: #94a3b8; margin: 0;" data-key="news_2_desc">High-security sovereign multi systems adopt decentralized ledger auditing for absolute transparency.</p>
+            </div>
+        </div>
     </div>
 
     <!-- 🤖 VAJRA AI VOICE & SMART ASSISTANT WIDGET -->
@@ -623,7 +702,30 @@ DASHBOARD_HTML = """
                 bank_aryavart: "Aryavart Bank (UP)",
                 bank_mp_coop: "Madhya Pradesh Rajya Sahakari Bank",
                 bank_mp_gramin: "Madhya Pradesh Gramin Bank",
-                bank_delhi_coop: "Delhi State Cooperative Bank"
+                bank_delhi_coop: "Delhi State Cooperative Bank",
+                market_hub_title: "Live Share Market & Crypto Intelligence Hub",
+                market_hub_desc: "Real-time global asset tracking, indices, and portfolio simulation.",
+                idx_nifty: "NIFTY 50 (NSE)",
+                idx_sensex: "SENSEX (BSE)",
+                idx_btc: "BITCOIN (BTC/INR)",
+                idx_gold: "MCX GOLD (10g)",
+                ph_symbol: "Symbol (e.g., RELIANCE, ETH)",
+                ph_buy_price: "Buy Price (₹)",
+                ph_qty: "Quantity",
+                btn_add_watchlist: "+ Add to Portfolio",
+                portfolio_title: "My Simulated Portfolio Holdings",
+                th_symbol: "Asset Symbol",
+                th_type: "Type",
+                th_buy: "Buy Price",
+                th_holding_qty: "Qty",
+                del: "Delete",
+                no_watchlist: "No assets added to portfolio yet.",
+                global_news_title: "Global Intelligence & Economic Calendar",
+                global_news_desc: "Live international financial updates, monetary policy alerts, and sovereign announcements.",
+                news_1_title: "Repo Rate Maintained at 6.5% for Stable Liquidity Flow",
+                news_1_desc: "Central bank emphasizes robust credit growth and inflation containment across Indian markets.",
+                news_2_title: "Enterprise Cloud Infrastructures Shift Towards Zero-Latency WAL",
+                news_2_desc: "High-security sovereign multi systems adopt decentralized ledger auditing for absolute transparency."
             },
             hi: {
                 header_title: "वज्र संप्रभु मल्टी सिस्टम",
@@ -752,7 +854,7 @@ DASHBOARD_HTML = """
                 bank_bggb: "बड़ौदा गुजरात ग्रामीण बैंक",
                 bank_saurashtra_gramin: "सौराष्ट्र ग्रामीण बैंक",
                 bank_gandhinagar: "गांधीनगर नागरिक सहकारी बैंक",
-                bank_anand: "आनंद મર્કેન્ટાઈલ કો-ઓપ બેંક",
+                bank_anand: "आनंद मर्केंटाइल को-ऑप बैंक",
                 bank_sabarkantha: "साबरकांठा जिला सहकारी बैंक",
                 bank_banaskantha: "बनासकांठा जिला केंद्रीय सहकारी बैंक",
                 bank_saraswat: "सारस्वत को-ऑपरेटिव बैंक",
@@ -767,7 +869,30 @@ DASHBOARD_HTML = """
                 vtype_RECEIPT: "रसीद",
                 vtype_PAYMENT: "भुगतान",
                 vtype_SALES: "बिक्री",
-                vtype_PURCHASE: "खरीद"
+                vtype_PURCHASE: "खरीद",
+                market_hub_title: "लाइव शेयर मार्केट और क्रिप्टो इंटेलिजेंस हब",
+                market_hub_desc: "रीयल-टाइम वैश्विक परिसंपत्ति ट्रैकिंग, सूचकांक और पोर्टफोलियो सिमुलेशन।",
+                idx_nifty: "निफ्टी 50 (NSE)",
+                idx_sensex: "सेंसेक्स (BSE)",
+                idx_btc: "बिटकॉइन (BTC/INR)",
+                idx_gold: "एमसीएक्स गोल्ड (10g)",
+                ph_symbol: "सिंबल (जैसे, RELIANCE, ETH)",
+                ph_buy_price: "खरीद मूल्य (₹)",
+                ph_qty: "मात्रा",
+                btn_add_watchlist: "+ पोर्टफोलियो में जोड़ें",
+                portfolio_title: "मेरे सिम्युलेटेड पोर्टफोलियो होल्डिंग्स",
+                th_symbol: "एसेट सिंबल",
+                th_type: "प्रकार",
+                th_buy: "खरीद मूल्य",
+                th_holding_qty: "मात्रा",
+                del: "हटाएं",
+                no_watchlist: "पोर्टफोलियो में अभी तक कोई एसेट नहीं जोड़ा गया है।",
+                global_news_title: "वैश्विक बुद्धिमत्ता और आर्थिक कैलेंडर",
+                global_news_desc: "लाइव अंतर्राष्ट्रीय वित्तीय अपडेट, मौद्रिक नीति अलर्ट और संप्रभु घोषणाएं।",
+                news_1_title: "स्थिर तरलता प्रवाह के लिए रेपो रेट 6.5% पर बनाए रखा गया",
+                news_1_desc: "केंद्रीय बैंक भारतीय बाजारों में मजबूत ऋण वृद्धि और मुद्रास्फीति नियंत्रण पर जोर देता है।",
+                news_2_title: "एंटरप्राइज क्लाउड इंफ्रास्ट्रक्चर जीरो-लेटency WAL की ओर स्थानांतरित",
+                news_2_desc: "उच्च-सुरक्षा संप्रभु मल्टी सिस्टम पूर्ण पारस्परिकता के लिए विकेंद्रीकृत बहीखाता लेखा परीक्षा अपनाते हैं।"
             },
             gu: {
                 header_title: "વજ્ર સોવરિન મલ્ટી સિસ્ટમ",
@@ -911,7 +1036,30 @@ DASHBOARD_HTML = """
                 vtype_RECEIPT: "રસીદ",
                 vtype_PAYMENT: "ચુકવણી",
                 vtype_SALES: "વેચાણ",
-                vtype_PURCHASE: "ખરીદી"
+                vtype_PURCHASE: "ખરીદી",
+                market_hub_title: "લાઈવ શેર માર્કેટ અને ક્રિપ્ટો ઇન્ટેલિજન્સ હબ",
+                market_hub_desc: "વાસ્તવિક સમયની વૈશ્વિક સંપત્તિ ટ્રેકિંગ, સૂચકાંક અને પોર્ટફોલિયો સિમ્યુલેશન.",
+                idx_nifty: "નિફ્ટી 50 (NSE)",
+                idx_sensex: "સેન્સેક્સ (BSE)",
+                idx_btc: "બિટકોઈન (BTC/INR)",
+                idx_gold: "એમસીએક્સ ગોલ્ડ (10g)",
+                ph_symbol: "સિમ્બોલ (જેમ કે, RELIANCE, ETH)",
+                ph_buy_price: "ખરીદ કિંમત (₹)",
+                ph_qty: "જથ્થો",
+                btn_add_watchlist: "+ પોર્ટફોલિયોમાં ઉમેરો",
+                portfolio_title: "મારા સિમ્યુલેટેડ પોર્ટફોલિયો હોલ્ડિંગ્સ",
+                th_symbol: "એસેટ સિમ્બોલ",
+                th_type: "પ્રકાર",
+                th_buy: "ખરીદ કિંમત",
+                th_holding_qty: "જથ્થો",
+                del: "ડિલીટ",
+                no_watchlist: "હજી સુધી પોર્ટફોલિયોમાં કોઈ એસેટ ઉમેરવામાં નથી આવી.",
+                global_news_title: "વૈશ્વિક ઇન્ટેલિજન્સ અને આર્થિક કેલેન્ડર",
+                global_news_desc: "લાઇવ આંતરરાષ્ટ્રીય નાણાકીય અપડેટ્સ, નાણાકીય નીતિ ચેતવણીઓ અને સોવરિન ઘોષણાઓ.",
+                news_1_title: "સ્થિર લિક્વિડિટી પ્રવાહ માટે રેપો રેટ 6.5% પર જાળવી રાખ્યો",
+                news_1_desc: "સેન્ટ્રલ બેંક ભારતીય બજારોમાં મજબૂત ક્રેડિટ વૃદ્ધિ અને ફુગાવા નિયંત્રણ પર ભાર મૂકે છે.",
+                news_2_title: "એન્ટરપ્રાઇઝ ક્લાઉડ ઇન્ફ્રાસ્ટ્રક્ચર્સ ઝીરો-લેટન્સી WAL તરફ શિ프트 થાય છે",
+                news_2_desc: "ઉચ્ચ-સુરક્ષા સોવરિન મલ્ટી સિસ્ટમ્સ સંપૂર્ણ પારદર્શિતા માટે વિકેન્દ્રિત બહીખાતા ઓડિટ અપનાવે છે."
             }
         };
 
@@ -1179,11 +1327,27 @@ def dashboard():
             total_inv_val += val
             stock_summary.append((data["name"], sku, data["status"], net_q, data["price"]))
 
+        watchlist = conn.execute("SELECT * FROM watchlist").fetchall()
         profit = revenue - expenses
         kpis = {"revenue": revenue, "expenses": expenses, "profit": profit, "inventory": total_inv_val, "bank_bal": bank_bal, "advances": net_advances}
 
     query_latency = round((time.time() - start_time) * 1000, 2)
-    return render_template_string(DASHBOARD_HTML, vouchers=vouchers, kpis=kpis, banks=banks, stock_summary=stock_summary, runway_days=runway_days, sentinel_status=sentinel_status, query_latency=query_latency, username=username)
+    return render_template_string(DASHBOARD_HTML, vouchers=vouchers, kpis=kpis, banks=banks, stock_summary=stock_summary, runway_days=runway_days, sentinel_status=sentinel_status, query_latency=query_latency, username=username, watchlist=watchlist)
+
+@app.route("/add_watchlist", methods=["POST"])
+def add_watchlist():
+    if not session.get("logged_in"): return redirect(url_for("login"))
+    with sqlite3.connect(DB_NAME) as conn:
+        conn.execute("INSERT INTO watchlist (symbol, asset_type, buy_price, qty) VALUES (?, ?, ?, ?)",
+                     (request.form.get("symbol"), request.form.get("asset_type"), float(request.form.get("buy_price")), float(request.form.get("qty"))))
+    return redirect(url_for("dashboard"))
+
+@app.route("/delete_watchlist/<int:wid>")
+def delete_watchlist(wid):
+    if not session.get("logged_in"): return redirect(url_for("login"))
+    with sqlite3.connect(DB_NAME) as conn:
+        conn.execute("DELETE FROM watchlist WHERE id = ?", (wid,))
+    return redirect(url_for("dashboard"))
 
 @app.route("/print_report_view")
 def print_report_view():
