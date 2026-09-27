@@ -263,7 +263,7 @@ DASHBOARD_HTML = """
         <div class="pro-nav-btn" onclick="alert(currentLang === 'gu' ? 'આઈડીઆઈ / એસઆઈપી ઇન્વેસ્ટમેન્ટ એક્ટિવ છે!' : 'SIP / Mutual Fund Active!')">
             <i class="fas fa-piggy-bank fa-lg"></i> <span data-key="nav_sip">SIP / Earn</span>
         </div>
-        <div class="pro-nav-btn" onclick="alert(currentLang === 'gu' ? 'ઓર્ડર બુક સ્ટેటસ સક્રિય છે!' : 'Live Orders Book Active!')">
+        <div class="pro-nav-btn" onclick="alert(currentLang === 'gu' ? 'ઓર્ડર બુક સ્ટેટસ સક્રિય છે!' : 'Live Orders Book Active!')">
             <i class="fas fa-receipt fa-lg"></i> <span data-key="nav_orders">Orders</span>
         </div>
         <div class="pro-nav-btn" onclick="alert(currentLang === 'gu' ? 'ગ્લોબલ ફ્યુચર્સ (GOOGL, TSLA, NVDA) 24x7 લાઈવ છે!' : 'Global Futures (GOOGL, TSLA) Live!')">
@@ -1126,7 +1126,7 @@ DASHBOARD_HTML = """
                 if (currentLang === 'gu') {
                     localizedReply = localizedReply.replace("Total revenue / sales is", "કુલ વેચાણ / આવક").replace("Today's net profit is", "આજે કુલ નેટ નફો").replace("Total bank balance across accounts is", "બધી બેંકનું કુલ બેલેન્સ").replace("Live inventory stock summary:", "ઇન્વેન્ટરી સ્ટોક મેનેજમેન્ટમાં કુલ").replace("items registered.", "આઇટમ્સ રજીસ્ટર થયેલી છે.");
                 } else if (currentLang === 'hi') {
-                    localizedReply = localizedReply.replace("Total revenue / sales is", "कुल राजस्व / बिक्री").replace("Today's net profit is", "आज कुल शुद्ध लाभ").replace("Total bank balance across accounts is", "सभी बैंकों का कुल शेष").replace("Live inventory stock summary:", "इन्वेंट्री स्टॉक में कुल").replace("items registered.", "इन्वेंट्री स्टॉक में कुल आइटम पंजीकृत हैं।");
+                    localizedReply = localizedReply.replace("Total revenue / sales is", "कुल राजस्व / बिक्री").replace("Today's net profit is", "आज कुल शुद्ध लाभ").replace("Total bank balance across accounts is", "सभी बैंकों का कुल शेष").replace("Live inventory stock summary:", "इन्वेंट्री स्टॉक में कुल").replace("items registered.", "इन्वेंट्री स्टॉक में कुल आइटम पंजीकृत हैं।।");
                 }
                 replyElem.innerText = prefix + localizedReply;
                 
