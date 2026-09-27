@@ -187,6 +187,7 @@ DASHBOARD_HTML = """
         
         label { font-size: 0.85em; color: #94a3b8; font-weight: bold; display: block; margin-top: 8px; }
         input, select, textarea { width: 100%; padding: 10px; margin-top: 4px; background: #030712; border: 1px solid #374151; color: #fff; border-radius: 6px; box-sizing: border-box; font-size: 0.95em; }
+        input:focus, select:focus { border-color: #3b82f6; outline: none; }
         button { background: #3b82f6; color: #fff; border: none; padding: 11px; width: 100%; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 12px; font-size: 0.95em; transition: 0.2s; }
         button:hover { background: #2563eb; }
         
@@ -252,28 +253,28 @@ DASHBOARD_HTML = """
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-bottom: 15px;">
             <div class="market-card">
                 <h4 data-key="idx_nifty">NIFTY 50 (NSE)</h4>
-                <div class="price">₹24,850.30</div>
+                <div class="price">₹<span class="num-val" data-val="24850.30">24850.30</span></div>
             </div>
             <div class="market-card">
                 <h4 data-key="idx_sensex">SENSEX (BSE)</h4>
-                <div class="price">₹81,420.10</div>
+                <div class="price">₹<span class="num-val" data-val="81420.10">81420.10</span></div>
             </div>
             <div class="market-card">
                 <h4 data-key="idx_btc">BITCOIN (BTC)</h4>
-                <div class="price">₹74,50,000</div>
+                <div class="price">₹<span class="num-val" data-val="7450000.00">7450000.00</span></div>
             </div>
             <div class="market-card">
                 <h4 data-key="idx_gold">MCX GOLD</h4>
-                <div class="price">₹76,200.00</div>
+                <div class="price">₹<span class="num-val" data-val="76200.00">76200.00</span></div>
             </div>
         </div>
 
         <form action="/add_watchlist" method="POST" style="display: flex; gap: 8px; flex-wrap: wrap; background: #030712; padding: 12px; border-radius: 8px; border: 1px solid #1f2937;">
             <input type="text" name="symbol" data-placeholder="ph_symbol" placeholder="Symbol (e.g., RELIANCE)" required style="flex:2; min-width:140px; margin-top:0;">
             <select name="asset_type" style="flex:1; min-width:90px; margin-top:0;">
-                <option value="STOCK">Stock</option>
-                <option value="CRYPTO">Crypto</option>
-                <option value="COMMODITY">Commodity</option>
+                <option value="STOCK" data-key="opt_stock">Stock</option>
+                <option value="CRYPTO" data-key="opt_crypto">Crypto</option>
+                <option value="COMMODITY" data-key="opt_commodity">Commodity</option>
             </select>
             <input type="number" step="0.01" name="buy_price" data-placeholder="ph_buy_price" placeholder="Buy Price" required style="flex:1; min-width:90px; margin-top:0;">
             <input type="number" step="0.01" name="qty" data-placeholder="ph_qty" placeholder="Qty" required style="flex:1; min-width:70px; margin-top:0;">
@@ -287,7 +288,7 @@ DASHBOARD_HTML = """
                 {% for w in watchlist %}
                 <tr>
                     <td><strong>{{ w[1] }}</strong></td>
-                    <td>{{ w[2] }}</td>
+                    <td><span class="asset-type" data-val="{{ w[2] }}">{{ w[2] }}</span></td>
                     <td>₹<span class="num-val" data-val="{{ "%.2f"|format(w[3]) }}">{{ "%.2f"|format(w[3]) }}</span></td>
                     <td><span class="num-val" data-val="{{ w[4] }}">{{ w[4] }}</span></td>
                     <td><a href="/delete_watchlist/{{ w[0] }}" style="color:#f43f5e; text-decoration:none; font-weight:bold;"><i class="fas fa-trash"></i> <span data-key="del">Delete</span></a></td>
@@ -306,12 +307,12 @@ DASHBOARD_HTML = """
         
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px;">
             <div style="background: #030712; padding: 12px; border-radius: 8px; border: 1px solid #1f2937;">
-                <span style="font-size: 0.7em; color: #38bdf8; font-weight: bold;">RBI POLICY UPDATE</span>
+                <span style="font-size: 0.7em; color: #38bdf8; font-weight: bold;" data-key="news_1_tag">RBI POLICY UPDATE</span>
                 <h4 style="margin: 4px 0; color: #fff; font-size: 0.9em;" data-key="news_1_title">Repo Rate Maintained at 6.5% for Stable Liquidity Flow</h4>
                 <p style="font-size: 0.75em; color: #94a3b8; margin: 0;" data-key="news_1_desc">Central bank emphasizes robust credit growth and inflation containment across Indian markets.</p>
             </div>
             <div style="background: #030712; padding: 12px; border-radius: 8px; border: 1px solid #1f2937;">
-                <span style="font-size: 0.7em; color: #10b981; font-weight: bold;">GLOBAL TECH & AI</span>
+                <span style="font-size: 0.7em; color: #10b981; font-weight: bold;" data-key="news_2_tag">GLOBAL TECH & AI</span>
                 <h4 style="margin: 4px 0; color: #fff; font-size: 0.9em;" data-key="news_2_title">Enterprise Cloud Infrastructures Shift Towards Zero-Latency WAL</h4>
                 <p style="font-size: 0.75em; color: #94a3b8; margin: 0;" data-key="news_2_desc">High-security sovereign multi systems adopt decentralized ledger auditing for absolute transparency.</p>
             </div>
@@ -343,7 +344,7 @@ DASHBOARD_HTML = """
     <div class="ai-banner">
         <div>
             <h3 data-key="sentinel_title"><i class="fas fa-shield-alt"></i> Sovereign Multi-Lingual Sentinel</h3>
-            <p><span data-key="runway_label">Estimated Liquidity Runway</span>: <strong style="color:#34d399;">{{ runway_days }} <span data-key="days_unit">Days</span></strong> | <span data-key="sentinel_status">Status</span>: <strong style="color:#38bdf8;" data-key="sentinel_val">{{ sentinel_status }}</strong></p>
+            <p><span data-key="runway_label">Estimated Liquidity Runway</span>: <strong style="color:#34d399;"><span class="num-val" data-val="{{ runway_days }}">{{ runway_days }}</span> <span data-key="days_unit">Days</span></strong> | <span data-key="sentinel_status">Status</span>: <strong style="color:#38bdf8;" data-key="sentinel_val">{{ sentinel_status }}</strong></p>
         </div>
         <div style="background: rgba(0,0,0,0.4); padding: 12px 15px; border-radius: 8px; text-align: center; border: 1px solid #6366f1;">
             <div style="font-size: 0.7em; text-transform: uppercase; color: #c7d2fe;" data-key="cloud_status">Cloud Status</div>
@@ -733,7 +734,13 @@ DASHBOARD_HTML = """
                 news_1_title: "Repo Rate Maintained at 6.5% for Stable Liquidity Flow",
                 news_1_desc: "Central bank emphasizes robust credit growth and inflation containment across Indian markets.",
                 news_2_title: "Enterprise Cloud Infrastructures Shift Towards Zero-Latency WAL",
-                news_2_desc: "High-security sovereign multi systems adopt decentralized ledger auditing for absolute transparency."
+                news_2_desc: "High-security sovereign multi systems adopt decentralized ledger auditing for absolute transparency.",
+                opt_stock: "Stock",
+                opt_crypto: "Crypto",
+                opt_commodity: "Commodity",
+                asset_STOCK: "Stock",
+                asset_CRYPTO: "Crypto",
+                asset_COMMODITY: "Commodity"
             },
             hi: {
                 header_title: "वज्र संप्रभु मल्टी सिस्टम",
@@ -862,7 +869,7 @@ DASHBOARD_HTML = """
                 bank_bggb: "बड़ौदा गुजरात ग्रामीण बैंक",
                 bank_saurashtra_gramin: "सौराष्ट्र ग्रामीण बैंक",
                 bank_gandhinagar: "गांधीनगर नागरिक सहकारी बैंक",
-                bank_anand: "आनंद मर्केंटाइल को-ऑપ બેંક",
+                bank_anand: "आनंद મર્કેન્ટાઈલ કો-ઓપ બેંક",
                 bank_sabarkantha: "साबरकांठा जिला सहकारी बैंक",
                 bank_banaskantha: "बनासकांठा जिला केंद्रीय सहकारी बैंक",
                 bank_saraswat: "सारस्वत को-ऑपरेटिव बैंक",
@@ -900,7 +907,13 @@ DASHBOARD_HTML = """
                 news_1_title: "स्थिर तरलता प्रवाह के लिए रेपो रेट 6.5% पर बनाए रखा गया",
                 news_1_desc: "केंद्रीय बैंक भारतीय बाजारों में मजबूत ऋण वृद्धि और मुद्रास्फीति नियंत्रण पर जोर देता है।",
                 news_2_title: "एंटरप्राइज क्लाउड इंफ्रास्ट्रक्चर जीरो-लेटency WAL की ओर स्थानांतरित",
-                news_2_desc: "उच्च-सुरक्षा संप्रभु मल्टी सिस्टम पूर्ण पारस्परिकता के लिए विकेंद्रीकृत बहीखाता लेखा परीक्षा अपनाते हैं।"
+                news_2_desc: "उच्च-सुरक्षा संप्रभु मल्टी सिस्टम पूर्ण पारस्परिकता के लिए विकेंद्रीकृत बहीखाता लेखा परीक्षा अपनाते हैं。",
+                opt_stock: "स्टॉक",
+                opt_crypto: "क्रिप्टो",
+                opt_commodity: "कमोडिटी",
+                asset_STOCK: "स्टॉक",
+                asset_CRYPTO: "क्रिप्टो",
+                asset_COMMODITY: "कमोडिटी"
             },
             gu: {
                 header_title: "વજ્ર સોવરિન મલ્ટી સિસ્ટમ",
@@ -1028,7 +1041,7 @@ DASHBOARD_HTML = """
                 bank_rajkot_peoples: "રાજકોટ પીપલ્સ કો-ઓપરેટિવ બેંક",
                 bank_bggb: "બરોડા ગુજરાત ગ્રામીણ બેંક",
                 bank_saurashtra_gramin: "સૌરાષ્ટ્ર ગ્રામીણ બેંક",
-                bank_gandhinagar: "ગાंधीनगर नागरिक सहकारी बैंक",
+                bank_gandhinagar: "ગાંધીનગર નાગરિક સહકારી બેંક",
                 bank_anand: "આણંદ મર્કેન્ટાઈલ કો-ઓપ બેંક",
                 bank_sabarkantha: "સાબરકાંઠા જિલ્લા સહકારી બેંક",
                 bank_banaskantha: "બનાસકાંઠા જિલ્લા મધ્યસ્થ સહકારી બેંક",
@@ -1067,14 +1080,27 @@ DASHBOARD_HTML = """
                 news_1_title: "સ્થિર લિક્વિડિટી પ્રવાહ માટે રેપો રેટ 6.5% પર જાળવી રાખ્યો",
                 news_1_desc: "સેન્ટ્રલ બેંક ભારતીય બજારોમાં મજબૂત ક્રેડિટ વૃદ્ધિ અને ફુગાવા નિયંત્રણ પર ભાર મૂકે છે.",
                 news_2_title: "એન્ટરપ્રાઇઝ ક્લાઉડ ઇન્ફ્રાસ્ટ્રક્ચર્સ ઝીરો-લેટન્સી WAL તરફ શિફ્ટ થાય છે",
-                news_2_desc: "ઉચ્ચ-સુરક્ષા સોવરિન મલ્ટી સિસ્ટમ્સ સંપૂર્ણ પારદર્શિતા માટે વિકેન્દ્રિત બહીખાતા ઓડિટ અપનાવે છે."
+                news_2_desc: "ઉચ્ચ-સુરક્ષા સોવરિન મલ્ટી સિસ્ટમ્સ સંપૂર્ણ પારદર્શિતા માટે વિકેન્દ્રિત બહીખાતા ઓડિટ અપનાવે છે.",
+                opt_stock: "સ્ટોક",
+                opt_crypto: "ક્રिप्टો",
+                opt_commodity: "કોમોડिटी",
+                asset_STOCK: "સ્ટોક",
+                asset_CRYPTO: "ક્રિપ્ટો",
+                asset_COMMODITY: "કોમોડિટી"
             }
         };
 
         function setLanguage(lang) {
             currentLang = lang;
             document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
+            // Find active button based on lang
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                if((lang === 'en' && btn.textContent.includes('EN')) ||
+                   (lang === 'hi' && btn.textContent.includes('हिन्दी')) ||
+                   (lang === 'gu' && btn.textContent.includes('ગુજરાતી'))) {
+                    btn.classList.add('active');
+                }
+            });
             
             const elements = document.querySelectorAll('[data-key]');
             elements.forEach(el => {
@@ -1096,6 +1122,16 @@ DASHBOARD_HTML = """
                     el.textContent = translations[lang][tKey];
                 } else {
                     el.textContent = vtype;
+                }
+            });
+
+            document.querySelectorAll('.asset-type').forEach(el => {
+                const atype = el.getAttribute('data-val');
+                const tKey = 'asset_' + atype;
+                if (translations[lang] && translations[lang][tKey]) {
+                    el.textContent = translations[lang][tKey];
+                } else {
+                    el.textContent = atype;
                 }
             });
 
