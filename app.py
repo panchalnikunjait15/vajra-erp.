@@ -10,7 +10,7 @@ import csv
 import io
 
 app = Flask(__name__)
-app.secret_key = "VAJRA_PRO_SUPREME_2026"
+app.secret_key = "VAJRA_PRO_ERP_2026"
 
 DB_NAME = "vajra_erp.db"
 
@@ -80,7 +80,7 @@ LOGIN_HTML = """
     <div class="card">
         <div class="logo-box"><i class="fas fa-shield-alt"></i></div>
         <h2>Vajra Sovereign Multi System</h2>
-        <p>Supreme Global Secure Portal</p>
+        <p>Enterprise Secure Login Portal</p>
         
         {% if error %}<div class="error"><i class="fas fa-exclamation-triangle"></i> {{ error }}</div>{% endif %}
         {% if msg %}<div class="success"><i class="fas fa-check-circle"></i> {{ msg }}</div>{% endif %}
@@ -133,7 +133,7 @@ REGISTER_HTML = """
     <div class="card">
         <div class="logo-box"><i class="fas fa-user-plus"></i></div>
         <h2>Vajra Sovereign Multi System</h2>
-        <p>New Supreme User Registration</p>
+        <p>New Enterprise User Registration</p>
         
         {% if error %}<div class="error"><i class="fas fa-exclamation-triangle"></i> {{ error }}</div>{% endif %}
 
@@ -164,56 +164,64 @@ DASHBOARD_HTML = """
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body { background: #030712; color: #f8f9fa; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 20px; }
-        header { background: #0f172a; padding: 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #3b82f6; border-radius: 10px; margin-bottom: 25px; flex-wrap: wrap; gap: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
-        h1 { margin: 0; font-size: 1.4em; color: #38bdf8; letter-spacing: 1px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+        body { background: #030712; color: #f8f9fa; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 15px; box-sizing: border-box; }
+        header { background: #0f172a; padding: 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #3b82f6; border-radius: 10px; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+        h1 { margin: 0; font-size: 1.25em; color: #38bdf8; letter-spacing: 0.5px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
         
-        .lang-switcher { display: flex; gap: 5px; background: #030712; padding: 4px; border-radius: 6px; border: 1px solid #1f2937; }
-        .lang-btn { background: transparent; border: none; color: #94a3b8; padding: 5px 10px; cursor: pointer; font-size: 0.85em; font-weight: bold; border-radius: 4px; transition: 0.2s; }
+        .lang-switcher { display: flex; gap: 4px; background: #030712; padding: 3px; border-radius: 6px; border: 1px solid #1f2937; }
+        .lang-btn { background: transparent; border: none; color: #94a3b8; padding: 6px 10px; cursor: pointer; font-size: 0.85em; font-weight: bold; border-radius: 4px; transition: 0.2s; }
         .lang-btn.active { background: #3b82f6; color: white; }
 
-        .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 25px; }
-        .kpi { background: #111827; padding: 20px; border-radius: 10px; border: 1px solid #1f2937; box-shadow: 0 8px 20px rgba(0,0,0,0.3); }
-        .kpi h3 { margin: 0; font-size: 0.75em; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; }
-        .kpi p { margin: 8px 0 0 0; font-size: 1.4em; font-weight: bold; color: #38bdf8; }
+        .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 20px; }
+        .kpi { background: #111827; padding: 15px; border-radius: 10px; border: 1px solid #1f2937; box-shadow: 0 8px 20px rgba(0,0,0,0.3); }
+        .kpi h3 { margin: 0; font-size: 0.7em; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; }
+        .kpi p { margin: 6px 0 0 0; font-size: 1.25em; font-weight: bold; color: #38bdf8; word-break: break-all; }
         
-        .ai-banner { background: linear-gradient(135deg, #1e1b4b, #312e81); border: 1px solid #6366f1; padding: 20px; border-radius: 10px; margin-bottom: 25px; display: flex; align-items: center; justify-content: space-between; gap: 15px; flex-wrap: wrap; }
-        .ai-banner h3 { margin: 0 0 5px 0; color: #e0e7ff; font-size: 1.1em; }
-        .ai-banner p { margin: 0; font-size: 0.9em; color: #c7d2fe; }
+        .ai-banner { background: linear-gradient(135deg, #1e1b4b, #312e81); border: 1px solid #6366f1; padding: 15px; border-radius: 10px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+        .ai-banner h3 { margin: 0 0 4px 0; color: #e0e7ff; font-size: 1.05em; }
+        .ai-banner p { margin: 0; font-size: 0.85em; color: #c7d2fe; }
 
-        .main-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 20px; margin-bottom: 25px; }
-        .card { background: #111827; padding: 22px; border-radius: 10px; border: 1px solid #1f2937; box-shadow: 0 8px 20px rgba(0,0,0,0.3); }
-        .card h3 { margin-top: 0; color: #38bdf8; font-size: 1.1em; border-bottom: 1px solid #1f2937; padding-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+        .main-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; margin-bottom: 20px; }
+        .card { background: #111827; padding: 18px; border-radius: 10px; border: 1px solid #1f2937; box-shadow: 0 8px 20px rgba(0,0,0,0.3); overflow-x: auto; }
+        .card h3 { margin-top: 0; color: #38bdf8; font-size: 1.05em; border-bottom: 1px solid #1f2937; padding-bottom: 8px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 5px; }
         
         label { font-size: 0.85em; color: #94a3b8; font-weight: bold; display: block; margin-top: 8px; }
-        input, select, textarea { width: 100%; padding: 11px; margin-top: 5px; background: #030712; border: 1px solid #374151; color: #fff; border-radius: 6px; box-sizing: border-box; font-size: 0.95em; }
-        button { background: #3b82f6; color: #fff; border: none; padding: 12px; width: 100%; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 12px; font-size: 1em; transition: 0.2s; }
+        input, select, textarea { width: 100%; padding: 10px; margin-top: 4px; background: #030712; border: 1px solid #374151; color: #fff; border-radius: 6px; box-sizing: border-box; font-size: 0.95em; }
+        button { background: #3b82f6; color: #fff; border: none; padding: 11px; width: 100%; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 12px; font-size: 0.95em; transition: 0.2s; }
         button:hover { background: #2563eb; }
         
-        .btn-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 25px; }
-        .btn-row a, .btn-row button { background: #374151; color: white; padding: 10px 18px; border-radius: 6px; text-decoration: none; font-size: 0.9em; border: none; flex: 1; text-align: center; font-weight: bold; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
+        .btn-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+        .btn-row a, .btn-row button { background: #374151; color: white; padding: 10px 14px; border-radius: 6px; text-decoration: none; font-size: 0.85em; border: none; flex: 1; min-width: 130px; text-align: center; font-weight: bold; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
         .logout { background: #f43f5e !important; }
 
-        table { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 0.85em; overflow-x: auto; display: block; }
-        th, td { border: 1px solid #1f2937; padding: 8px; text-align: left; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.85em; min-width: 320px; }
+        th, td { border: 1px solid #1f2937; padding: 8px 6px; text-align: left; word-break: break-word; }
         th { background: #0f172a; color: #38bdf8; }
-        .badge-trend { background: #10b981; color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.75em; font-weight: bold; }
-        .badge-alert { background: #ef4444; color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.75em; font-weight: bold; }
+        .badge-trend { background: #10b981; color: white; padding: 2px 5px; border-radius: 4px; font-size: 0.7em; font-weight: bold; }
+        .badge-alert { background: #ef4444; color: white; padding: 2px 5px; border-radius: 4px; font-size: 0.7em; font-weight: bold; }
         
-        .share-group { display: flex; gap: 5px; flex-wrap: wrap; }
-        .whatsapp-btn { background: #25d366; color: white; padding: 5px 8px; border-radius: 4px; text-decoration: none; font-size: 0.75em; display: inline-flex; align-items: center; gap: 4px; font-weight: bold; }
-        .telegram-btn { background: #0088cc; color: white; padding: 5px 8px; border-radius: 4px; text-decoration: none; font-size: 0.75em; display: inline-flex; align-items: center; gap: 4px; font-weight: bold; }
-        .gmail-btn { background: #ea4335; color: white; padding: 5px 8px; border-radius: 4px; text-decoration: none; font-size: 0.75em; display: inline-flex; align-items: center; gap: 4px; font-weight: bold; }
-        .market-card { background: #0f172a; border: 1px solid #374151; padding: 15px; border-radius: 8px; text-align: center; margin-bottom: 10px; }
-        .market-card h4 { margin: 0 0 5px 0; color: #38bdf8; font-size: 0.9em; }
-        .market-card .price { font-size: 1.2em; font-weight: bold; color: #34d399; }
+        .share-group { display: flex; gap: 4px; flex-wrap: wrap; }
+        .whatsapp-btn { background: #25d366; color: white; padding: 4px 6px; border-radius: 4px; text-decoration: none; font-size: 0.7em; display: inline-flex; align-items: center; gap: 3px; font-weight: bold; }
+        .telegram-btn { background: #0088cc; color: white; padding: 4px 6px; border-radius: 4px; text-decoration: none; font-size: 0.7em; display: inline-flex; align-items: center; gap: 3px; font-weight: bold; }
+        .gmail-btn { background: #ea4335; color: white; padding: 4px 6px; border-radius: 4px; text-decoration: none; font-size: 0.7em; display: inline-flex; align-items: center; gap: 3px; font-weight: bold; }
+        
+        .market-card { background: #0f172a; border: 1px solid #374151; padding: 12px; border-radius: 8px; text-align: center; margin-bottom: 8px; }
+        .market-card h4 { margin: 0 0 4px 0; color: #38bdf8; font-size: 0.85em; }
+        .market-card .price { font-size: 1.1em; font-weight: bold; color: #34d399; }
+        
+        @media(max-width: 600px) {
+            body { padding: 8px; }
+            header { padding: 10px; }
+            h1 { font-size: 1.05em; }
+            .card { padding: 12px; }
+        }
     </style>
 </head>
 <body>
     <header>
         <h1>
             <i class="fas fa-globe"></i> <span data-key="header_title">VAJRA SOVEREIGN MULTI SYSTEM</span>
-            <span style="font-size: 0.7em; background: rgba(59,130,246,0.2); border: 1px solid #3b82f6; padding: 3px 10px; border-radius: 20px; color: #38bdf8;">
+            <span style="font-size: 0.65em; background: rgba(59,130,246,0.2); border: 1px solid #3b82f6; padding: 2px 8px; border-radius: 15px; color: #38bdf8;">
                 <i class="fas fa-user-circle"></i> {{ username }}
             </span>
         </h1>
@@ -224,9 +232,9 @@ DASHBOARD_HTML = """
             <button class="lang-btn" onclick="setLanguage('gu')">ગુજરાતી</button>
         </div>
 
-        <div style="display: flex; gap: 10px; align-items: center;">
-            <span style="font-family: monospace; color: #34d399; font-size: 0.85em;"><i class="fas fa-bolt"></i> {{ query_latency }} ms</span>
-            <a href="/logout" class="logout" style="padding: 8px 16px; background: #f43f5e; color: #fff; border-radius: 6px; text-decoration:none; font-size:0.9em; font-weight:bold;" data-key="logout">Logout</a>
+        <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+            <span style="font-family: monospace; color: #34d399; font-size: 0.8em;"><i class="fas fa-bolt"></i> {{ query_latency }} ms</span>
+            <a href="/logout" class="logout" style="padding: 6px 12px; background: #f43f5e; color: #fff; border-radius: 6px; text-decoration:none; font-size:0.85em; font-weight:bold;" data-key="logout">Logout</a>
         </div>
     </header>
     
@@ -237,42 +245,42 @@ DASHBOARD_HTML = """
     </div>
 
     <!-- 📈 LIVE SHARE MARKET & CRYPTO HUB -->
-    <div class="card" style="margin-bottom: 25px; border: 1.5px solid #10b981; background: linear-gradient(135deg, #0f172a 0%, #064e3b 30%, #0f172a 100%);">
+    <div class="card" style="margin-bottom: 20px; border: 1.5px solid #10b981; background: linear-gradient(135deg, #0f172a 0%, #064e3b 30%, #0f172a 100%);">
         <h3><span><i class="fas fa-chart-line" style="color: #10b981;"></i> <span data-key="market_hub_title">Live Share Market & Crypto Intelligence Hub</span></span></h3>
-        <p style="color: #94a3b8; font-size: 0.85em; margin-bottom: 15px;" data-key="market_hub_desc">Real-time global asset tracking, indices, and portfolio simulation.</p>
+        <p style="color: #94a3b8; font-size: 0.8em; margin-bottom: 12px;" data-key="market_hub_desc">Real-time global asset tracking, indices, and portfolio simulation.</p>
         
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 20px;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-bottom: 15px;">
             <div class="market-card">
                 <h4 data-key="idx_nifty">NIFTY 50 (NSE)</h4>
-                <div class="price">₹24,850.30 <span style="font-size: 0.75em; color: #34d399;">(+1.2%)</span></div>
+                <div class="price">₹24,850.30</div>
             </div>
             <div class="market-card">
                 <h4 data-key="idx_sensex">SENSEX (BSE)</h4>
-                <div class="price">₹81,420.10 <span style="font-size: 0.75em; color: #34d399;">(+0.9%)</span></div>
+                <div class="price">₹81,420.10</div>
             </div>
             <div class="market-card">
-                <h4 data-key="idx_btc">BITCOIN (BTC/INR)</h4>
-                <div class="price">₹74,50,000 <span style="font-size: 0.75em; color: #34d399;">(+2.4%)</span></div>
+                <h4 data-key="idx_btc">BITCOIN (BTC)</h4>
+                <div class="price">₹74,50,000</div>
             </div>
             <div class="market-card">
-                <h4 data-key="idx_gold">MCX GOLD (10g)</h4>
-                <div class="price">₹76,200.00 <span style="font-size: 0.75em; color: #34d399;">(+0.5%)</span></div>
+                <h4 data-key="idx_gold">MCX GOLD</h4>
+                <div class="price">₹76,200.00</div>
             </div>
         </div>
 
-        <form action="/add_watchlist" method="POST" style="display: flex; gap: 10px; flex-wrap: wrap; background: #030712; padding: 15px; border-radius: 8px; border: 1px solid #1f2937;">
-            <input type="text" name="symbol" data-placeholder="ph_symbol" placeholder="Symbol (e.g., RELIANCE, ETH)" required style="flex:2; margin-top:0;">
-            <select name="asset_type" style="flex:1; margin-top:0;">
+        <form action="/add_watchlist" method="POST" style="display: flex; gap: 8px; flex-wrap: wrap; background: #030712; padding: 12px; border-radius: 8px; border: 1px solid #1f2937;">
+            <input type="text" name="symbol" data-placeholder="ph_symbol" placeholder="Symbol (e.g., RELIANCE)" required style="flex:2; min-width:140px; margin-top:0;">
+            <select name="asset_type" style="flex:1; min-width:90px; margin-top:0;">
                 <option value="STOCK">Stock</option>
                 <option value="CRYPTO">Crypto</option>
                 <option value="COMMODITY">Commodity</option>
             </select>
-            <input type="number" step="0.01" name="buy_price" data-placeholder="ph_buy_price" placeholder="Buy Price (₹)" required style="flex:1; margin-top:0;">
-            <input type="number" step="0.01" name="qty" data-placeholder="ph_qty" placeholder="Quantity" required style="flex:1; margin-top:0;">
-            <button type="submit" style="background:#10b981; flex:1; margin-top:0;" data-key="btn_add_watchlist">+ Add to Portfolio</button>
+            <input type="number" step="0.01" name="buy_price" data-placeholder="ph_buy_price" placeholder="Buy Price" required style="flex:1; min-width:90px; margin-top:0;">
+            <input type="number" step="0.01" name="qty" data-placeholder="ph_qty" placeholder="Qty" required style="flex:1; min-width:70px; margin-top:0;">
+            <button type="submit" style="background:#10b981; flex:1; min-width:130px; margin-top:0;" data-key="btn_add_watchlist">+ Portfolio</button>
         </form>
 
-        <h4 style="color: #38bdf8; margin-top: 20px;" data-key="portfolio_title">My Simulated Portfolio Holdings</h4>
+        <h4 style="color: #38bdf8; margin-top: 15px; font-size: 0.95em;" data-key="portfolio_title">My Simulated Portfolio Holdings</h4>
         <table>
             <tr><th data-key="th_symbol">Asset Symbol</th><th data-key="th_type">Type</th><th data-key="th_buy">Buy Price</th><th data-key="th_holding_qty">Qty</th><th data-key="th_action">Action</th></tr>
             {% if watchlist %}
@@ -292,44 +300,44 @@ DASHBOARD_HTML = """
     </div>
 
     <!-- 🌐 WORLD INTELLIGENCE & NEWS HUB -->
-    <div class="card" style="margin-bottom: 25px; border: 1.5px solid #3b82f6; background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 30%, #0f172a 100%);">
+    <div class="card" style="margin-bottom: 20px; border: 1.5px solid #3b82f6; background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 30%, #0f172a 100%);">
         <h3><span><i class="fas fa-globe-americas" style="color: #3b82f6;"></i> <span data-key="global_news_title">Global Intelligence & Economic Calendar</span></span></h3>
-        <p style="color: #94a3b8; font-size: 0.85em; margin-bottom: 15px;" data-key="global_news_desc">Live international financial updates, monetary policy alerts, and sovereign announcements.</p>
+        <p style="color: #94a3b8; font-size: 0.8em; margin-bottom: 12px;" data-key="global_news_desc">Live international financial updates, monetary policy alerts, and sovereign announcements.</p>
         
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px;">
-            <div style="background: #030712; padding: 15px; border-radius: 8px; border: 1px solid #1f2937;">
-                <span style="font-size: 0.75em; color: #38bdf8; font-weight: bold;">RBI POLICY UPDATE</span>
-                <h4 style="margin: 5px 0; color: #fff; font-size: 0.95em;" data-key="news_1_title">Repo Rate Maintained at 6.5% for Stable Liquidity Flow</h4>
-                <p style="font-size: 0.8em; color: #94a3b8; margin: 0;" data-key="news_1_desc">Central bank emphasizes robust credit growth and inflation containment across Indian markets.</p>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px;">
+            <div style="background: #030712; padding: 12px; border-radius: 8px; border: 1px solid #1f2937;">
+                <span style="font-size: 0.7em; color: #38bdf8; font-weight: bold;">RBI POLICY UPDATE</span>
+                <h4 style="margin: 4px 0; color: #fff; font-size: 0.9em;" data-key="news_1_title">Repo Rate Maintained at 6.5% for Stable Liquidity Flow</h4>
+                <p style="font-size: 0.75em; color: #94a3b8; margin: 0;" data-key="news_1_desc">Central bank emphasizes robust credit growth and inflation containment across Indian markets.</p>
             </div>
-            <div style="background: #030712; padding: 15px; border-radius: 8px; border: 1px solid #1f2937;">
-                <span style="font-size: 0.75em; color: #10b981; font-weight: bold;">GLOBAL TECH & AI</span>
-                <h4 style="margin: 5px 0; color: #fff; font-size: 0.95em;" data-key="news_2_title">Enterprise Cloud Infrastructures Shift Towards Zero-Latency WAL</h4>
-                <p style="font-size: 0.8em; color: #94a3b8; margin: 0;" data-key="news_2_desc">High-security sovereign multi systems adopt decentralized ledger auditing for absolute transparency.</p>
+            <div style="background: #030712; padding: 12px; border-radius: 8px; border: 1px solid #1f2937;">
+                <span style="font-size: 0.7em; color: #10b981; font-weight: bold;">GLOBAL TECH & AI</span>
+                <h4 style="margin: 4px 0; color: #fff; font-size: 0.9em;" data-key="news_2_title">Enterprise Cloud Infrastructures Shift Towards Zero-Latency WAL</h4>
+                <p style="font-size: 0.75em; color: #94a3b8; margin: 0;" data-key="news_2_desc">High-security sovereign multi systems adopt decentralized ledger auditing for absolute transparency.</p>
             </div>
         </div>
     </div>
 
     <!-- 🤖 VAJRA AI VOICE & SMART ASSISTANT WIDGET -->
-    <div class="card" style="margin-bottom: 25px; border: 1.5px solid #818cf8; background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%); box-shadow: 0 12px 30px rgba(99,102,241,0.25);">
+    <div class="card" style="margin-bottom: 20px; border: 1.5px solid #818cf8; background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%); box-shadow: 0 12px 30px rgba(99,102,241,0.25);">
         <h3><span><i class="fas fa-microphone-alt" style="color: #818cf8;"></i> <span data-key="ai_voice_title">Vajra AI Voice & Smart Assistant</span></span></h3>
-        <p id="voiceStatus" style="color: #38bdf8; margin: 8px 0; font-size: 0.95em;" data-key="voice_hint">Click mic to speak or use quick buttons below:</p>
+        <p id="voiceStatus" style="color: #38bdf8; margin: 6px 0; font-size: 0.9em;" data-key="voice_hint">Click mic to speak or use quick buttons below:</p>
         
-        <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 12px;">
-            <button onclick="startVoiceRecognition()" style="background: linear-gradient(135deg, #2563eb, #1d4ed8); width: auto; padding: 10px 18px; margin-top: 0; border-radius: 8px;"><i class="fas fa-microphone"></i> <span data-key="speak_btn">🎤 Speak</span></button>
-            <input type="text" id="aiTextInput" data-placeholder="type_query_placeholder" placeholder="Type query here..." style="flex: 1; margin-top: 0; padding: 11px; background: #030712; border: 1px solid #4f46e5; border-radius: 8px; color: #fff;" onkeypress="if(event.key==='Enter') sendQueryToAI(this.value)">
-            <button onclick="sendQueryToAI(document.getElementById('aiTextInput').value)" style="background: linear-gradient(135deg, #10b981, #059669); width: auto; padding: 10px 20px; margin-top: 0; border-radius: 8px;"><span data-key="ask_btn">Ask AI</span></button>
+        <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-bottom: 10px;">
+            <button onclick="startVoiceRecognition()" style="background: linear-gradient(135deg, #2563eb, #1d4ed8); width: auto; padding: 9px 14px; margin-top: 0; border-radius: 8px;"><i class="fas fa-microphone"></i> <span data-key="speak_btn">🎤 Speak</span></button>
+            <input type="text" id="aiTextInput" data-placeholder="type_query_placeholder" placeholder="Type query here..." style="flex: 1; min-width: 160px; margin-top: 0; padding: 10px; background: #030712; border: 1px solid #4f46e5; border-radius: 8px; color: #fff;" onkeypress="if(event.key==='Enter') sendQueryToAI(this.value)">
+            <button onclick="sendQueryToAI(document.getElementById('aiTextInput').value)" style="background: linear-gradient(135deg, #10b981, #059669); width: auto; padding: 9px 16px; margin-top: 0; border-radius: 8px;"><span data-key="ask_btn">Ask AI</span></button>
         </div>
 
         <!-- ⚡ INSTANT QUICK ACTION BUTTONS -->
-        <div style="display: flex; gap: 8px; flex-wrap: wrap; border-top: 1px solid #312e81; padding-top: 12px;">
-            <button onclick="quickAsk('profit')" style="background: #3b82f6; width: auto; padding: 6px 14px; margin-top:0; font-size: 0.85em; border-radius: 6px;"><i class="fas fa-chart-line"></i> <span data-key="btn_profit">Net Profit</span></button>
-            <button onclick="quickAsk('sales')" style="background: #6366f1; width: auto; padding: 6px 14px; margin-top:0; font-size: 0.85em; border-radius: 6px;"><i class="fas fa-rupee-sign"></i> <span data-key="btn_sales">Total Sales</span></button>
-            <button onclick="quickAsk('bank')" style="background: #0ea5e9; width: auto; padding: 6px 14px; margin-top:0; font-size: 0.85em; border-radius: 6px;"><i class="fas fa-university"></i> <span data-key="btn_bank">Bank Balance</span></button>
-            <button onclick="quickAsk('stock')" style="background: #10b981; width: auto; padding: 6px 14px; margin-top:0; font-size: 0.85em; border-radius: 6px;"><i class="fas fa-boxes"></i> <span data-key="btn_stock">Stock Summary</span></button>
+        <div style="display: flex; gap: 6px; flex-wrap: wrap; border-top: 1px solid #312e81; padding-top: 10px;">
+            <button onclick="quickAsk('profit')" style="background: #3b82f6; width: auto; padding: 5px 10px; margin-top:0; font-size: 0.8em; border-radius: 6px;"><i class="fas fa-chart-line"></i> <span data-key="btn_profit">Net Profit</span></button>
+            <button onclick="quickAsk('sales')" style="background: #6366f1; width: auto; padding: 5px 10px; margin-top:0; font-size: 0.8em; border-radius: 6px;"><i class="fas fa-rupee-sign"></i> <span data-key="btn_sales">Total Sales</span></button>
+            <button onclick="quickAsk('bank')" style="background: #0ea5e9; width: auto; padding: 5px 10px; margin-top:0; font-size: 0.8em; border-radius: 6px;"><i class="fas fa-university"></i> <span data-key="btn_bank">Bank Balance</span></button>
+            <button onclick="quickAsk('stock')" style="background: #10b981; width: auto; padding: 5px 10px; margin-top:0; font-size: 0.8em; border-radius: 6px;"><i class="fas fa-boxes"></i> <span data-key="btn_stock">Stock Summary</span></button>
         </div>
 
-        <p id="aiReply" style="margin-top: 15px; font-size: 1.05em; font-weight: bold; color: #4ade80; border-left: 4px solid #22c55e; padding-left: 10px; display: none;"></p>
+        <p id="aiReply" style="margin-top: 12px; font-size: 1em; font-weight: bold; color: #4ade80; border-left: 4px solid #22c55e; padding-left: 8px; display: none;"></p>
     </div>
 
     <div class="ai-banner">
@@ -337,9 +345,9 @@ DASHBOARD_HTML = """
             <h3 data-key="sentinel_title"><i class="fas fa-shield-alt"></i> Sovereign Multi-Lingual Sentinel</h3>
             <p><span data-key="runway_label">Estimated Liquidity Runway</span>: <strong style="color:#34d399;">{{ runway_days }} <span data-key="days_unit">Days</span></strong> | <span data-key="sentinel_status">Status</span>: <strong style="color:#38bdf8;" data-key="sentinel_val">{{ sentinel_status }}</strong></p>
         </div>
-        <div style="background: rgba(0,0,0,0.4); padding: 15px 20px; border-radius: 8px; text-align: center; border: 1px solid #6366f1;">
-            <div style="font-size: 0.75em; text-transform: uppercase; color: #c7d2fe;" data-key="cloud_status">Cloud Status</div>
-            <div style="font-size: 1.1em; font-weight: bold; color: #34d399;" data-key="cloud_val">Live & Secure</div>
+        <div style="background: rgba(0,0,0,0.4); padding: 12px 15px; border-radius: 8px; text-align: center; border: 1px solid #6366f1;">
+            <div style="font-size: 0.7em; text-transform: uppercase; color: #c7d2fe;" data-key="cloud_status">Cloud Status</div>
+            <div style="font-size: 1.05em; font-weight: bold; color: #34d399;" data-key="cloud_val">Live & Secure</div>
         </div>
     </div>
 
@@ -350,7 +358,7 @@ DASHBOARD_HTML = """
         <div class="kpi"><h3 data-key="kpi_advances">Net Advances</h3><p>₹<span class="num-val" data-val="{{ "%.2f"|format(kpis.advances) }}">{{ "%.2f"|format(kpis.advances) }}</span></p></div>
     </div>
 
-    <div class="card" style="margin-bottom: 25px;">
+    <div class="card" style="margin-bottom: 20px;">
         <h3><span><i class="fas fa-university"></i> <span data-key="bank_hub_title">Indian Bank Accounts Hub</span></span></h3>
         <table>
             <tr><th data-key="th_bank_name">Bank Name</th><th data-key="th_acc_no">Account No / Ref</th><th data-key="th_balance">Current Balance</th></tr>
@@ -368,7 +376,7 @@ DASHBOARD_HTML = """
         </table>
     </div>
 
-    <div class="card" style="margin-bottom: 25px;">
+    <div class="card" style="margin-bottom: 20px;">
         <h3><span><i class="fas fa-boxes"></i> <span data-key="stock_hub_title">Live Stock & Market Trending Status</span></span></h3>
         <table>
             <tr><th data-key="th_item">Item Name</th><th data-key="th_sku">SKU Code</th><th data-key="th_status">Market Status</th><th data-key="th_qty">Current Qty</th><th data-key="th_price">Unit Price</th><th data-key="th_val">Stock Value</th></tr>
@@ -441,7 +449,7 @@ DASHBOARD_HTML = """
                 <button type="submit" style="background:#10b981;" data-key="btn_process_tx">Process Bank Txn</button>
             </form>
             
-            <form action="/add_bank" method="POST" style="margin-top:20px; border-top:1px solid #1f2937; padding-top:15px;">
+            <form action="/add_bank" method="POST" style="margin-top:15px; border-top:1px solid #1f2937; padding-top:12px;">
                 <label style="color:#38bdf8;" data-key="lbl_add_bank">+ Add Indian Bank Account:</label>
                 <select name="bank_name" required>
                     <option value="State Bank of India (SBI)" data-key="bank_sbi">State Bank of India (SBI)</option>
@@ -502,7 +510,7 @@ DASHBOARD_HTML = """
                     <option value="REGULAR" data-key="opt_regular">Regular Stock</option>
                     <option value="TRENDING" data-key="opt_trending">Fast-Moving (Trending)</option>
                 </select>
-                <div style="display: flex; gap: 10px; margin-top: 8px;">
+                <div style="display: flex; gap: 8px; margin-top: 8px;">
                     <div style="flex:1;"><label data-key="lbl_qty">Qty:</label><input type="number" name="qty" required></div>
                     <div style="flex:1;"><label data-key="lbl_price">Price (₹):</label><input type="number" step="0.01" name="price" required></div>
                 </div>
@@ -707,12 +715,12 @@ DASHBOARD_HTML = """
                 market_hub_desc: "Real-time global asset tracking, indices, and portfolio simulation.",
                 idx_nifty: "NIFTY 50 (NSE)",
                 idx_sensex: "SENSEX (BSE)",
-                idx_btc: "BITCOIN (BTC/INR)",
-                idx_gold: "MCX GOLD (10g)",
-                ph_symbol: "Symbol (e.g., RELIANCE, ETH)",
-                ph_buy_price: "Buy Price (₹)",
-                ph_qty: "Quantity",
-                btn_add_watchlist: "+ Add to Portfolio",
+                idx_btc: "BITCOIN (BTC)",
+                idx_gold: "MCX GOLD",
+                ph_symbol: "Symbol (e.g., RELIANCE)",
+                ph_buy_price: "Buy Price",
+                ph_qty: "Qty",
+                btn_add_watchlist: "+ Portfolio",
                 portfolio_title: "My Simulated Portfolio Holdings",
                 th_symbol: "Asset Symbol",
                 th_type: "Type",
@@ -854,7 +862,7 @@ DASHBOARD_HTML = """
                 bank_bggb: "बड़ौदा गुजरात ग्रामीण बैंक",
                 bank_saurashtra_gramin: "सौराष्ट्र ग्रामीण बैंक",
                 bank_gandhinagar: "गांधीनगर नागरिक सहकारी बैंक",
-                bank_anand: "आनंद मर्केंटाइल को-ऑप बैंक",
+                bank_anand: "आनंद मर्केंटाइल को-ऑપ બેંક",
                 bank_sabarkantha: "साबरकांठा जिला सहकारी बैंक",
                 bank_banaskantha: "बनासकांठा जिला केंद्रीय सहकारी बैंक",
                 bank_saraswat: "सारस्वत को-ऑपरेटिव बैंक",
@@ -874,12 +882,12 @@ DASHBOARD_HTML = """
                 market_hub_desc: "रीयल-टाइम वैश्विक परिसंपत्ति ट्रैकिंग, सूचकांक और पोर्टफोलियो सिमुलेशन।",
                 idx_nifty: "निफ्टी 50 (NSE)",
                 idx_sensex: "सेंसेक्स (BSE)",
-                idx_btc: "बिटकॉइन (BTC/INR)",
-                idx_gold: "एमसीएक्स गोल्ड (10g)",
-                ph_symbol: "सिंबल (जैसे, RELIANCE, ETH)",
-                ph_buy_price: "खरीद मूल्य (₹)",
+                idx_btc: "बिटकॉइन (BTC)",
+                idx_gold: "एमसीएक्स गोल्ड",
+                ph_symbol: "सिंबल (जैसे, RELIANCE)",
+                ph_buy_price: "खरीद मूल्य",
                 ph_qty: "मात्रा",
-                btn_add_watchlist: "+ पोर्टफोलियो में जोड़ें",
+                btn_add_watchlist: "+ पोर्टफोलियो",
                 portfolio_title: "मेरे सिम्युलेटेड पोर्टफोलियो होल्डिंग्स",
                 th_symbol: "एसेट सिंबल",
                 th_type: "प्रकार",
@@ -1020,7 +1028,7 @@ DASHBOARD_HTML = """
                 bank_rajkot_peoples: "રાજકોટ પીપલ્સ કો-ઓપરેટિવ બેંક",
                 bank_bggb: "બરોડા ગુજરાત ગ્રામીણ બેંક",
                 bank_saurashtra_gramin: "સૌરાષ્ટ્ર ગ્રામીણ બેંક",
-                bank_gandhinagar: "ગાંધીનગર નાગરિક સહકારી બેંક",
+                bank_gandhinagar: "ગાंधीनगर नागरिक सहकारी बैंक",
                 bank_anand: "આણંદ મર્કેન્ટાઈલ કો-ઓપ બેંક",
                 bank_sabarkantha: "સાબરકાંઠા જિલ્લા સહકારી બેંક",
                 bank_banaskantha: "બનાસકાંઠા જિલ્લા મધ્યસ્થ સહકારી બેંક",
@@ -1041,12 +1049,12 @@ DASHBOARD_HTML = """
                 market_hub_desc: "વાસ્તવિક સમયની વૈશ્વિક સંપત્તિ ટ્રેકિંગ, સૂચકાંક અને પોર્ટફોલિયો સિમ્યુલેશન.",
                 idx_nifty: "નિફ્ટી 50 (NSE)",
                 idx_sensex: "સેન્સેક્સ (BSE)",
-                idx_btc: "બિટકોઈન (BTC/INR)",
-                idx_gold: "એમસીએક્સ ગોલ્ડ (10g)",
-                ph_symbol: "સિમ્બોલ (જેમ કે, RELIANCE, ETH)",
-                ph_buy_price: "ખરીદ કિંમત (₹)",
+                idx_btc: "બિટકોઈન (BTC)",
+                idx_gold: "એમસીએક્સ ગોલ્ડ",
+                ph_symbol: "સિમ્બોલ (જેમ કે, RELIANCE)",
+                ph_buy_price: "ખરીદ કિંમત",
                 ph_qty: "જથ્થો",
-                btn_add_watchlist: "+ પોર્ટફોલિયોમાં ઉમેરો",
+                btn_add_watchlist: "+ પોર્ટફોલિયો",
                 portfolio_title: "મારા સિમ્યુલેટેડ પોર્ટફોલિયો હોલ્ડિંગ્સ",
                 th_symbol: "એસેટ સિમ્બોલ",
                 th_type: "પ્રકાર",
@@ -1058,7 +1066,7 @@ DASHBOARD_HTML = """
                 global_news_desc: "લાઇવ આંતરરાષ્ટ્રીય નાણાકીય અપડેટ્સ, નાણાકીય નીતિ ચેતવણીઓ અને સોવરિન ઘોષણાઓ.",
                 news_1_title: "સ્થિર લિક્વિડિટી પ્રવાહ માટે રેપો રેટ 6.5% પર જાળવી રાખ્યો",
                 news_1_desc: "સેન્ટ્રલ બેંક ભારતીય બજારોમાં મજબૂત ક્રેડિટ વૃદ્ધિ અને ફુગાવા નિયંત્રણ પર ભાર મૂકે છે.",
-                news_2_title: "એન્ટરપ્રાઇઝ ક્લાઉડ ઇન્ફ્રાસ્ટ્રક્ચર્સ ઝીરો-લેટન્સી WAL તરફ શિ프트 થાય છે",
+                news_2_title: "એન્ટરપ્રાઇઝ ક્લાઉડ ઇન્ફ્રાસ્ટ્રક્ચર્સ ઝીરો-લેટન્સી WAL તરફ શિફ્ટ થાય છે",
                 news_2_desc: "ઉચ્ચ-સુરક્ષા સોવરિન મલ્ટી સિસ્ટમ્સ સંપૂર્ણ પારદર્શિતા માટે વિકેન્દ્રિત બહીખાતા ઓડિટ અપનાવે છે."
             }
         };
