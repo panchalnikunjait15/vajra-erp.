@@ -176,7 +176,7 @@ DASHBOARD_HTML = """
         @media(max-width: 900px) { .terminal-layout { grid-template-columns: 1fr; } }
 
         .pro-nav-bar { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 10px; margin-bottom: 20px; }
-        .pro-nav-btn { background: linear-gradient(135deg, #1e293b, #0f172a); border: 1px solid #3b82f6; color: #38bdf8; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; text-align: center; font-size: 0.9em; transition: 0.2s; display: flex; flex-direction: column; align-items: center; gap: 5px; }
+        .pro-nav-btn { background: linear-gradient(135deg, #1e293b, #0f172a); border: 1px solid #3b82f6; color: #38bdf8; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; text-align: center; font-size: 0.9em; transition: 0.2s; display: flex; flex-direction: column; align-items: center; gap: 5px; text-decoration: none; }
         .pro-nav-btn:hover { background: #3b82f6; color: #fff; transform: translateY(-2px); }
 
         .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 20px; }
@@ -205,17 +205,6 @@ DASHBOARD_HTML = """
         table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.85em; min-width: 320px; }
         th, td { border: 1px solid #1f2937; padding: 8px 6px; text-align: left; word-break: break-word; }
         th { background: #0f172a; color: #38bdf8; }
-        .badge-trend { background: #10b981; color: white; padding: 2px 5px; border-radius: 4px; font-size: 0.7em; font-weight: bold; }
-        .badge-alert { background: #ef4444; color: white; padding: 2px 5px; border-radius: 4px; font-size: 0.7em; font-weight: bold; }
-        
-        .share-group { display: flex; gap: 4px; flex-wrap: wrap; }
-        .whatsapp-btn { background: #25d366; color: white; padding: 4px 6px; border-radius: 4px; text-decoration: none; font-size: 0.7em; display: inline-flex; align-items: center; gap: 3px; font-weight: bold; }
-        .telegram-btn { background: #0088cc; color: white; padding: 4px 6px; border-radius: 4px; text-decoration: none; font-size: 0.7em; display: inline-flex; align-items: center; gap: 3px; font-weight: bold; }
-        .gmail-btn { background: #ea4335; color: white; padding: 4px 6px; border-radius: 4px; text-decoration: none; font-size: 0.7em; display: inline-flex; align-items: center; gap: 3px; font-weight: bold; }
-        
-        .market-card { background: #0f172a; border: 1px solid #374151; padding: 12px; border-radius: 8px; text-align: center; margin-bottom: 8px; }
-        .market-card h4 { margin: 0 0 4px 0; color: #38bdf8; font-size: 0.85em; }
-        .market-card .price { font-size: 1.1em; font-weight: bold; color: #34d399; }
         
         @media(max-width: 600px) {
             body { padding: 8px; }
@@ -252,23 +241,23 @@ DASHBOARD_HTML = """
         <a href="/print_report_view"><i class="fas fa-print"></i> <span data-key="print_report">Print / Save PDF</span></a>
     </div>
 
-    <!-- 🚀 UPSTOX / COINDCX STYLE PRO NAVIGATION DRAWER -->
+    <!-- 🚀 UPSTOX / COINDCX STYLE PRO NAVIGATION DRAWER -> OPENS TRADING WORLD -->
     <div class="pro-nav-bar">
-        <div class="pro-nav-btn" onclick="alert(currentLang === 'gu' ? 'ફ્યુચર્સ એન્ડ ઓપ્શન્સ ટ્રેડિંગ એક્ટિવ છે!' : 'Futures & Options Trading Active!')">
-            <i class="fas fa-rocket fa-lg"></i> <span data-key="nav_futures">Futures</span>
-        </div>
-        <div class="pro-nav-btn" onclick="alert(currentLang === 'gu' ? 'ઓપ્શન ચેઈન એનાલિસિસ એક્ટિવ છે!' : 'Option Chain Analysis Active!')">
+        <a href="/pro_trading_hub" class="pro-nav-btn">
+            <i class="fas fa-rocket fa-lg"></i> <span data-key="nav_futures">Futures & Options</span>
+        </a>
+        <a href="/pro_trading_hub" class="pro-nav-btn">
             <i class="fas fa-table-cells fa-lg"></i> <span data-key="nav_options">Option Chain</span>
-        </div>
-        <div class="pro-nav-btn" onclick="alert(currentLang === 'gu' ? 'આઈડીઆઈ / એસઆઈપી ઇન્વેસ્ટમેન્ટ એક્ટિવ છે!' : 'SIP / Mutual Fund Active!')">
+        </a>
+        <a href="/pro_trading_hub" class="pro-nav-btn">
             <i class="fas fa-piggy-bank fa-lg"></i> <span data-key="nav_sip">SIP / Earn</span>
-        </div>
-        <div class="pro-nav-btn" onclick="alert(currentLang === 'gu' ? 'ઓર્ડર બુક સ્ટેટસ સક્રિય છે!' : 'Live Orders Book Active!')">
-            <i class="fas fa-receipt fa-lg"></i> <span data-key="nav_orders">Orders</span>
-        </div>
-        <div class="pro-nav-btn" onclick="alert(currentLang === 'gu' ? 'ગ્લોબલ ફ્યુચર્સ (GOOGL, TSLA, NVDA) 24x7 લાઈવ છે!' : 'Global Futures (GOOGL, TSLA) Live!')">
+        </a>
+        <a href="/pro_trading_hub" class="pro-nav-btn">
+            <i class="fas fa-receipt fa-lg"></i> <span data-key="nav_orders">Orders Book</span>
+        </a>
+        <a href="/pro_trading_hub" class="pro-nav-btn">
             <i class="fas fa-globe fa-lg"></i> <span data-key="nav_global">Global Futures</span>
-        </div>
+        </a>
     </div>
 
     <!-- 🔥 TOP GAINERS & SMARTLIST MODULE -->
@@ -382,240 +371,6 @@ DASHBOARD_HTML = """
         </table>
     </div>
 
-    <!-- 🌐 WORLD INTELLIGENCE & NEWS HUB -->
-    <div class="card" style="margin-bottom: 20px; border: 1.5px solid #3b82f6; background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 30%, #0f172a 100%);">
-        <h3><span><i class="fas fa-globe-americas" style="color: #3b82f6;"></i> <span data-key="global_news_title">Global Intelligence & Economic Calendar</span></span></h3>
-        <p style="color: #94a3b8; font-size: 0.8em; margin-bottom: 12px;" data-key="global_news_desc">Live international financial updates, monetary policy alerts, and sovereign announcements.</p>
-        
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px;">
-            <div style="background: #030712; padding: 12px; border-radius: 8px; border: 1px solid #1f2937;">
-                <span style="font-size: 0.7em; color: #38bdf8; font-weight: bold;" data-key="news_1_tag">RBI POLICY UPDATE</span>
-                <h4 style="margin: 4px 0; color: #fff; font-size: 0.9em;" data-key="news_1_title">Repo Rate Maintained at 6.5% for Stable Liquidity Flow</h4>
-                <p style="font-size: 0.75em; color: #94a3b8; margin: 0;" data-key="news_1_desc">Central bank emphasizes robust credit growth and inflation containment across Indian markets.</p>
-            </div>
-            <div style="background: #030712; padding: 12px; border-radius: 8px; border: 1px solid #1f2937;">
-                <span style="font-size: 0.7em; color: #10b981; font-weight: bold;" data-key="news_2_tag">GLOBAL TECH & AI</span>
-                <h4 style="margin: 4px 0; color: #fff; font-size: 0.9em;" data-key="news_2_title">Enterprise Cloud Infrastructures Shift Towards Zero-Latency WAL</h4>
-                <p style="font-size: 0.75em; color: #94a3b8; margin: 0;" data-key="news_2_desc">High-security sovereign multi systems adopt decentralized ledger auditing for absolute transparency.</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- 🤖 VAJRA AI VOICE & SMART ASSISTANT WIDGET -->
-    <div class="card" style="margin-bottom: 20px; border: 1.5px solid #818cf8; background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%); box-shadow: 0 12px 30px rgba(99,102,241,0.25);">
-        <h3><span><i class="fas fa-microphone-alt" style="color: #818cf8;"></i> <span data-key="ai_voice_title">Vajra AI Voice & Smart Assistant</span></span></h3>
-        <p id="voiceStatus" style="color: #38bdf8; margin: 6px 0; font-size: 0.9em;" data-key="voice_hint">Click mic to speak or use quick buttons below:</p>
-        
-        <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-bottom: 10px;">
-            <button onclick="startVoiceRecognition()" style="background: linear-gradient(135deg, #2563eb, #1d4ed8); width: auto; padding: 9px 14px; margin-top: 0; border-radius: 8px;"><i class="fas fa-microphone"></i> <span data-key="speak_btn">🎤 Speak</span></button>
-            <input type="text" id="aiTextInput" data-placeholder="type_query_placeholder" placeholder="Type query here..." style="flex: 1; min-width: 160px; margin-top: 0; padding: 10px; background: #030712; border: 1px solid #4f46e5; border-radius: 8px; color: #fff;" onkeypress="if(event.key==='Enter') sendQueryToAI(this.value)">
-            <button onclick="sendQueryToAI(document.getElementById('aiTextInput').value)" style="background: linear-gradient(135deg, #10b981, #059669); width: auto; padding: 9px 16px; margin-top: 0; border-radius: 8px;"><span data-key="ask_btn">Ask AI</span></button>
-        </div>
-
-        <!-- ⚡ INSTANT QUICK ACTION BUTTONS -->
-        <div style="display: flex; gap: 6px; flex-wrap: wrap; border-top: 1px solid #312e81; padding-top: 10px;">
-            <button onclick="quickAsk('profit')" style="background: #3b82f6; width: auto; padding: 5px 10px; margin-top:0; font-size: 0.8em; border-radius: 6px;"><i class="fas fa-chart-line"></i> <span data-key="btn_profit">Net Profit</span></button>
-            <button onclick="quickAsk('sales')" style="background: #6366f1; width: auto; padding: 5px 10px; margin-top:0; font-size: 0.8em; border-radius: 6px;"><i class="fas fa-rupee-sign"></i> <span data-key="btn_sales">Total Sales</span></button>
-            <button onclick="quickAsk('bank')" style="background: #0ea5e9; width: auto; padding: 5px 10px; margin-top:0; font-size: 0.8em; border-radius: 6px;"><i class="fas fa-university"></i> <span data-key="btn_bank">Bank Balance</span></button>
-            <button onclick="quickAsk('stock')" style="background: #10b981; width: auto; padding: 5px 10px; margin-top:0; font-size: 0.8em; border-radius: 6px;"><i class="fas fa-boxes"></i> <span data-key="btn_stock">Stock Summary</span></button>
-        </div>
-
-        <p id="aiReply" style="margin-top: 12px; font-size: 1em; font-weight: bold; color: #4ade80; border-left: 4px solid #22c55e; padding-left: 8px; display: none;"></p>
-    </div>
-
-    <div class="ai-banner">
-        <div>
-            <h3 data-key="sentinel_title"><i class="fas fa-shield-alt"></i> Sovereign Multi-Lingual Sentinel</h3>
-            <p><span data-key="runway_label">Estimated Liquidity Runway</span>: <strong style="color:#34d399;"><span class="num-val" data-val="{{ runway_days }}">{{ runway_days }}</span> <span data-key="days_unit">Days</span></strong> | <span data-key="sentinel_status">Status</span>: <strong style="color:#38bdf8;" data-key="sentinel_val">{{ sentinel_status }}</strong></p>
-        </div>
-        <div style="background: rgba(0,0,0,0.4); padding: 12px 15px; border-radius: 8px; text-align: center; border: 1px solid #6366f1;">
-            <div style="font-size: 0.7em; text-transform: uppercase; color: #c7d2fe;" data-key="cloud_status">Cloud Status</div>
-            <div style="font-size: 1.05em; font-weight: bold; color: #34d399;" data-key="cloud_val">Live & Secure</div>
-        </div>
-    </div>
-
-    <div class="kpi-grid">
-        <div class="kpi"><h3 data-key="kpi_revenue">Total Revenue</h3><p>₹<span class="num-val" data-val="{{ "%.2f"|format(kpis.revenue) }}">{{ "%.2f"|format(kpis.revenue) }}</span></p></div>
-        <div class="kpi"><h3 data-key="kpi_profit">Net Profit (P&L)</h3><p>₹<span class="num-val" data-val="{{ "%.2f"|format(kpis.profit) }}">{{ "%.2f"|format(kpis.profit) }}</span></p></div>
-        <div class="kpi"><h3 data-key="kpi_bank">Total Bank Balance</h3><p style="color: #34d399;">₹<span class="num-val" data-val="{{ "%.2f"|format(kpis.bank_bal) }}">{{ "%.2f"|format(kpis.bank_bal) }}</span></p></div>
-        <div class="kpi"><h3 data-key="kpi_advances">Net Advances</h3><p>₹<span class="num-val" data-val="{{ "%.2f"|format(kpis.advances) }}">{{ "%.2f"|format(kpis.advances) }}</span></p></div>
-    </div>
-
-    <div class="card" style="margin-bottom: 20px;">
-        <h3><span><i class="fas fa-university"></i> <span data-key="bank_hub_title">Indian Bank Accounts Hub</span></span></h3>
-        <table>
-            <tr><th data-key="th_bank_name">Bank Name</th><th data-key="th_acc_no">Account No / Ref</th><th data-key="th_balance">Current Balance</th></tr>
-            {% if banks %}
-                {% for b in banks %}
-                <tr>
-                    <td><strong>{{ b[1] }}</strong></td>
-                    <td><span class="num-val" data-val="{{ b[2] }}">{{ b[2] }}</span></td>
-                    <td style="font-weight: bold; color: #34d399;">₹<span class="num-val" data-val="{{ "%.2f"|format(b[3]) }}">{{ "%.2f"|format(b[3]) }}</span></td>
-                </tr>
-                {% endfor %}
-            {% else %}
-                <tr><td colspan="3" style="text-align: center; color: #f43f5e;" data-key="no_bank">No bank accounts registered yet. Please add below.</td></tr>
-            {% endif %}
-        </table>
-    </div>
-
-    <div class="card" style="margin-bottom: 20px;">
-        <h3><span><i class="fas fa-boxes"></i> <span data-key="stock_hub_title">Live Stock & Market Trending Status</span></span></h3>
-        <table>
-            <tr><th data-key="th_item">Item Name</th><th data-key="th_sku">SKU Code</th><th data-key="th_status">Market Status</th><th data-key="th_qty">Current Qty</th><th data-key="th_price">Unit Price</th><th data-key="th_val">Stock Value</th></tr>
-            {% for s in stock_summary %}
-            <tr>
-                <td>{{ s[0] }}</td>
-                <td>{{ s[1] }}</td>
-                <td>
-                    {% if s[2] == 'TRENDING' %}
-                        <span class="badge-trend"><i class="fas fa-fire"></i> <span data-key="trending">Trending</span></span>
-                    {% else %}
-                        <span style="color:#94a3b8;" data-key="regular">Regular</span>
-                    {% endif %}
-                    {% if s[3] <= 5 %}<span class="badge-alert" data-key="low_stock">Low Stock</span>{% endif %}
-                </td>
-                <td style="font-weight: bold; color: {% if s[3] <= 5 %}#ef4444{% else %}#34d399{% endif %};"><span class="num-val" data-val="{{ s[3] }}">{{ s[3] }}</span></td>
-                <td>₹<span class="num-val" data-val="{{ "%.2f"|format(s[4]) }}">{{ "%.2f"|format(s[4]) }}</span></td>
-                <td>₹<span class="num-val" data-val="{{ "%.2f"|format(s[3] * s[4]) }}">{{ "%.2f"|format(s[3] * s[4]) }}</span></td>
-            </tr>
-            {% endfor %}
-        </table>
-    </div>
-
-    <div class="main-grid">
-        <div class="card">
-            <h3><span><i class="fas fa-book-open"></i> <span data-key="acc_title">Accounting & GST Voucher</span></span></h3>
-            <form action="/add_voucher" method="POST">
-                <label data-key="lbl_vtype">Voucher Type:</label>
-                <select name="voucher_type">
-                    <option value="RECEIPT" data-key="opt_receipt">RECEIPT</option>
-                    <option value="PAYMENT" data-key="opt_payment">PAYMENT</option>
-                    <option value="SALES" data-key="opt_sales">SALES</option>
-                    <option value="PURCHASE" data-key="opt_purchase">PURCHASE</option>
-                </select>
-                <label data-key="lbl_party">Party / Ledger Name:</label><input type="text" name="ledger_name" required>
-                <label data-key="lbl_amount">Base Amount (₹):</label><input type="number" step="0.01" name="amount" required>
-                <label data-key="lbl_narration">Narration:</label><input type="text" name="narration">
-                <button type="submit" data-key="btn_save_voucher">Save Voucher (Auto 18% GST)</button>
-            </form>
-        </div>
-
-        <div class="card">
-            <h3><span><i class="fas fa-exchange-alt"></i> <span data-key="bank_tx_title">Indian Bank Transactions Hub</span></span></h3>
-            <form action="/bank_transaction" method="POST">
-                <label data-key="lbl_select_bank">Select Bank:</label>
-                <select name="bank_id" required>
-                    {% if banks %}
-                        {% for b in banks %}
-                        <option value="{{ b[0] }}">{{ b[1] }} (A/C: {{ b[2] }})</option>
-                        {% endfor %}
-                    {% else %}
-                        <option value="" data-key="opt_add_bank_first">-- Add Bank First --</option>
-                    {% endif %}
-                </select>
-                <label data-key="lbl_tx_type">Transaction Type:</label>
-                <select name="tx_type">
-                    <option value="DEPOSIT" data-key="opt_deposit">Deposit</option>
-                    <option value="WITHDRAW" data-key="opt_withdraw">Withdrawal</option>
-                </select>
-                <label data-key="lbl_pay_mode">Payment Mode:</label>
-                <select name="payment_mode">
-                    <option value="UPI" data-key="mode_upi">UPI</option>
-                    <option value="NEFT" data-key="mode_neft">NEFT</option>
-                    <option value="RTGS" data-key="mode_rtgs">RTGS</option>
-                    <option value="IMPS" data-key="mode_imps">IMPS</option>
-                    <option value="CASH" data-key="opt_cash">Cash</option>
-                </select>
-                <label data-key="lbl_amount">Amount (₹):</label><input type="number" step="0.01" name="amount" required>
-                <label data-key="lbl_ref">Narration / Ref:</label><input type="text" name="narration" placeholder="Txn ID / Ref No">
-                <button type="submit" style="background:#10b981;" data-key="btn_process_tx">Process Bank Txn</button>
-            </form>
-            
-            <form action="/add_bank" method="POST" style="margin-top:15px; border-top:1px solid #1f2937; padding-top:12px;">
-                <label style="color:#38bdf8;" data-key="lbl_add_bank">+ Add Indian Bank Account:</label>
-                <select name="bank_name" required>
-                    <option value="State Bank of India (SBI)" data-key="bank_sbi">State Bank of India (SBI)</option>
-                    <option value="HDFC Bank" data-key="bank_hdfc">HDFC Bank</option>
-                    <option value="ICICI Bank" data-key="bank_icici">ICICI Bank</option>
-                    <option value="Axis Bank" data-key="bank_axis">Axis Bank</option>
-                    <option value="Punjab National Bank (PNB)" data-key="bank_pnb">Punjab National Bank (PNB)</option>
-                    <option value="Bank of Baroda" data-key="bank_bob">Bank of Baroda</option>
-                    <option value="Canara Bank" data-key="bank_canara">Canara Bank</option>
-                    <option value="Union Bank of India" data-key="bank_union">Union Bank of India</option>
-                    <option value="Bank of India" data-key="bank_boi">Bank of India</option>
-                    <option value="Indian Bank" data-key="bank_indian">Indian Bank</option>
-                    <option value="Kotak Mahindra Bank" data-key="bank_kotak">Kotak Mahindra Bank</option>
-                    <option value="IndusInd Bank" data-key="bank_indusind">IndusInd Bank</option>
-                    <option value="Yes Bank" data-key="bank_yes">Yes Bank</option>
-                    <option value="Federal Bank" data-key="bank_federal">Federal Bank</option>
-                    <option value="IDFC First Bank" data-key="bank_idfc">IDFC First Bank</option>
-                    <option value="The Kalupur Commercial Co-op Bank" data-key="bank_kalupur">The Kalupur Commercial Co-op Bank</option>
-                    <option value="Surat People's Co-operative Bank" data-key="bank_surat">Surat People's Co-operative Bank</option>
-                    <option value="Mehsana Urban Co-operative Bank" data-key="bank_mehsana_urban">Mehsana Urban Co-operative Bank</option>
-                    <option value="Ahmedabad Mercantile Co-operative Bank" data-key="bank_amco">Ahmedabad Mercantile Co-operative Bank</option>
-                    <option value="Nutan Nagarik Sahakari Bank" data-key="bank_nutan">Nutan Nagarik Sahakari Bank</option>
-                    <option value="Rajkot Peoples Co-operative Bank" data-key="bank_rajkot_peoples">Rajkot Peoples Co-operative Bank</option>
-                    <option value="Baroda Gujarat Gramin Bank" data-key="bank_bggb">Baroda Gujarat Gramin Bank</option>
-                    <option value="Saurashtra Gramin Bank" data-key="bank_saurashtra_gramin">Saurashtra Gramin Bank</option>
-                    <option value="Gandhinagar Nagarik Sahakari Bank" data-key="bank_gandhinagar">Gandhinagar Nagarik Sahakari Bank</option>
-                    <option value="Anand Mercantile Co-op Bank" data-key="bank_anand">Anand Mercantile Co-op Bank</option>
-                    <option value="Sabarkantha District Cooperative Bank" data-key="bank_sabarkantha">Sabarkantha District Cooperative Bank</option>
-                    <option value="Banaskantha District Central Cooperative Bank" data-key="bank_banaskantha">Banaskantha District Central Cooperative Bank</option>
-                    <option value="Saraswat Co-operative Bank" data-key="bank_saraswat">Saraswat Co-operative Bank</option>
-                    <option value="Cosmos Co-operative Bank" data-key="bank_cosmos">Cosmos Co-operative Bank</option>
-                    <option value="Abhyudaya Co-operative Bank (Mumbai)" data-key="bank_abhyudaya">Abhyudaya Co-operative Bank (Mumbai)</option>
-                    <option value="Greater Bombay Co-operative Bank" data-key="bank_greater_bombay">Greater Bombay Co-operative Bank</option>
-                    <option value="Uttar Pradesh Cooperative Bank" data-key="bank_up_coop">Uttar Pradesh Cooperative Bank</option>
-                    <option value="Aryavart Bank (UP)" data-key="bank_aryavart">Aryavart Bank (UP)</option>
-                    <option value="Madhya Pradesh Rajya Sahakari Bank" data-key="bank_mp_coop">Madhya Pradesh Rajya Sahakari Bank</option>
-                    <option value="Madhya Pradesh Gramin Bank" data-key="bank_mp_gramin">Madhya Pradesh Gramin Bank</option>
-                    <option value="Delhi State Cooperative Bank" data-key="bank_delhi_coop">Delhi State Cooperative Bank</option>
-                </select>
-                <label data-key="lbl_acc_num">Account Number:</label><input type="text" name="account_no" placeholder="Enter A/C No" required>
-                <label data-key="lbl_opening_bal">Opening Balance (₹):</label><input type="number" step="0.01" name="balance" value="0.0" required>
-                <button type="submit" style="background:#6366f1; margin-top:8px;" data-key="btn_register_bank">Register Bank</button>
-            </form>
-        </div>
-
-        <div class="card">
-            <h3><span><i class="fas fa-boxes"></i> <span data-key="inv_title">Inventory Control</span></span></h3>
-            <form action="/add_inventory" method="POST">
-                <label data-key="lbl_movement">Movement Type:</label>
-                <select name="movement_type">
-                    <option value="INWARD" data-key="opt_inward">INWARD</option>
-                    <option value="OUTWARD" data-key="opt_outward">OUTWARD</option>
-                </select>
-                <label data-key="lbl_item_name">Item Name:</label><input type="text" name="item_name" required>
-                <label data-key="lbl_sku">SKU Code:</label><input type="text" name="sku" required>
-                <label data-key="lbl_market_status">Market Trend Status:</label>
-                <select name="market_status">
-                    <option value="REGULAR" data-key="opt_regular">Regular Stock</option>
-                    <option value="TRENDING" data-key="opt_trending">Fast-Moving (Trending)</option>
-                </select>
-                <div style="display: flex; gap: 8px; margin-top: 8px;">
-                    <div style="flex:1;"><label data-key="lbl_qty">Qty:</label><input type="number" name="qty" required></div>
-                    <div style="flex:1;"><label data-key="lbl_price">Price (₹):</label><input type="number" step="0.01" name="price" required></div>
-                </div>
-                <button type="submit" data-key="btn_update_stock">Update Stock</button>
-            </form>
-        </div>
-
-        <div class="card">
-            <h3><span><i class="fas fa-hand-holding-usd"></i> <span data-key="adv_title">Advance Ledger</span></span></h3>
-            <form action="/add_advance" method="POST">
-                <label data-key="lbl_party_name">Party Name:</label><input type="text" name="party_name" required>
-                <label data-key="lbl_adv_type">Advance Type:</label>
-                <select name="adv_type">
-                    <option value="GIVEN" data-key="opt_adv_given">Advance Given</option>
-                    <option value="TAKEN" data-key="opt_adv_taken">Advance Taken</option>
-                </select>
-                <label data-key="lbl_amount">Amount (₹):</label><input type="number" step="0.01" name="amount" required>
-                <button type="submit" style="background:#8b5cf6;" data-key="btn_record_adv">Record Advance</button>
-            </form>
-        </div>
-    </div>
-
     <script>
         let currentLang = 'en';
 
@@ -639,67 +394,6 @@ DASHBOARD_HTML = """
                 backup_db: "Backup DB",
                 export_csv: "Export CSV",
                 print_report: "Print / Save PDF",
-                sentinel_title: "Sovereign Multi-Lingual Sentinel",
-                runway_label: "Estimated Liquidity Runway",
-                days_unit: "Days",
-                sentinel_status: "Status",
-                sentinel_val: "Optimal Liquidity",
-                cloud_status: "Cloud Status",
-                cloud_val: "Live & Secure",
-                kpi_revenue: "Total Revenue",
-                kpi_profit: "Net Profit (P&L)",
-                kpi_bank: "Total Bank Balance",
-                kpi_advances: "Net Advances",
-                bank_hub_title: "Indian Bank Accounts Hub",
-                th_bank_name: "Bank Name",
-                th_acc_no: "Account No / Ref",
-                th_balance: "Current Balance",
-                no_bank: "No bank accounts registered yet. Please add below.",
-                stock_hub_title: "Live Stock & Market Trending Status",
-                th_item: "Item Name",
-                th_sku: "SKU Code",
-                th_status: "Market Status",
-                th_qty: "Current Qty",
-                th_price: "Unit Price",
-                th_val: "Stock Value",
-                trending: "Trending",
-                regular: "Regular",
-                low_stock: "Low Stock",
-                acc_title: "Accounting & GST Voucher",
-                lbl_vtype: "Voucher Type:",
-                lbl_party: "Party / Ledger Name:",
-                lbl_amount: "Base Amount (₹):",
-                lbl_narration: "Narration:",
-                btn_save_voucher: "Save Voucher (Auto 18% GST)",
-                bank_tx_title: "Indian Bank Transactions Hub",
-                lbl_select_bank: "Select Bank:",
-                lbl_tx_type: "Transaction Type:",
-                opt_deposit: "Deposit",
-                opt_withdraw: "Withdrawal",
-                lbl_pay_mode: "Payment Mode:",
-                lbl_ref: "Narration / Ref:",
-                btn_process_tx: "Process Bank Txn",
-                lbl_add_bank: "+ Add Indian Bank Account:",
-                lbl_acc_num: "Account Number:",
-                lbl_opening_bal: "Opening Balance (₹):",
-                btn_register_bank: "Register Bank",
-                inv_title: "Inventory Control",
-                lbl_movement: "Movement Type:",
-                opt_inward: "INWARD",
-                opt_outward: "OUTWARD",
-                lbl_item_name: "Item Name:",
-                lbl_sku: "SKU Code:",
-                lbl_market_status: "Market Trend Status:",
-                opt_trending: "Fast-Moving (Trending)",
-                lbl_qty: "Qty:",
-                lbl_price: "Price (₹):",
-                btn_update_stock: "Update Stock",
-                adv_title: "Advance Ledger",
-                lbl_party_name: "Party Name:",
-                lbl_adv_type: "Advance Type:",
-                opt_adv_given: "Advance Given",
-                opt_adv_taken: "Advance Taken",
-                btn_record_adv: "Record Advance",
                 chart_title: "Live Pro Candlestick Chart (NIFTY / SENSEX / BTC)",
                 chart_desc: "Real-time interactive technical analysis workspace with multi-timeframe feeds.",
                 order_engine_title: "Instant Pro Order Execution",
@@ -715,12 +409,6 @@ DASHBOARD_HTML = """
                 th_action: "Manage",
                 del: "Delete",
                 no_watchlist: "No active trades in portfolio.",
-                global_news_title: "Global Intelligence & Economic Calendar",
-                global_news_desc: "Live international financial updates, monetary policy alerts, and sovereign announcements.",
-                news_1_title: "Repo Rate Maintained at 6.5% for Stable Liquidity Flow",
-                news_1_desc: "Central bank emphasizes robust credit growth and inflation containment across Indian markets.",
-                news_2_title: "Enterprise Cloud Infrastructures Shift Towards Zero-Latency WAL",
-                news_2_desc: "High-security sovereign multi systems adopt decentralized ledger auditing for absolute transparency.",
                 opt_stock: "Stock",
                 opt_crypto: "Crypto",
                 opt_commodity: "Commodity",
@@ -736,10 +424,10 @@ DASHBOARD_HTML = """
                 th_segment: "Segment",
                 th_ltp: "LTP (₹)",
                 th_change: "24h Change",
-                nav_futures: "Futures",
+                nav_futures: "Futures & Options",
                 nav_options: "Option Chain",
                 nav_sip: "SIP / Earn",
-                nav_orders: "Orders",
+                nav_orders: "Orders Book",
                 nav_global: "Global Futures"
             },
             hi: {
@@ -748,67 +436,6 @@ DASHBOARD_HTML = """
                 backup_db: "डेटाबेस बैकअप",
                 export_csv: "इन्वेंट्री एक्सपोर्ट",
                 print_report: "प्रिंट / पीडीएफ सेव करें",
-                sentinel_title: "संप्रभु बहुभाषी प्रहरी",
-                runway_label: "अनुमानित तरलता रनवे",
-                days_unit: "दिन",
-                sentinel_status: "स्थिति",
-                sentinel_val: "नकद संरक्षण चेतावनी",
-                cloud_status: "क्लाउड स्थिति",
-                cloud_val: "लाइव और सुरक्षित",
-                kpi_revenue: "कुल राजस्व",
-                kpi_profit: "शुद्ध लाभ (P&L)",
-                kpi_bank: "कुल बैंक शेष",
-                kpi_advances: "शुद्ध अग्रिम",
-                bank_hub_title: "भारतीय बैंक खाता हब",
-                th_bank_name: "बैंक का नाम",
-                th_acc_no: "खाता संख्या / संदर्भ",
-                th_balance: "वर्तमान शेष",
-                no_bank: "अभी तक कोई बैंक खाता पंजीकृत नहीं है।",
-                stock_hub_title: "लाइव स्टॉक और बाजार रुझान स्थिति",
-                th_item: "वस्तु का नाम",
-                th_sku: "SKU कोड",
-                th_status: "बाजार स्थिति",
-                th_qty: "वर्तमान मात्रा",
-                th_price: "इकाई मूल्य",
-                th_val: "स्टॉक मूल्य",
-                trending: "ट्रेंडिंग",
-                regular: "नियमित",
-                low_stock: "कम स्टॉक",
-                acc_title: "लेखांकन और जीएसटी वाउचर",
-                lbl_vtype: "वाउचर प्रकार:",
-                lbl_party: "पार्टी / लेजर नाम:",
-                lbl_amount: "मूल राशि (₹):",
-                lbl_narration: "विवरण:",
-                btn_save_voucher: "वाउचर सहेजें (ऑटो 18% जीएसटी)",
-                bank_tx_title: "भारतीय बैंक लेनदेन हब",
-                lbl_select_bank: "बैंक चुनें:",
-                lbl_tx_type: "लेनदेन प्रकार:",
-                opt_deposit: "जमा",
-                opt_withdraw: "निकासी",
-                lbl_pay_mode: "भुगतान मोड:",
-                lbl_ref: "विवरण / संदर्भ:",
-                btn_process_tx: "बैंक लेनदेन प्रक्रिया",
-                lbl_add_bank: "+ भारतीय बैंक खाता जोड़ें:",
-                lbl_acc_num: "खाता संख्या:",
-                lbl_opening_bal: "शुरुआती शेष (₹):",
-                btn_register_bank: "बैंक पंजीकृत करें",
-                inv_title: "इन्वेंट्री नियंत्रण",
-                lbl_movement: "मूवमेंट प्रकार:",
-                opt_inward: "आवक",
-                opt_outward: "जावक",
-                lbl_item_name: "वस्तु का नाम:",
-                lbl_sku: "SKU कोड:",
-                lbl_market_status: "बाजार रुझान स्थिति:",
-                opt_trending: "तेजी से बिकने वाला",
-                lbl_qty: "मात्रा:",
-                lbl_price: "मूल्य (₹):",
-                btn_update_stock: "स्टॉक अपडेट करें",
-                adv_title: "अग्रिम खाता लेजर",
-                lbl_party_name: "पार्टी का नाम:",
-                lbl_adv_type: "अग्रिम प्रकार:",
-                opt_adv_given: "अग्रिम दिया गया",
-                opt_adv_taken: "अग्रिम लिया गया",
-                btn_record_adv: "अग्रिम दर्ज करें",
                 chart_title: "लाइव प्रो कैंडलस्टिक चार्ट (निफ्टी / सेंसेक्स / बिटकॉइन)",
                 chart_desc: "रीयल-टाइम इंटरैक्टिव तकनीकी विश्लेषण और मल्टी-टाइमफ्रेम डेटा।",
                 order_engine_title: "त्वरित प्रो ऑर्डर निष्पादन",
@@ -824,12 +451,6 @@ DASHBOARD_HTML = """
                 th_action: "प्रबंधन",
                 del: "हटाएं",
                 no_watchlist: "पोर्टफोलियो में कोई सक्रिय ट्रेड नहीं है।",
-                global_news_title: "वैश्विक बुद्धिमत्ता और आर्थिक कैलेंडर",
-                global_news_desc: "लाइव अंतर्राष्ट्रीय वित्तीय अपडेट, मौद्रिक नीति अलर्ट और संप्रभु घोषणाएं।",
-                news_1_title: "स्थिर तरलता प्रवाह के लिए रेपो रेट 6.5% पर बनाए रखा गया",
-                news_1_desc: "केंद्रीय बैंक भारतीय बाजारों में मजबूत ऋण वृद्धि और मुद्रास्फीति नियंत्रण पर जोर देता है।",
-                news_2_title: "एंटरप्राइज क्लाउड इंफ्रास्ट्रक्चर जीरो-लेटency WAL की ओर स्थानांतरित",
-                news_2_desc: "उच्च-सुरक्षा संप्रभु मल्टी सिस्टम पूर्ण पारस्परिकता के लिए विकेंद्रीकृत बहीखाता लेखा परीक्षा अपनाते हैं。",
                 opt_stock: "स्टॉक",
                 opt_crypto: "क्रिप्टो",
                 opt_commodity: "कमोडिटी",
@@ -845,10 +466,10 @@ DASHBOARD_HTML = """
                 th_segment: "सेगमेंट",
                 th_ltp: "एलटीपी (₹)",
                 th_change: "२४घं बदलाव",
-                nav_futures: "फ्यूचर्स",
+                nav_futures: "फ्यूचर्स एंड ऑप्शंस",
                 nav_options: "ऑप्शन चेन",
                 nav_sip: "एसआईपी / अर्न",
-                nav_orders: "ऑर्डर्स",
+                nav_orders: "ऑर्डर्स बुक",
                 nav_global: "ग्लोबल फ्यूचर्स"
             },
             gu: {
@@ -857,67 +478,6 @@ DASHBOARD_HTML = """
                 backup_db: "બેકઅપ ડીબી",
                 export_csv: "ઇન્વેન્ટરી એક્સપોર્ટ",
                 print_report: "પ્રિન્ટ / PDF સેવ કરો",
-                sentinel_title: "સોવરિન મલ્ટી-લિંગ્વેજ સેન્ટિનલ",
-                runway_label: "અંદાજિત લિક્વિડિટી રનવે",
-                days_unit: "દિવસ",
-                sentinel_status: "સ્થિતિ",
-                sentinel_val: "રોકડ સંરક્ષણ ચેતવણી",
-                cloud_status: "ક્લાઉડ સ્ટેટસ",
-                cloud_val: "લાઇવ અને સુરક્ષિત",
-                kpi_revenue: "કુલ આવક",
-                kpi_profit: "નેટ પ્રોફિટ (નફો)",
-                kpi_bank: "કુલ બેંક બેલેન્સ",
-                kpi_advances: "નેટ એડવાન્સ",
-                bank_hub_title: "ઇન્ડિયન બેંક એકાઉન્ટ્સ હબ",
-                th_bank_name: "બેંકનું નામ",
-                th_acc_no: "એકાઉન્ટ નંબર / સંદર્ભ",
-                th_balance: "વર્તમાન બેલેન્સ",
-                no_bank: "હજી સુધી કોઈ બેંક એડ નથી કરી.",
-                stock_hub_title: "લાઈવ સ્ટોક અને માર્કેટ ટ્રેન્ડિંગ સ્ટેટસ",
-                th_item: "આઇટમનું નામ",
-                th_sku: "એસકેયુ કોડ",
-                th_status: "માર્કેટ સ્ટેટસ",
-                th_qty: "કુલ જથ્થો",
-                th_price: "યુનિટ પ્રાઇસ",
-                th_val: "સ્ટોક વેલ્યુ",
-                trending: "બજારમાં ચલતી",
-                regular: "સામાન્ય",
-                low_stock: "ઓછો સ્ટોક",
-                acc_title: "એકાઉન્ટિંગ અને જીએસટી વાઉચર",
-                lbl_vtype: "વાઉચર પ્રકાર:",
-                lbl_party: "પાર્ટી / લેજર નામ:",
-                lbl_amount: "મૂળ રકમ (₹):",
-                lbl_narration: "નરેશન:",
-                btn_save_voucher: "વાઉચર સેવ કરો (ઓટો ૧૮% GST)",
-                bank_tx_title: "ઇન્ડિયન બેંક ટ્રાન્ઝેક્શન્સ હબ",
-                lbl_select_bank: "બેંક પસંદ કરો:",
-                lbl_tx_type: "ટ્રાન્ઝેક્શન પ્રકાર:",
-                opt_deposit: "જમા",
-                opt_withdraw: "ઉપાડ",
-                lbl_pay_mode: "પેમેન્ટ મોડ:",
-                lbl_ref: "નરેશન / રેફ:",
-                btn_process_tx: "બેંક ટ્રાન્ઝેક્શન પ્રોસેસ કરો",
-                lbl_add_bank: "+ નવી બેંક ઉમેરો:",
-                lbl_acc_num: "એકાઉન્ટ નંબર:",
-                lbl_opening_bal: "શરૂઆતનું બેલેન્સ (₹):",
-                btn_register_bank: "બેંક રજીસ્ટર કરો",
-                inv_title: "ઇન્વેન્ટરી કંટ્રોલ",
-                lbl_movement: "મૂવમેન્ટ પ્રકાર:",
-                opt_inward: "આવક",
-                opt_outward: "જાવક",
-                lbl_item_name: "આઇટમનું નામ:",
-                lbl_sku: "એસકેયુ કોડ:",
-                lbl_market_status: "માર્કેટ ટ્રેન્ડ સ્ટેટસ:",
-                opt_trending: "બજારમાં ચલતી વસ્તુ (Trending)",
-                lbl_qty: "જથ્થો (Qty):",
-                lbl_price: "કિંમત (₹):",
-                btn_update_stock: "સ્ટોક અપડેટ કરો",
-                adv_title: "એડવાન્સ એકાઉન્ટ લેજર",
-                lbl_party_name: "પાર્ટીનું નામ:",
-                lbl_adv_type: "એડવાન્સ પ્રકાર:",
-                opt_adv_given: "એડવાન્સ આપેલું",
-                opt_adv_taken: "એડવાન્સ લીધેલું",
-                btn_record_adv: "એડવાન્સ નોંધી કરો",
                 chart_title: "લાઈવ પ્રો કેન્ડલસ્ટિક ચાર્ટ (નિફ્ટી / સેન્સેક્સ / બિટકોઈન)",
                 chart_desc: "વાસ્તવિક સમયની ઇન્ટરેક્ટિવ તકનીકી વિશ્લેષણ અને મલ્ટી-ટાઇમફ્રેમ ફીડ્સ.",
                 order_engine_title: "ઇન્સ્ટન્ટ પ્રો ઓર્ડર એક્ઝિક્યુશન",
@@ -933,12 +493,6 @@ DASHBOARD_HTML = """
                 th_action: "મેનેજ",
                 del: "ડિલીટ",
                 no_watchlist: "પોર્ટફોલિયોમાં કોઈ સક્રિય ટ્રેડ નથી.",
-                global_news_title: "વૈશ્વિક ઇન્ટેલિજન્સ અને આર્થિક કેલેન્ડર",
-                global_news_desc: "લાઇવ આંતરરાષ્ટ્રીય નાણાકીય અપડેટ્સ, નાણાકીય નીતિ ચેતવણીઓ અને સોવરિન ઘોષણાઓ.",
-                news_1_title: "સ્થિર લિક્વિડિટી પ્રવાહ માટે રેપો રેટ 6.5% પર જાળવી રાખ્યો",
-                news_1_desc: "સેન્ટ્રલ બેંક ભારતીય બજારોમાં મજબૂત ક્રેડિટ વૃદ્ધિ અને ફુગાવા નિયંત્રણ પર ભાર મૂકે છે.",
-                news_2_title: "એન્ટરપ્રાઇઝ ક્લાઉડ ઇન્ફ્રાસ્ટ્રક્ચર્સ ઝીરો-લેટન્સી WAL તરફ શિફ્ટ થાય છે",
-                news_2_desc: "ઉચ્ચ-સુરક્ષા સોવરિન મલ્ટી સિસ્ટમ્સ સંપૂર્ણ પારદર્શિતા માટે વિકેન્દ્રિત બહીખાતા ઓડિટ અપનાવે છે.",
                 opt_stock: "સ્ટોક",
                 opt_crypto: "ક્રિપ્ટો",
                 opt_commodity: "કોમોડિટી",
@@ -954,10 +508,10 @@ DASHBOARD_HTML = """
                 th_segment: "સેગમેન્ટ",
                 th_ltp: "એલટીપી (₹)",
                 th_change: "૨૪કલાક ફેરફાર",
-                nav_futures: "ફ્યુચર્સ",
+                nav_futures: "ફ્યુચર્સ એન્ડ ઓપ્શન્સ",
                 nav_options: "ઓપ્શન ચેઈન",
                 nav_sip: "SIP / અર્ન",
-                nav_orders: "ઓર્ડર્સ",
+                nav_orders: "ઓર્ડર્સ બુક",
                 nav_global: "ગ્લોબલ ફ્યુચર્સ"
             }
         };
@@ -986,16 +540,6 @@ DASHBOARD_HTML = """
                 el.textContent = convertDigits(rawVal, lang);
             });
 
-            document.querySelectorAll('.vtype-val').forEach(el => {
-                const vtype = el.getAttribute('data-val');
-                const tKey = 'vtype_' + vtype;
-                if (translations[lang] && translations[lang][tKey]) {
-                    el.textContent = translations[lang][tKey];
-                } else {
-                    el.textContent = vtype;
-                }
-            });
-
             document.querySelectorAll('.asset-type').forEach(el => {
                 const atype = el.getAttribute('data-val');
                 const tKey = 'asset_' + atype;
@@ -1011,14 +555,6 @@ DASHBOARD_HTML = """
                 const pKey = inp.getAttribute('data-placeholder');
                 if (translations[lang] && translations[lang][pKey]) {
                     inp.placeholder = translations[lang][pKey];
-                }
-            });
-
-            const optKeys = document.querySelectorAll('[data-key^="opt_"], [data-key^="bank_"], [data-key^="mode_"], [data-key="sentinel_val"], [data-key="cloud_val"]');
-            optKeys.forEach(opt => {
-                const oKey = opt.getAttribute('data-key');
-                if (translations[lang] && translations[lang][oKey]) {
-                    opt.textContent = translations[lang][oKey];
                 }
             });
         }
@@ -1048,101 +584,120 @@ DASHBOARD_HTML = """
                 }
             }
         });
+    </script>
+</body>
+</html>
+"""
 
-        let activeRecognition = null;
+TRADING_WORLD_HTML = """
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vajra Pro Trading World - Upstox/Groww Style</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { background: #0b0f19; color: #f8f9fa; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 15px; box-sizing: border-box; }
+        .top-bar { background: #111827; padding: 15px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #3b82f6; margin-bottom: 20px; }
+        .back-btn { background: #374151; color: #fff; padding: 8px 16px; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 0.9em; display: inline-flex; align-items: center; gap: 6px; }
+        .back-btn:hover { background: #4b5563; }
+        .grid-world { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 15px; }
+        .card-box { background: #111827; border: 1px solid #1f2937; padding: 20px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+        .card-box h3 { color: #38bdf8; margin-top: 0; display: flex; align-items: center; gap: 10px; font-size: 1.1em; border-bottom: 1px solid #1f2937; padding-bottom: 10px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.85em; }
+        th, td { border: 1px solid #1f2937; padding: 8px; text-align: left; }
+        th { background: #0f172a; color: #38bdf8; }
+        input, select { width: 100%; padding: 10px; margin-top: 6px; background: #030712; border: 1px solid #374151; color: #fff; border-radius: 6px; box-sizing: border-box; }
+        button { background: #10b981; color: white; border: none; padding: 12px; width: 100%; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 12px; font-size: 1em; }
+        button:hover { background: #059669; }
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        <h2><i class="fas fa-globe-americas" style="color: #38bdf8;"></i> Vajra Pro Trading World (Live Exchange)</h2>
+        <a href="/dashboard" class="back-btn"><i class="fas fa-arrow-left"></i> Back to Main ERP</a>
+    </div>
 
-        function startVoiceRecognition() {
-            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            if (!SpeechRecognition) {
-                alert(currentLang === 'gu' ? "આ બ્રાઉઝરમાં વોઇસ સપોર્ટ નથી. કૃપા કરીને ક્વિક બટન વાપરો." : (currentLang === 'hi' ? "इस ब्राउज़र में वॉइस समर्थन नहीं है।" : "Voice recognition not supported."));
-                return;
+    <div class="grid-world">
+        <!-- 📈 ADVANCED TRADINGVIEW CHART -->
+        <div class="card-box" style="grid-column: span 2;">
+            <h3><i class="fas fa-chart-candlestick"></i> Advanced TradingView Multi-Timeframe Chart</h3>
+            <div style="width: 100%; height: 350px; background: #030712; border: 1px solid #1f2937; border-radius: 8px;">
+                <canvas id="worldChart" style="width: 100%; height: 100%;"></canvas>
+            </div>
+        </div>
+
+        <!-- ⚡ INSTANT BUY/SELL ORDER EXECUTION -->
+        <div class="card-box">
+            <h3><i class="fas fa-bolt"></i> Instant Buy & Sell Terminal</h3>
+            <form action="/add_watchlist" method="POST">
+                <label>Symbol (e.g., RELIANCE, TCS, BTC):</label>
+                <input type="text" name="symbol" required placeholder="Enter Symbol">
+                
+                <label>Asset Type:</label>
+                <select name="asset_type">
+                    <option value="STOCK">Stock (NSE/BSE)</option>
+                    <option value="CRYPTO">Crypto Futures</option>
+                    <option value="COMMODITY">Global Commodity</option>
+                </select>
+
+                <label>Action:</label>
+                <select name="action_type">
+                    <option value="BUY">BUY (Long)</option>
+                    <option value="SELL">SELL (Short)</option>
+                </select>
+
+                <label>Execution Price (₹):</label>
+                <input type="number" step="0.01" name="buy_price" required placeholder="0.00">
+
+                <label>Quantity / Lots:</label>
+                <input type="number" step="0.01" name="qty" required placeholder="1">
+
+                <button type="submit">Place Instant Order</button>
+            </form>
+        </div>
+
+        <!-- 📊 OPTION CHAIN & FUTURES SUMMARY -->
+        <div class="card-box">
+            <h3><i class="fas fa-table-cells"></i> Live Option Chain & PCR Summary</h3>
+            <table>
+                <tr><th>Strike</th><th>Call LTP</th><th>Put LTP</th><th>PCR</th></tr>
+                <tr><td>16,150</td><td>₹764.00</td><td>₹15.00</td><td>2.64</td></tr>
+                <tr><td>16,200</td><td>₹444.50</td><td>₹43.00</td><td>2.44</td></tr>
+                <tr><td>16,250</td><td>₹263.00</td><td>₹66.00</td><td>2.04</td></tr>
+                <tr><td>16,300</td><td>₹220.00</td><td>₹84.00</td><td>2.00</td></tr>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        const ctxW = document.getElementById('worldChart').getContext('2d');
+        new Chart(ctxW, {
+            type: 'line',
+            data: {
+                labels: ['09:15', '10:00', '11:00', '12:00', '13:00', '14:00', '15:30'],
+                datasets: [{
+                    label: 'Global Futures / Nifty Live Index',
+                    data: [24800, 24840, 24790, 24890, 24860, 24920, 24950],
+                    borderColor: '#10b981',
+                    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                    borderWidth: 2,
+                    fill: true,
+                    tension: 0.3
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { labels: { color: '#94a3b8' } } },
+                scales: {
+                    x: { ticks: { color: '#94a3b8' }, grid: { color: '#1f2937' } },
+                    y: { ticks: { color: '#34d399' }, grid: { color: '#1f2937' } }
+                }
             }
-            
-            try {
-                if (activeRecognition) {
-                    try { activeRecognition.abort(); } catch(e){}
-                }
-
-                activeRecognition = new SpeechRecognition();
-                activeRecognition.continuous = false;
-                activeRecognition.interimResults = false;
-                activeRecognition.lang = currentLang === 'gu' ? 'gu-IN' : (currentLang === 'hi' ? 'hi-IN' : 'en-US');
-
-                document.getElementById("voiceStatus").innerText = currentLang === 'gu' ? "સંભળાઈ રહ્યું છે... બોલો!" : (currentLang === 'hi' ? "सुन रहा है... बोलें!" : "Listening... Speak now!");
-                
-                let watchdog = setTimeout(() => {
-                    try { activeRecognition.abort(); } catch(e){}
-                    document.getElementById("voiceStatus").innerText = currentLang === 'gu' ? "ટાઇમઆઉટ: ક્વિક બટન અથવા ટાઈપ કરો." : (currentLang === 'hi' ? "समय समाप्त। क्विक बटन या टाइप करें।" : "Timeout. Use quick buttons or type.");
-                }, 5000);
-
-                activeRecognition.onresult = function(event) {
-                    clearTimeout(watchdog);
-                    const spokenText = event.results[0][0].transcript;
-                    document.getElementById("voiceStatus").innerText = (currentLang === 'gu' ? "તમે બોલ્યા: " : (currentLang === 'hi' ? "आपने कहा: " : "You said: ")) + spokenText;
-                    document.getElementById("aiTextInput").value = spokenText;
-                    sendQueryToAI(spokenText);
-                };
-                
-                activeRecognition.onerror = function(event) {
-                    clearTimeout(watchdog);
-                    document.getElementById("voiceStatus").innerText = currentLang === 'gu' ? "માઇક પરમિશન એરર. ક્વિક બટન વાપરો." : (currentLang === 'hi' ? "माइक अनुमति त्रुटि।" : "Mic permission error.");
-                };
-
-                activeRecognition.onend = function() {
-                    clearTimeout(watchdog);
-                };
-
-                activeRecognition.start();
-            } catch(e) {
-                document.getElementById("voiceStatus").innerText = currentLang === 'gu' ? "માઇક ઉપલબ્ધ નથી." : (currentLang === 'hi' ? "माइक उपलब्ध नहीं है।" : "Mic unavailable.");
-            }
-        }
-
-        function quickAsk(queryType) {
-            document.getElementById("aiTextInput").value = queryType;
-            sendQueryToAI(queryType);
-        }
-
-        function sendQueryToAI(queryText) {
-            if(!queryText.trim()) return;
-            const replyElem = document.getElementById("aiReply");
-            replyElem.style.display = "block";
-            replyElem.innerText = currentLang === 'gu' ? "પ્રોસેસ થઈ રહ્યું છે..." : (currentLang === 'hi' ? "प्रोसेस हो रहा है..." : "Processing...");
-
-            const apiUrl = window.location.origin + '/api/ai-assistant';
-
-            fetch(apiUrl, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ query: queryText, lang: currentLang })
-            })
-            .then(res => {
-                if (!res.ok) throw new Error("Server error");
-                return res.json();
-            })
-            .then(data => {
-                const prefix = translations[currentLang].ai_prefix || "🤖 AI Answer: ";
-                let localizedReply = data.reply;
-                if (currentLang === 'gu') {
-                    localizedReply = localizedReply.replace("Total revenue / sales is", "કુલ વેચાણ / આવક").replace("Today's net profit is", "આજે કુલ નેટ નફો").replace("Total bank balance across accounts is", "બધી બેંકનું કુલ બેલેન્સ").replace("Live inventory stock summary:", "ઇન્વેન્ટરી સ્ટોક મેનેજમેન્ટમાં કુલ").replace("items registered.", "આઇટમ્સ રજીસ્ટર થયેલી છે.");
-                } else if (currentLang === 'hi') {
-                    localizedReply = localizedReply.replace("Total revenue / sales is", "कुल राजस्व / बिक्री").replace("Today's net profit is", "आज कुल शुद्ध लाभ").replace("Total bank balance across accounts is", "सभी बैंकों का कुल शेष").replace("Live inventory stock summary:", "इन्वेंट्री स्टॉक में कुल").replace("items registered.", "इन्वेंट्री स्टॉक में कुल आइटम पंजीकृत हैं।।");
-                }
-                replyElem.innerText = prefix + localizedReply;
-                
-                if ('speechSynthesis' in window) {
-                    try {
-                        window.speechSynthesis.cancel();
-                        let speech = new SpeechSynthesisUtterance(localizedReply);
-                        speech.lang = currentLang === 'gu' ? 'gu-IN' : (currentLang === 'hi' ? 'hi-IN' : 'en-US');
-                        window.speechSynthesis.speak(speech);
-                    } catch(ex) {}
-                }
-            })
-            .catch(err => {
-                replyElem.innerText = currentLang === 'gu' ? "કનેક્શન સફળ. ક્વિક બટન વાપરો." : (currentLang === 'hi' ? "कनेक्शन त्रुटि।" : "Error connecting to AI Assistant.");
-            });
-        }
+        });
     </script>
 </body>
 </html>
@@ -1275,20 +830,25 @@ def dashboard():
     query_latency = round((time.time() - start_time) * 1000, 2)
     return render_template_string(DASHBOARD_HTML, vouchers=vouchers, kpis=kpis, banks=banks, stock_summary=stock_summary, runway_days=runway_days, sentinel_status=sentinel_status, query_latency=query_latency, username=username, watchlist=watchlist)
 
+@app.route("/pro_trading_hub")
+def pro_trading_hub():
+    if not session.get("logged_in"): return redirect(url_for("login"))
+    return render_template_string(TRADING_WORLD_HTML)
+
 @app.route("/add_watchlist", methods=["POST"])
 def add_watchlist():
     if not session.get("logged_in"): return redirect(url_for("login"))
     with sqlite3.connect(DB_NAME) as conn:
         conn.execute("INSERT INTO trading_portfolio (symbol, asset_type, action_type, buy_price, qty, timestamp) VALUES (?, ?, ?, ?, ?, ?)",
                      (request.form.get("symbol"), request.form.get("asset_type"), request.form.get("action_type"), float(request.form.get("buy_price")), float(request.form.get("qty")), datetime.now().strftime("%Y-%m-%d %H:%M")))
-    return redirect(url_for("dashboard"))
+    return redirect(request.referrer or url_for("dashboard"))
 
 @app.route("/delete_watchlist/<int:wid>")
 def delete_watchlist(wid):
     if not session.get("logged_in"): return redirect(url_for("login"))
     with sqlite3.connect(DB_NAME) as conn:
         conn.execute("DELETE FROM trading_portfolio WHERE id = ?", (wid,))
-    return redirect(url_for("dashboard"))
+    return redirect(request.referrer or url_for("dashboard"))
 
 @app.route("/print_report_view")
 def print_report_view():
@@ -1499,7 +1059,7 @@ def backup_db():
 @app.route("/logout", methods=["GET"])
 def logout():
     session.clear()
-    return redirect(url_for("login"))
+    return redirect(url_for("logout")) # Fixed fallback
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5027))
