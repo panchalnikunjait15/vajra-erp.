@@ -56,32 +56,39 @@ LOGIN_HTML = """
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vajra Sovereign ERP & Pro Terminal - Login</title>
+    <title>Vajra Sovereign ERP - Secure Login</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body { background: #030712; color: #fff; font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; padding: 20px; box-sizing: border-box; }
-        .card { background: linear-gradient(135deg, #111827 0%, #0f172a 100%); padding: 35px 30px; border-radius: 16px; width: 100%; max-width: 400px; border: 1px solid #1f2937; text-align: center; box-shadow: 0 25px 60px rgba(0,0,0,0.9); }
-        .logo-box { width: 70px; height: 70px; background: linear-gradient(135deg, #3b82f6, #1d4ed8); border-radius: 50%; display: flex; justify-content: center; align-items: center; margin: 0 auto 15px auto; box-shadow: 0 0 20px rgba(59,130,246,0.5); }
+        .card { background: linear-gradient(135deg, #111827 0%, #0f172a 100%); padding: 35px 30px; border-radius: 16px; width: 100%; max-width: 400px; border: 1px solid #1f2937; text-align: center; box-shadow: 0 25px 60px rgba(0,0,0,0.9), 0 0 30px rgba(59,130,246,0.15); }
+        .logo-box { width: 70px; height: 70px; background: linear-gradient(135deg, #3b82f6, #1d4ed8); border-radius: 50%; display: flex; justify-content: center; align-items: center; margin: 0 auto 15px auto; box-shadow: 0 0 20px rgba(59,130,246,0.5); border: 2px solid #60a5fa; }
         .logo-box i { font-size: 2em; color: #fff; }
-        h2 { color: #38bdf8; margin: 0 0 5px 0; font-size: 1.25em; }
+        h2 { color: #38bdf8; margin: 0 0 5px 0; font-size: 1.25em; letter-spacing: 0.5px; }
         p { color: #94a3b8; font-size: 0.85em; margin-bottom: 20px; }
         input { width: 100%; padding: 12px; margin: 8px 0; background: #030712; border: 1px solid #374151; color: #fff; border-radius: 8px; box-sizing: border-box; font-size: 0.95em; }
-        input:focus { border-color: #3b82f6; outline: none; }
-        button { background: linear-gradient(135deg, #3b82f6, #2563eb); color: white; border: none; padding: 13px; width: 100%; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 1em; margin-top: 12px; }
+        input:focus { border-color: #3b82f6; outline: none; box-shadow: 0 0 10px rgba(59,130,246,0.3); }
+        .captcha-container { background: #0f172a; border: 1px solid #374151; padding: 12px; border-radius: 8px; margin: 12px 0; display: flex; align-items: center; justify-content: space-between; font-size: 1.1em; color: #38bdf8; font-family: monospace; font-weight: bold; }
+        button { background: linear-gradient(135deg, #3b82f6, #2563eb); color: white; border: none; padding: 13px; width: 100%; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 1em; margin-top: 12px; box-shadow: 0 4px 15px rgba(59,130,246,0.4); }
         button:hover { background: linear-gradient(135deg, #2563eb, #1d4ed8); }
         .error { color: #f43f5e; background: rgba(244,63,94,0.1); padding: 10px; border-radius: 8px; font-size: 0.85em; margin-bottom: 15px; border: 1px solid #f43f5e; text-align: left; }
+        .success { color: #34d399; background: rgba(52,211,153,0.1); padding: 10px; border-radius: 8px; font-size: 0.85em; margin-bottom: 15px; border: 1px solid #34d399; text-align: left; }
     </style>
 </head>
 <body>
     <div class="card">
         <div class="logo-box"><i class="fas fa-shield-alt"></i></div>
         <h2>Vajra Sovereign ERP</h2>
-        <p>Enterprise & Pro Trading Suite</p>
+        <p>Enterprise Secure Login & Captcha Security</p>
         {% if error %}<div class="error"><i class="fas fa-exclamation-triangle"></i> {{ error }}</div>{% endif %}
+        {% if msg %}<div class="success"><i class="fas fa-check-circle"></i> {{ msg }}</div>{% endif %}
         <form method="POST">
-            <input type="text" name="username" placeholder="Username (VajraERP)" required autocomplete="off">
-            <input type="password" name="password" placeholder="Password (Vajra@erp)" required autocomplete="off">
-            <button type="submit"><i class="fas fa-lock-open"></i> Secure Login</button>
+            <input type="text" name="username" placeholder="Enterprise Username" required autocomplete="off">
+            <input type="password" name="password" placeholder="Master Password" required autocomplete="off">
+            <div class="captcha-container">
+                <span><i class="fas fa-calculator" style="margin-right: 8px;"></i> Solve: {{ math_question }}</span>
+            </div>
+            <input type="number" name="math_input" placeholder="Enter Math Answer" required autocomplete="off">
+            <button type="submit"><i class="fas fa-lock-open"></i> Secure Access Login</button>
         </form>
     </div>
 </body>
@@ -94,13 +101,17 @@ DASHBOARD_HTML = """
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vajra ERP & Business Suite</title>
+    <title>Vajra ERP - Multi-Lingual Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body { background: #030712; color: #f8f9fa; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 15px; box-sizing: border-box; }
         header { background: #0f172a; padding: 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #3b82f6; border-radius: 10px; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
         h1 { margin: 0; font-size: 1.25em; color: #38bdf8; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
         
+        .lang-switcher { display: flex; gap: 4px; background: #030712; padding: 3px; border-radius: 6px; border: 1px solid #1f2937; }
+        .lang-btn { background: transparent; border: none; color: #94a3b8; padding: 6px 10px; cursor: pointer; font-size: 0.85em; font-weight: bold; border-radius: 4px; transition: 0.2s; }
+        .lang-btn.active { background: #3b82f6; color: white; }
+
         .pro-banner { background: linear-gradient(135deg, #1e1b4b, #312e81); border: 2px solid #3b82f6; padding: 20px; border-radius: 12px; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: center; gap: 15px; flex-wrap: wrap; box-shadow: 0 10px 30px rgba(59,130,246,0.25); }
         .pro-banner h3 { margin: 0 0 5px 0; color: #e0e7ff; font-size: 1.2em; }
         .pro-banner p { margin: 0; color: #c7d2fe; font-size: 0.9em; }
@@ -109,8 +120,8 @@ DASHBOARD_HTML = """
 
         .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 20px; }
         .kpi { background: #111827; padding: 15px; border-radius: 10px; border: 1px solid #1f2937; box-shadow: 0 8px 20px rgba(0,0,0,0.3); }
-        .kpi h3 { margin: 0; font-size: 0.7em; color: #94a3b8; text-transform: uppercase; }
-        .kpi p { margin: 6px 0 0 0; font-size: 1.25em; font-weight: bold; color: #38bdf8; }
+        .kpi h3 { margin: 0; font-size: 0.7em; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; }
+        .kpi p { margin: 6px 0 0 0; font-size: 1.25em; font-weight: bold; color: #38bdf8; word-break: break-all; }
 
         .main-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; margin-bottom: 20px; }
         .card { background: #111827; padding: 18px; border-radius: 10px; border: 1px solid #1f2937; box-shadow: 0 8px 20px rgba(0,0,0,0.3); overflow-x: auto; }
@@ -124,80 +135,290 @@ DASHBOARD_HTML = """
         .btn-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
         .btn-row a { background: #374151; color: white; padding: 10px 14px; border-radius: 6px; text-decoration: none; font-size: 0.85em; font-weight: bold; display: inline-flex; align-items: center; gap: 6px; }
         .logout { background: #f43f5e !important; }
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.85em; }
-        th, td { border: 1px solid #1f2937; padding: 8px; text-align: left; }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.85em; min-width: 320px; }
+        th, td { border: 1px solid #1f2937; padding: 8px 6px; text-align: left; word-break: break-word; }
         th { background: #0f172a; color: #38bdf8; }
+        
+        .share-group { display: flex; gap: 4px; flex-wrap: wrap; }
+        .whatsapp-btn { background: #25d366; color: white; padding: 4px 6px; border-radius: 4px; text-decoration: none; font-size: 0.7em; display: inline-flex; align-items: center; gap: 3px; font-weight: bold; }
+        .telegram-btn { background: #0088cc; color: white; padding: 4px 6px; border-radius: 4px; text-decoration: none; font-size: 0.7em; display: inline-flex; align-items: center; gap: 3px; font-weight: bold; }
+        .gmail-btn { background: #ea4335; color: white; padding: 4px 6px; border-radius: 4px; text-decoration: none; font-size: 0.7em; display: inline-flex; align-items: center; gap: 3px; font-weight: bold; }
     </style>
 </head>
 <body>
     <header>
         <h1>
-            <i class="fas fa-shield-alt"></i> VAJRA ERP & BUSINESS SUITE
+            <i class="fas fa-shield-alt"></i> <span data-key="header_title">VAJRA ERP & BUSINESS SUITE</span>
             <span style="font-size: 0.65em; background: rgba(59,130,246,0.2); border: 1px solid #3b82f6; padding: 2px 8px; border-radius: 15px; color: #38bdf8;">
                 <i class="fas fa-user-circle"></i> {{ username }}
             </span>
         </h1>
+        
+        <div class="lang-switcher">
+            <button class="lang-btn active" onclick="setLanguage('en')">EN</button>
+            <button class="lang-btn" onclick="setLanguage('hi')">हिन्दी</button>
+            <button class="lang-btn" onclick="setLanguage('gu')">ગુજરાતી</button>
+        </div>
+
         <div style="display: flex; gap: 8px; align-items: center;">
             <span style="font-family: monospace; color: #34d399; font-size: 0.8em;"><i class="fas fa-bolt"></i> {{ query_latency }} ms</span>
-            <a href="/logout" class="logout" style="padding: 6px 12px; border-radius: 6px; text-decoration:none; font-size:0.85em; font-weight:bold; color:#fff;">Logout</a>
+            <a href="/logout" class="logout" style="padding: 6px 12px; border-radius: 6px; text-decoration:none; font-size:0.85em; font-weight:bold; color:#fff;" data-key="logout">Logout</a>
         </div>
     </header>
     
-    <!-- 🚀 DEDICATED PRO TRADING TERMINAL LAUNCH BANNER -->
+    <!-- 🚀 PRO TRADING TERMINAL LAUNCH BANNER -->
     <div class="pro-banner">
         <div>
-            <h3><i class="fas fa-rocket"></i> Vajra Pro Trading Terminal (Upstox & Groww Mode)</h3>
-            <p>Access live futures, options chain, SIP, earn, global futures, and TradingView charts in a dedicated professional workspace without altering core ERP data.</p>
+            <h3 data-key="pro_banner_title"><i class="fas fa-rocket"></i> Vajra Pro Trading Terminal (Upstox & Groww Mode)</h3>
+            <p data-key="pro_banner_desc">Click here to open a dedicated professional trading exchange world featuring Futures, Option Chain, SIP/Earn, Orders, and TradingView charts.</p>
         </div>
-        <a href="/pro_trading_hub" class="launch-btn"><i class="fas fa-external-link-alt"></i> Open Pro Trading World</a>
+        <a href="/pro_trading_hub" class="launch-btn"><i class="fas fa-external-link-alt"></i> <span data-key="launch_btn">Open Pro Trading World</span></a>
     </div>
 
     <div class="btn-row">
-        <a href="/backup_db"><i class="fas fa-database"></i> Backup DB</a>
-        <a href="/export_inventory_csv"><i class="fas fa-download"></i> Export CSV</a>
-        <a href="/print_report_view"><i class="fas fa-print"></i> Print Report</a>
+        <a href="/backup_db"><i class="fas fa-database"></i> <span data-key="backup_db">Backup DB</span></a>
+        <a href="/export_inventory_csv"><i class="fas fa-download"></i> <span data-key="export_csv">Export CSV</span></a>
+        <a href="/print_report_view"><i class="fas fa-print"></i> <span data-key="print_report">Print Report</span></a>
     </div>
 
     <div class="kpi-grid">
-        <div class="kpi"><h3>Total Revenue</h3><p>₹{{ "%.2f"|format(kpis.revenue) }}</p></div>
-        <div class="kpi"><h3>Net Profit (P&L)</h3><p>₹{{ "%.2f"|format(kpis.profit) }}</p></div>
-        <div class="kpi"><h3>Total Bank Balance</h3><p style="color: #34d399;">₹{{ "%.2f"|format(kpis.bank_bal) }}</p></div>
-        <div class="kpi"><h3>Net Advances</h3><p>₹{{ "%.2f"|format(kpis.advances) }}</p></div>
+        <div class="kpi"><h3 data-key="kpi_revenue">Total Revenue</h3><p>₹<span class="num-val" data-val="{{ "%.2f"|format(kpis.revenue) }}">{{ "%.2f"|format(kpis.revenue) }}</span></p></div>
+        <div class="kpi"><h3 data-key="kpi_profit">Net Profit (P&L)</h3><p>₹<span class="num-val" data-val="{{ "%.2f"|format(kpis.profit) }}">{{ "%.2f"|format(kpis.profit) }}</span></p></div>
+        <div class="kpi"><h3 data-key="kpi_bank">Total Bank Balance</h3><p style="color: #34d399;">₹<span class="num-val" data-val="{{ "%.2f"|format(kpis.bank_bal) }}">{{ "%.2f"|format(kpis.bank_bal) }}</span></p></div>
+        <div class="kpi"><h3 data-key="kpi_advances">Net Advances</h3><p>₹<span class="num-val" data-val="{{ "%.2f"|format(kpis.advances) }}">{{ "%.2f"|format(kpis.advances) }}</span></p></div>
     </div>
 
     <div class="main-grid">
         <div class="card">
-            <h3><i class="fas fa-book-open"></i> Accounting & GST Voucher</h3>
+            <h3><span><i class="fas fa-book-open"></i> <span data-key="acc_title">Accounting & GST Voucher</span></span></h3>
             <form action="/add_voucher" method="POST">
-                <label>Voucher Type:</label>
+                <label data-key="lbl_vtype">Voucher Type:</label>
                 <select name="voucher_type">
-                    <option value="RECEIPT">RECEIPT</option>
-                    <option value="PAYMENT">PAYMENT</option>
-                    <option value="SALES">SALES</option>
-                    <option value="PURCHASE">PURCHASE</option>
+                    <option value="RECEIPT" data-key="opt_receipt">RECEIPT</option>
+                    <option value="PAYMENT" data-key="opt_payment">PAYMENT</option>
+                    <option value="SALES" data-key="opt_sales">SALES</option>
+                    <option value="PURCHASE" data-key="opt_purchase">PURCHASE</option>
                 </select>
-                <label>Party / Ledger Name:</label><input type="text" name="ledger_name" required>
-                <label>Base Amount (₹):</label><input type="number" step="0.01" name="amount" required>
-                <label>Narration:</label><input type="text" name="narration">
-                <button type="submit">Save Voucher (Auto 18% GST)</button>
+                <label data-key="lbl_party">Party / Ledger Name:</label><input type="text" name="ledger_name" required>
+                <label data-key="lbl_amount">Base Amount (₹):</label><input type="number" step="0.01" name="amount" required>
+                <label data-key="lbl_narration">Narration:</label><input type="text" name="narration">
+                <button type="submit" data-key="btn_save_voucher">Save Voucher (Auto 18% GST)</button>
             </form>
         </div>
 
         <div class="card">
-            <h3><i class="fas fa-boxes"></i> Inventory Control</h3>
+            <h3><span><i class="fas fa-boxes"></i> <span data-key="inv_title">Inventory Control</span></span></h3>
             <form action="/add_inventory" method="POST">
-                <label>Movement Type:</label>
-                <select name="movement_type"><option value="INWARD">INWARD</option><option value="OUTWARD">OUTWARD</option></select>
-                <label>Item Name:</label><input type="text" name="item_name" required>
-                <label>SKU Code:</label><input type="text" name="sku" required>
+                <label data-key="lbl_movement">Movement Type:</label>
+                <select name="movement_type">
+                    <option value="INWARD" data-key="opt_inward">INWARD</option>
+                    <option value="OUTWARD" data-key="opt_outward">OUTWARD</option>
+                </select>
+                <label data-key="lbl_item_name">Item Name:</label><input type="text" name="item_name" required>
+                <label data-key="lbl_sku">SKU Code:</label><input type="text" name="sku" required>
                 <div style="display: flex; gap: 8px; margin-top: 8px;">
-                    <div style="flex:1;"><label>Qty:</label><input type="number" name="qty" required></div>
-                    <div style="flex:1;"><label>Price (₹):</label><input type="number" step="0.01" name="price" required></div>
+                    <div style="flex:1;"><label data-key="lbl_qty">Qty:</label><input type="number" name="qty" required></div>
+                    <div style="flex:1;"><label data-key="lbl_price">Price (₹):</label><input type="number" step="0.01" name="price" required></div>
                 </div>
-                <button type="submit">Update Stock</button>
+                <button type="submit" data-key="btn_update_stock">Update Stock</button>
             </form>
         </div>
     </div>
+
+    <!-- RECENT VOUCHERS WITH DIRECT WHATSAPP, TELEGRAM & GMAIL SHARING -->
+    <div class="card">
+        <h3><span><i class="fas fa-history"></i> <span data-key="history_title">Recent Vouchers & Direct Sharing</span></span></h3>
+        <table>
+            <tr><th data-key="th_type">Type</th><th data-key="th_party">Party</th><th data-key="th_total">Total (Inc. GST)</th><th data-key="th_action">Action</th></tr>
+            {% for v in vouchers %}
+            <tr>
+                <td><span class="vtype-val" data-val="{{ v[2] }}">{{ v[2] }}</span></td>
+                <td>{{ v[3] }}</td>
+                <td>₹<span class="num-val" data-val="{{ "%.2f"|format(v[6]) }}">{{ "%.2f"|format(v[6]) }}</span></td>
+                <td>
+                    <div class="share-group">
+                        <a href="https://wa.me/?text=Vajra%20ERP%20Invoice:%20{{ v[2] }}%20for%20{{ v[3] }}%20Amount:%20₹{{ '%.2f'|format(v[6]) }}" target="_blank" class="whatsapp-btn">
+                            <i class="fab fa-whatsapp"></i> <span data-key="share_wa">WA</span>
+                        </a>
+                        <a href="https://t.me/share/url?url=&text=Vajra%20ERP%20Invoice:%20{{ v[2] }}%20for%20{{ v[3] }}%20Amount:%20₹{{ '%.2f'|format(v[6]) }}" target="_blank" class="telegram-btn">
+                            <i class="fab fa-telegram-plane"></i> <span data-key="share_tg">TG</span>
+                        </a>
+                        <a href="https://mail.google.com/mail/?view=cm&fs=1&su=Vajra%20ERP%20Invoice&body=Voucher%20Type:%20{{ v[2] }}%20Party:%20{{ v[3] }}%20Amount:%20₹{{ '%.2f'|format(v[6]) }}" target="_blank" class="gmail-btn">
+                            <i class="fas fa-envelope"></i> <span data-key="share_mail">Mail</span>
+                        </a>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <script>
+        let currentLang = 'en';
+        const hindiDigits = {'0':'०', '1':'१', '2':'२', '3':'३', '4':'४', '5':'५', '6':'६', '7':'७', '8':'८', '9':'९', '.':'.'};
+        const gujaratiDigits = {'0':'૦', '1':'૧', '2':'૨', '3':'૩', '4':'૪', '5':'૫', '6':'૬', '7':'૭', '8':'૮', '9':'૯', '.':'.'};
+
+        function convertDigits(text, lang) {
+            let str = String(text);
+            if (lang === 'hi') return str.split('').map(char => hindiDigits[char] !== undefined ? hindiDigits[char] : char).join('');
+            if (lang === 'gu') return str.split('').map(char => gujaratiDigits[char] !== undefined ? gujaratiDigits[char] : char).join('');
+            return str;
+        }
+
+        const translations = {
+            en: {
+                header_title: "VAJRA ERP & BUSINESS SUITE",
+                logout: "Logout",
+                backup_db: "Backup DB",
+                export_csv: "Export CSV",
+                print_report: "Print Report",
+                pro_banner_title: "Vajra Pro Trading Terminal (Upstox & Groww Mode)",
+                pro_banner_desc: "Click here to open a dedicated professional trading exchange world featuring Futures, Option Chain, SIP/Earn, Orders, and TradingView charts.",
+                launch_btn: "Open Pro Trading World",
+                kpi_revenue: "Total Revenue",
+                kpi_profit: "Net Profit (P&L)",
+                kpi_bank: "Total Bank Balance",
+                kpi_advances: "Net Advances",
+                acc_title: "Accounting & GST Voucher",
+                lbl_vtype: "Voucher Type:",
+                lbl_party: "Party / Ledger Name:",
+                lbl_amount: "Base Amount (₹):",
+                lbl_narration: "Narration:",
+                btn_save_voucher: "Save Voucher (Auto 18% GST)",
+                inv_title: "Inventory Control",
+                lbl_movement: "Movement Type:",
+                opt_inward: "INWARD",
+                opt_outward: "OUTWARD",
+                lbl_item_name: "Item Name:",
+                lbl_sku: "SKU Code:",
+                lbl_qty: "Qty:",
+                lbl_price: "Price (₹):",
+                btn_update_stock: "Update Stock",
+                history_title: "Recent Vouchers & Direct Sharing",
+                th_type: "Type",
+                th_party: "Party",
+                th_total: "Total (Inc. GST)",
+                th_action: "Action",
+                share_wa: "WA",
+                share_tg: "TG",
+                share_mail: "Mail",
+                opt_receipt: "RECEIPT",
+                opt_payment: "PAYMENT",
+                opt_sales: "SALES",
+                opt_purchase: "PURCHASE"
+            },
+            hi: {
+                header_title: "वज्र ईआरपी और बिजनेस सूट",
+                logout: "लॉग आउट",
+                backup_db: "डेटाबेस बैकअप",
+                export_csv: "इन्वेंट्री एक्सपोर्ट",
+                print_report: "प्रिंट रिपोर्ट",
+                pro_banner_title: "वज्र प्रो ट्रेडिंग टर्मिनल (Upstox और Groww मोड)",
+                pro_banner_desc: "फ्यूचर्स, ऑप्शन चेन, SIP/अर्न, ऑर्डर्स और TradingView चार्ट वाला समर्पित एक्सचेंज खोलने के लिए क्लिक करें।",
+                launch_btn: "प्रो ट्रेडिंग वर्ल्ड खोलें",
+                kpi_revenue: "कुल राजस्व",
+                kpi_profit: "शुद्ध लाभ (P&L)",
+                kpi_bank: "कुल बैंक शेष",
+                kpi_advances: "शुद्ध अग्रिम",
+                acc_title: "लेखांकन और जीएसटी वाउचर",
+                lbl_vtype: "वाउचर प्रकार:",
+                lbl_party: "पार्टी / लेजर नाम:",
+                lbl_amount: "मूल राशि (₹):",
+                lbl_narration: "विवरण:",
+                btn_save_voucher: "वाउचर सहेजें (ऑटो 18% जीएसटी)",
+                inv_title: "इन्वेंट्री नियंत्रण",
+                lbl_movement: "मूवमेंट प्रकार:",
+                opt_inward: "आवक",
+                opt_outward: "जावक",
+                lbl_item_name: "वस्तु का नाम:",
+                lbl_sku: "SKU कोड:",
+                lbl_qty: "मात्रा:",
+                lbl_price: "मूल्य (₹):",
+                btn_update_stock: "स्टॉक अपडेट करें",
+                history_title: "हाल के वाउचर और डायरेक्ट शेयरिंग",
+                th_type: "प्रकार",
+                th_party: "पार्टी",
+                th_total: "कुल (जीएसटी सहित)",
+                th_action: "कार्रवाई",
+                share_wa: "व्हाट्सऐप",
+                share_tg: "टेलीग्राम",
+                share_mail: "मेल",
+                vtype_RECEIPT: "रसीद",
+                vtype_PAYMENT: "भुगतान",
+                vtype_SALES: "बिक्री",
+                vtype_PURCHASE: "खरीद"
+            },
+            gu: {
+                header_title: "વજ્ર ERP અને બિઝનેસ સૂટ",
+                logout: "લોગઆઉટ",
+                backup_db: "બેકઅપ ડીબી",
+                export_csv: "ઇન્વેન્ટરી એક્સપોર્ટ",
+                print_report: "પ્રિન્ટ રિપોર્ટ",
+                pro_banner_title: "વજ્ર પ્રો ટ્રેડિંગ ટર્મિનલ (Upstox & Groww મોડ)",
+                pro_banner_desc: "ફ્યુચર્સ, ઓપ્શન ચેઈન, SIP/અર્ન, ઓર્ડર્સ અને TradingView ચાર્ટવાળી અદભુત ટ્રેડિંગ દુનિયા ખોલવા માટે ક્લિક કરો.",
+                launch_btn: "પ્રો ટ્રેડિંગ વર્લ્ડ ખોલો",
+                kpi_revenue: "કુલ આવક",
+                kpi_profit: "નેટ પ્રોફિટ (નફો)",
+                kpi_bank: "કુલ બેંક બેલેન્સ",
+                kpi_advances: "નેટ એડવાન્સ",
+                acc_title: "એકાઉન્ટિંગ અને જીએસટી વાઉચર",
+                lbl_vtype: "વાઉચર પ્રકાર:",
+                lbl_party: "પાર્ટી / લેજર નામ:",
+                lbl_amount: "મૂળ રકમ (₹):",
+                lbl_narration: "નરેશન:",
+                btn_save_voucher: "વાઉચર સેવ કરો (ઓટો ૧૮% GST)",
+                inv_title: "ઇન્વેન્ટરી કંટ્રોલ",
+                lbl_movement: "મૂવમેન્ટ પ્રકાર:",
+                opt_inward: "આવક",
+                opt_outward: "જાવક",
+                lbl_item_name: "આઇટમનું નામ:",
+                lbl_sku: "એસકેયુ કોડ:",
+                lbl_qty: "જથ્થો (Qty):",
+                lbl_price: "કિંમત (₹):",
+                btn_update_stock: "સ્ટોક અપડેટ કરો",
+                history_title: "તાજેતરના વાઉચર્સ અને ડાયરેક્ટ શેરિંગ",
+                th_type: "પ્રકાર",
+                th_party: "પાર્ટી",
+                th_total: "કુલ (જીએસટી સાથે)",
+                th_action: "એક્શન",
+                share_wa: "વ્હોટ્સએપ",
+                share_tg: "ટેલિગ્રામ",
+                share_mail: "મેઇલ",
+                vtype_RECEIPT: "રસીદ",
+                vtype_PAYMENT: "ચુકવણી",
+                vtype_SALES: "વેચાણ",
+                vtype_PURCHASE: "ખરીદી"
+            }
+        };
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            document.querySelectorAll('[data-key]').forEach(el => {
+                const key = el.getAttribute('data-key');
+                if (translations[lang] && translations[lang][key]) {
+                    el.textContent = translations[lang][key];
+                }
+            });
+
+            document.querySelectorAll('.num-val').forEach(el => {
+                el.textContent = convertDigits(el.getAttribute('data-val'), lang);
+            });
+
+            document.querySelectorAll('.vtype-val').forEach(el => {
+                const vtype = el.getAttribute('data-val');
+                const tKey = 'vtype_' + vtype;
+                if (translations[lang] && translations[lang][tKey]) {
+                    el.textContent = translations[lang][tKey];
+                } else {
+                    el.textContent = vtype;
+                }
+            });
+        }
+    </script>
 </body>
 </html>
 """
@@ -208,7 +429,7 @@ TRADING_WORLD_HTML = """
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vajra Pro Trading World - Upstox/Groww Edition</title>
+    <title>Vajra Pro Trading Exchange - Upstox/Groww World</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -221,7 +442,7 @@ TRADING_WORLD_HTML = """
         .ex-tab { background: transparent; border: none; color: #9ca3af; font-weight: bold; cursor: pointer; font-size: 1em; padding: 15px 5px; white-space: nowrap; border-bottom: 3px solid transparent; }
         .ex-tab.active { color: #10b981; border-bottom: 3px solid #10b981; }
 
-        .tab-content { display: none; padding: 20px; }
+        .tab-content { display: none; padding: 20px; max-width: 1300px; margin: 0 auto; }
         .tab-content.active { display: block; }
 
         .exchange-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; }
@@ -256,12 +477,12 @@ TRADING_WORLD_HTML = """
 
     <!-- TABS NAVIGATION -->
     <div class="exchange-tabs">
-        <button class="ex-tab active" onclick="switchTab(event, 'tab-explore')">Explore / Gainers</button>
-        <button class="ex-tab" onclick="switchTab(event, 'tab-futures')">Futures & Options</button>
-        <button class="ex-tab" onclick="switchTab(event, 'tab-options')">Option Chain</button>
-        <button class="ex-tab" onclick="switchTab(event, 'tab-global')">Global Futures (US Stocks)</button>
-        <button class="ex-tab" onclick="switchTab(event, 'tab-sip')">SIP & Mutual Funds</button>
-        <button class="ex-tab" onclick="switchTab(event, 'tab-orders')">Orders & Portfolio</button>
+        <button class="ex-tab active" onclick="switchTab(event, 'tab-explore')"><i class="fas fa-compass"></i> Explore / Gainers</button>
+        <button class="ex-tab" onclick="switchTab(event, 'tab-futures')"><i class="fas fa-rocket"></i> Futures & Options</button>
+        <button class="ex-tab" onclick="switchTab(event, 'tab-options')"><i class="fas fa-table-cells"></i> Option Chain</button>
+        <button class="ex-tab" onclick="switchTab(event, 'tab-global')"><i class="fas fa-globe"></i> Global Futures</button>
+        <button class="ex-tab" onclick="switchTab(event, 'tab-sip')"><i class="fas fa-piggy-bank"></i> SIP & Mutual Funds</button>
+        <button class="ex-tab" onclick="switchTab(event, 'tab-orders')"><i class="fas fa-receipt"></i> Orders & Portfolio</button>
     </div>
 
     <!-- TICKER STRIP -->
@@ -289,7 +510,6 @@ TRADING_WORLD_HTML = """
                         <tr><td><strong>RELIANCE INDUSTRIES</strong></td><td>EQ</td><td>₹2,940.15</td><td style="color: #10b981;">+4.04%</td></tr>
                         <tr><td><strong>TATA MOTORS</strong></td><td>EQ</td><td>₹980.25</td><td style="color: #10b981;">+6.09%</td></tr>
                         <tr><td><strong>INFOSYS LTD</strong></td><td>EQ</td><td>₹1,850.40</td><td style="color: #10b981;">+2.85%</td></tr>
-                        <tr><td><strong>HDFC BANK</strong></td><td>EQ</td><td>₹1,670.80</td><td style="color: #10b981;">+1.95%</td></tr>
                     </table>
                 </div>
             </div>
@@ -325,12 +545,10 @@ TRADING_WORLD_HTML = """
     <div id="tab-futures" class="tab-content">
         <div class="ex-card">
             <h3><i class="fas fa-rocket"></i> Nifty & BankNifty Futures (Live Expiry)</h3>
-            <p style="color:#9ca3af;">Trade high-liquidity index and stock futures with instant margin calculation.</p>
             <table>
                 <tr><th>Contract Name</th><th>Expiry Date</th><th>LTP (₹)</th><th>Open Interest (OI)</th><th>Action</th></tr>
                 <tr><td><strong>NIFTY 28OCT FUT</strong></td><td>28-Oct-2026</td><td>₹24,880.50</td><td>1.45 Cr</td><td><button style="background:#10b981; padding:6px 12px; width:auto;">Trade Future</button></td></tr>
                 <tr><td><strong>BANKNIFTY 28OCT FUT</strong></td><td>28-Oct-2026</td><td>₹51,400.00</td><td>98 Lakh</td><td><button style="background:#10b981; padding:6px 12px; width:auto;">Trade Future</button></td></tr>
-                <tr><td><strong>RELIANCE 28OCT FUT</strong></td><td>28-Oct-2026</td><td>₹2,955.00</td><td>45 Lakh</td><td><button style="background:#10b981; padding:6px 12px; width:auto;">Trade Future</button></td></tr>
             </table>
         </div>
     </div>
@@ -344,8 +562,6 @@ TRADING_WORLD_HTML = """
                 <tr><th>CALL OI (Lakhs)</th><th>CALL LTP</th><th>STRIKE PRICE</th><th>PUT LTP</th><th>PUT OI (Lakhs)</th></tr>
                 <tr><td>45.2</td><td>₹764.00</td><td><strong style="color:#38bdf8;">16,150</strong></td><td>₹15.00</td><td>12.4</td></tr>
                 <tr><td>32.1</td><td>₹444.50</td><td><strong style="color:#38bdf8;">16,200</strong></td><td>₹43.00</td><td>24.8</td></tr>
-                <tr><td>18.5</td><td>₹263.00</td><td><strong style="color:#38bdf8;">16,250</strong></td><td>₹66.00</td><td>51.2</td></tr>
-                <tr><td>12.0</td><td>₹220.00</td><td><strong style="color:#38bdf8;">16,300</strong></td><td>₹84.00</td><td>78.5</td></tr>
             </table>
         </div>
     </div>
@@ -358,21 +574,17 @@ TRADING_WORLD_HTML = """
                 <tr><th>Global Giant</th><th>Symbol</th><th>LTP</th><th>24h Change</th></tr>
                 <tr><td><strong>NASDAQ 100</strong></td><td>NSDQ100 / USDC</td><td>₹24,24,624.00</td><td style="color:#10b981;">+0.58%</td></tr>
                 <tr><td><strong>GOOGLE (ALPHABET)</strong></td><td>GOOGL / USDC</td><td>₹29,997.10</td><td style="color:#f43f5e;">-2.21%</td></tr>
-                <tr><td><strong>NVIDIA CORP</strong></td><td>NVDA / USDC</td><td>₹18,377.51</td><td style="color:#10b981;">+1.58%</td></tr>
-                <tr><td><strong>TESLA INC</strong></td><td>TSLA / USDC</td><td>₹41,188.85</td><td style="color:#10b981;">+1.30%</td></tr>
             </table>
         </div>
     </div>
 
-    <!-- TAB 5: SIP & MUTUAL FUNDS -->
+    <!-- TAB 5: SIP & EARN -->
     <div id="tab-sip" class="tab-content">
         <div class="ex-card">
             <h3><i class="fas fa-piggy-bank"></i> Vajra Smart SIP & High-Yield Earn Funds</h3>
-            <p style="color:#9ca3af;">Automated mutual fund investments starting from ₹500/month with zero commission.</p>
             <table>
-                <tr><th>Fund Name</th><th>Category</th><th>3Y Returns (CAGR)</th><th>Risk Level</th><th>Action</th></tr>
-                <tr><td><strong>Vajra Bluechip Equity Fund</strong></td><td>Large Cap</td><td>22.4%</td><td>Moderate</td><td><button style="background:#3b82f6; padding:6px 12px; width:auto;">Start SIP</button></td></tr>
-                <tr><td><strong>Sovereign Tech Opportunities Fund</strong></td><td>Sectoral / Thematic</td><td>28.6%</td><td>High</td><td><button style="background:#3b82f6; padding:6px 12px; width:auto;">Start SIP</button></td></tr>
+                <tr><th>Fund Name</th><th>Category</th><th>3Y Returns (CAGR)</th><th>Action</th></tr>
+                <tr><td><strong>Vajra Bluechip Equity Fund</strong></td><td>Large Cap</td><td>22.4%</td><td><button style="background:#3b82f6; padding:6px 12px; width:auto;">Start SIP</button></td></tr>
             </table>
         </div>
     </div>
@@ -381,11 +593,9 @@ TRADING_WORLD_HTML = """
     <div id="tab-orders" class="tab-content">
         <div class="ex-card">
             <h3><i class="fas fa-receipt"></i> Active Orders & Holdings Portfolio</h3>
-            <p style="color:#9ca3af;">Manage your active executions, open positions, and profit/loss summary.</p>
             <table>
                 <tr><th>Symbol</th><th>Type</th><th>Action</th><th>Price</th><th>Qty</th><th>Status</th></tr>
                 <tr><td>RELIANCE</td><td>STOCK</td><td>BUY</td><td>₹2,940.15</td><td>5.0</td><td><span style="color:#10b981; font-weight:bold;">EXECUTED (LIVE)</span></td></tr>
-                <tr><td>BTC</td><td>CRYPTO</td><td>BUY</td><td>₹74,50,000</td><td>0.01</td><td><span style="color:#10b981; font-weight:bold;">EXECUTED (LIVE)</span></td></tr>
             </table>
         </div>
     </div>
@@ -431,26 +641,35 @@ TRADING_WORLD_HTML = """
 @app.route("/", methods=["GET", "POST"])
 def login():
     error, msg = None, request.args.get("msg")
-    if request.method == "GET": session.clear()
+    if request.method == "GET":
+        session.clear()
+        n1, n2 = random.randint(1, 15), random.randint(1, 10)
+        session["math_ans"] = str(n1 + n2)
+        session["math_q"] = f"{n1} + {n2} = ?"
     if session.get("logged_in"): return redirect(url_for("dashboard"))
     if request.method == "POST":
-        if request.form.get("username") == "VajraERP" and request.form.get("password") == "Vajra@erp":
-            session["logged_in"] = True
-            session["username"] = "VajraERP"
-            return redirect(url_for("dashboard"))
+        if request.form.get("math_input", "").strip() != session.get("math_ans", ""):
+            error = "Math Verification Failed!"
         else:
-            error = "Invalid Credentials!"
+            with sqlite3.connect(DB_NAME) as conn:
+                cursor = conn.cursor()
+                cursor.execute("SELECT * FROM users WHERE username = ? AND password = ?", 
+                               (request.form.get("username", "").strip(), request.form.get("password", "").strip()))
+                user = cursor.fetchone()
+            if user:
+                session["logged_in"] = True
+                session["username"] = user[1]
+                return redirect(url_for("dashboard"))
+            else:
+                error = "Invalid Credentials!"
     return render_template_string(LOGIN_HTML, error=error, msg=msg)
-
-@app.route("/register", methods=["GET", "POST"])
-def register():
-    return redirect(url_for("login"))
 
 @app.route("/dashboard")
 def dashboard():
     if not session.get("logged_in"): return redirect(url_for("login"))
     start_time = time.time()
     with sqlite3.connect(DB_NAME) as conn:
+        vouchers = conn.execute("SELECT * FROM vouchers ORDER BY id DESC LIMIT 6").fetchall()
         revenue = conn.execute("SELECT SUM(total_with_gst) FROM vouchers WHERE voucher_type IN ('RECEIPT', 'SALES')").fetchone()[0] or 0.0
         expenses = conn.execute("SELECT SUM(amount) FROM expenses").fetchone()[0] or 0.0
         banks = conn.execute("SELECT * FROM bank_accounts").fetchall()
@@ -460,7 +679,7 @@ def dashboard():
         profit = revenue - expenses
         kpis = {"revenue": revenue, "expenses": expenses, "profit": profit, "bank_bal": bank_bal, "advances": net_advances}
     query_latency = round((time.time() - start_time) * 1000, 2)
-    return render_template_string(DASHBOARD_HTML, kpis=kpis, query_latency=query_latency, username=session.get("username", "Admin"))
+    return render_template_string(DASHBOARD_HTML, vouchers=vouchers, kpis=kpis, query_latency=query_latency, username=session.get("username", "Admin"))
 
 @app.route("/pro_trading_hub")
 def pro_trading_hub():
@@ -474,6 +693,28 @@ def add_watchlist():
         conn.execute("INSERT INTO trading_portfolio (symbol, asset_type, action_type, buy_price, qty, timestamp) VALUES (?, ?, ?, ?, ?, ?)",
                      (request.form.get("symbol"), request.form.get("asset_type"), request.form.get("action_type"), float(request.form.get("buy_price")), float(request.form.get("qty")), datetime.now().strftime("%Y-%m-%d %H:%M")))
     return redirect(url_for("pro_trading_hub"))
+
+@app.route("/add_voucher", methods=["POST"])
+def add_voucher():
+    if not session.get("logged_in"): return redirect(url_for("login"))
+    v_type = request.form.get("voucher_type")
+    ledger = request.form.get("ledger_name")
+    amount = float(request.form.get("amount"))
+    gst = amount * 0.18
+    total = amount + gst
+    crypto_hash = generate_hash(f"{datetime.now()}{v_type}{ledger}{total}")
+    with sqlite3.connect(DB_NAME) as conn:
+        conn.execute("INSERT INTO vouchers (date, voucher_type, ledger_name, amount, gst_amount, total_with_gst, narration, crypto_hash) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+                     (datetime.now().strftime("%Y-%m-%d %H:%M"), v_type, ledger, amount, gst, total, request.form.get("narration", ""), crypto_hash))
+    return redirect(url_for("dashboard"))
+
+@app.route("/add_inventory", methods=["POST"])
+def add_inventory():
+    if not session.get("logged_in"): return redirect(url_for("login"))
+    with sqlite3.connect(DB_NAME) as conn:
+        conn.execute("INSERT INTO inventory (item_name, sku, qty, price, movement_type) VALUES (?, ?, ?, ?, ?)",
+                     (request.form.get("item_name"), request.form.get("sku"), int(request.form.get("qty")), float(request.form.get("price")), request.form.get("movement_type")))
+    return redirect(url_for("dashboard"))
 
 @app.route("/print_report_view")
 def print_report_view():
