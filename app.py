@@ -60,35 +60,30 @@ LOGIN_HTML = """
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body { background: #030712; color: #fff; font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; padding: 20px; box-sizing: border-box; }
-        .card { background: linear-gradient(135deg, #111827 0%, #0f172a 100%); padding: 35px 30px; border-radius: 16px; width: 100%; max-width: 400px; border: 1px solid #1f2937; text-align: center; box-shadow: 0 25px 60px rgba(0,0,0,0.9), 0 0 30px rgba(59,130,246,0.15); }
-        .logo-box { width: 70px; height: 70px; background: linear-gradient(135deg, #3b82f6, #1d4ed8); border-radius: 50%; display: flex; justify-content: center; align-items: center; margin: 0 auto 15px auto; box-shadow: 0 0 20px rgba(59,130,246,0.5); border: 2px solid #60a5fa; }
-        .logo-box i { font-size: 2em; color: #fff; }
-        h2 { color: #38bdf8; margin: 0 0 5px 0; font-size: 1.25em; letter-spacing: 0.5px; }
+        .card { background: linear-gradient(135deg, #111827 0%, #0f172a 100%); padding: 35px 30px; border-radius: 16px; width: 100%; max-width: 400px; border: 1px solid #1f2937; text-align: center; box-shadow: 0 25px 60px rgba(0,0,0,0.9); }
+        .logo-box { width: 70px; height: 70px; background: linear-gradient(135deg, #3b82f6, #1d4ed8); border-radius: 50%; display: flex; justify-content: center; align-items: center; margin: 0 auto 15px auto; box-shadow: 0 0 20px rgba(59,130,246,0.5); }
+        h2 { color: #38bdf8; margin: 0 0 5px 0; font-size: 1.25em; }
         p { color: #94a3b8; font-size: 0.85em; margin-bottom: 20px; }
-        input { width: 100%; padding: 12px; margin: 8px 0; background: #030712; border: 1px solid #374151; color: #fff; border-radius: 8px; box-sizing: border-box; font-size: 0.95em; }
-        input:focus { border-color: #3b82f6; outline: none; box-shadow: 0 0 10px rgba(59,130,246,0.3); }
+        input { width: 100%; padding: 12px; margin: 8px 0; background: #030712; border: 1px solid #374151; color: #fff; border-radius: 8px; box-sizing: border-box; }
         .captcha-container { background: #0f172a; border: 1px solid #374151; padding: 12px; border-radius: 8px; margin: 12px 0; display: flex; align-items: center; justify-content: space-between; font-size: 1.1em; color: #38bdf8; font-family: monospace; font-weight: bold; }
-        button { background: linear-gradient(135deg, #3b82f6, #2563eb); color: white; border: none; padding: 13px; width: 100%; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 1em; margin-top: 12px; box-shadow: 0 4px 15px rgba(59,130,246,0.4); }
-        button:hover { background: linear-gradient(135deg, #2563eb, #1d4ed8); }
+        button { background: linear-gradient(135deg, #3b82f6, #2563eb); color: white; border: none; padding: 13px; width: 100%; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 12px; }
         .error { color: #f43f5e; background: rgba(244,63,94,0.1); padding: 10px; border-radius: 8px; font-size: 0.85em; margin-bottom: 15px; border: 1px solid #f43f5e; text-align: left; }
-        .success { color: #34d399; background: rgba(52,211,153,0.1); padding: 10px; border-radius: 8px; font-size: 0.85em; margin-bottom: 15px; border: 1px solid #34d399; text-align: left; }
     </style>
 </head>
 <body>
     <div class="card">
-        <div class="logo-box"><i class="fas fa-shield-alt"></i></div>
+        <div class="logo-box"><i class="fas fa-shield-alt" style="font-size: 2em; color: #fff;"></i></div>
         <h2>Vajra Sovereign ERP</h2>
-        <p>Enterprise Secure Login & Captcha Security</p>
+        <p>Enterprise Login & Captcha Security</p>
         {% if error %}<div class="error"><i class="fas fa-exclamation-triangle"></i> {{ error }}</div>{% endif %}
-        {% if msg %}<div class="success"><i class="fas fa-check-circle"></i> {{ msg }}</div>{% endif %}
         <form method="POST">
-            <input type="text" name="username" placeholder="Enterprise Username" required autocomplete="off">
-            <input type="password" name="password" placeholder="Master Password" required autocomplete="off">
+            <input type="text" name="username" placeholder="Username (VajraERP)" required autocomplete="off">
+            <input type="password" name="password" placeholder="Password (Vajra@erp)" required autocomplete="off">
             <div class="captcha-container">
                 <span><i class="fas fa-calculator" style="margin-right: 8px;"></i> Solve: {{ math_question }}</span>
             </div>
             <input type="number" name="math_input" placeholder="Enter Math Answer" required autocomplete="off">
-            <button type="submit"><i class="fas fa-lock-open"></i> Secure Access Login</button>
+            <button type="submit">Secure Access Login</button>
         </form>
     </div>
 </body>
@@ -101,7 +96,7 @@ DASHBOARD_HTML = """
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vajra ERP - Multi-Lingual Dashboard</title>
+    <title>Vajra ERP - Multi-Lingual Dashboard & AI Voice</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body { background: #030712; color: #f8f9fa; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 15px; box-sizing: border-box; }
@@ -120,8 +115,8 @@ DASHBOARD_HTML = """
 
         .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 20px; }
         .kpi { background: #111827; padding: 15px; border-radius: 10px; border: 1px solid #1f2937; box-shadow: 0 8px 20px rgba(0,0,0,0.3); }
-        .kpi h3 { margin: 0; font-size: 0.7em; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; }
-        .kpi p { margin: 6px 0 0 0; font-size: 1.25em; font-weight: bold; color: #38bdf8; word-break: break-all; }
+        .kpi h3 { margin: 0; font-size: 0.7em; color: #94a3b8; text-transform: uppercase; }
+        .kpi p { margin: 6px 0 0 0; font-size: 1.25em; font-weight: bold; color: #38bdf8; }
 
         .main-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; margin-bottom: 20px; }
         .card { background: #111827; padding: 18px; border-radius: 10px; border: 1px solid #1f2937; box-shadow: 0 8px 20px rgba(0,0,0,0.3); overflow-x: auto; }
@@ -137,7 +132,7 @@ DASHBOARD_HTML = """
         .logout { background: #f43f5e !important; }
         
         table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.85em; min-width: 320px; }
-        th, td { border: 1px solid #1f2937; padding: 8px 6px; text-align: left; word-break: break-word; }
+        th, td { border: 1px solid #1f2937; padding: 8px 6px; text-align: left; }
         th { background: #0f172a; color: #38bdf8; }
         
         .share-group { display: flex; gap: 4px; flex-wrap: wrap; }
@@ -180,6 +175,24 @@ DASHBOARD_HTML = """
         <a href="/backup_db"><i class="fas fa-database"></i> <span data-key="backup_db">Backup DB</span></a>
         <a href="/export_inventory_csv"><i class="fas fa-download"></i> <span data-key="export_csv">Export CSV</span></a>
         <a href="/print_report_view"><i class="fas fa-print"></i> <span data-key="print_report">Print Report</span></a>
+    </div>
+
+    <!-- 🤖 VAJRA AI VOICE & SMART ASSISTANT WIDGET -->
+    <div class="card" style="margin-bottom: 20px; border: 1.5px solid #818cf8; background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);">
+        <h3><span><i class="fas fa-microphone-alt" style="color: #818cf8;"></i> <span data-key="ai_voice_title">Vajra AI Voice & Smart Assistant</span></span></h3>
+        <p id="voiceStatus" style="color: #38bdf8; margin: 6px 0; font-size: 0.9em;" data-key="voice_hint">Click mic to speak or use quick buttons below:</p>
+        <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-bottom: 10px;">
+            <button onclick="startVoiceRecognition()" style="background: linear-gradient(135deg, #2563eb, #1d4ed8); width: auto; padding: 9px 14px; margin-top: 0; border-radius: 8px;"><i class="fas fa-microphone"></i> <span data-key="speak_btn">🎤 Speak</span></button>
+            <input type="text" id="aiTextInput" data-placeholder="type_query_placeholder" placeholder="Type query here..." style="flex: 1; min-width: 160px; margin-top: 0; padding: 10px; background: #030712; border: 1px solid #4f46e5; border-radius: 8px; color: #fff;" onkeypress="if(event.key==='Enter') sendQueryToAI(this.value)">
+            <button onclick="sendQueryToAI(document.getElementById('aiTextInput').value)" style="background: linear-gradient(135deg, #10b981, #059669); width: auto; padding: 9px 16px; margin-top: 0; border-radius: 8px;"><span data-key="ask_btn">Ask AI</span></button>
+        </div>
+        <div style="display: flex; gap: 6px; flex-wrap: wrap; border-top: 1px solid #312e81; padding-top: 10px;">
+            <button onclick="quickAsk('profit')" style="background: #3b82f6; width: auto; padding: 5px 10px; margin-top:0; font-size: 0.8em; border-radius: 6px;"><span data-key="btn_profit">Net Profit</span></button>
+            <button onclick="quickAsk('sales')" style="background: #6366f1; width: auto; padding: 5px 10px; margin-top:0; font-size: 0.8em; border-radius: 6px;"><span data-key="btn_sales">Total Sales</span></button>
+            <button onclick="quickAsk('bank')" style="background: #0ea5e9; width: auto; padding: 5px 10px; margin-top:0; font-size: 0.8em; border-radius: 6px;"><span data-key="btn_bank">Bank Balance</span></button>
+            <button onclick="quickAsk('stock')" style="background: #10b981; width: auto; padding: 5px 10px; margin-top:0; font-size: 0.8em; border-radius: 6px;"><span data-key="btn_stock">Stock Summary</span></button>
+        </div>
+        <p id="aiReply" style="margin-top: 12px; font-size: 1em; font-weight: bold; color: #4ade80; border-left: 4px solid #22c55e; padding-left: 8px; display: none;"></p>
     </div>
 
     <div class="kpi-grid">
@@ -303,6 +316,16 @@ DASHBOARD_HTML = """
                 share_wa: "WA",
                 share_tg: "TG",
                 share_mail: "Mail",
+                ai_voice_title: "Vajra AI Voice & Smart Assistant",
+                speak_btn: "🎤 Speak",
+                ask_btn: "Ask AI",
+                voice_hint: "Click mic to speak or use quick buttons below:",
+                type_query_placeholder: "Type query here...",
+                ai_prefix: "🤖 AI Answer: ",
+                btn_profit: "Net Profit",
+                btn_sales: "Total Sales",
+                btn_bank: "Bank Balance",
+                btn_stock: "Stock Summary",
                 opt_receipt: "RECEIPT",
                 opt_payment: "PAYMENT",
                 opt_sales: "SALES",
@@ -344,6 +367,16 @@ DASHBOARD_HTML = """
                 share_wa: "व्हाट्सऐप",
                 share_tg: "टेलीग्राम",
                 share_mail: "मेल",
+                ai_voice_title: "वज्र एआई वॉयस और स्मार्ट असिस्टेंट",
+                speak_btn: "🎤 बोलें",
+                ask_btn: "पूछें",
+                voice_hint: "माइक दबाएं, क्विक बटन उपयोग करें या नीचे टाइप करें:",
+                type_query_placeholder: "यहाँ अपना प्रश्न टाइप करें...",
+                ai_prefix: "🤖 एआई उत्तर: ",
+                btn_profit: "शुद्ध लाभ",
+                btn_sales: "कुल बिक्री",
+                btn_bank: "बैंक बैलेंस",
+                btn_stock: "स्टॉक सारांश",
                 vtype_RECEIPT: "रसीद",
                 vtype_PAYMENT: "भुगतान",
                 vtype_SALES: "बिक्री",
@@ -385,6 +418,16 @@ DASHBOARD_HTML = """
                 share_wa: "વ્હોટ્સએપ",
                 share_tg: "ટેલિગ્રામ",
                 share_mail: "મેઇલ",
+                ai_voice_title: "વજ્ર એઆઈ વોઇસ અને સ્માર્ટ અસિસ્ટન્ટ",
+                speak_btn: "🎤 બોલો",
+                ask_btn: "પૂછો",
+                voice_hint: "માઇક, ક્વિક બટન અથવા નીચે ટાઈપ કરો:",
+                type_query_placeholder: "તમારો પ્રશ્ન અહીં ટાઈપ કરો...",
+                ai_prefix: "🤖 એઆઈ જવાબ: ",
+                btn_profit: "નેટ નફો",
+                btn_sales: "કુલ વેચાણ",
+                btn_bank: "બેંક બેલેન્સ",
+                btn_stock: "સ્ટોક રિપોર્ટ",
                 vtype_RECEIPT: "રસીદ",
                 vtype_PAYMENT: "ચુકવણી",
                 vtype_SALES: "વેચાણ",
@@ -417,6 +460,65 @@ DASHBOARD_HTML = """
                     el.textContent = vtype;
                 }
             });
+
+            const inputs = document.querySelectorAll('[data-placeholder]');
+            inputs.forEach(inp => {
+                const pKey = inp.getAttribute('data-placeholder');
+                if (translations[lang] && translations[lang][pKey]) {
+                    inp.placeholder = translations[lang][pKey];
+                }
+            });
+        }
+
+        let activeRecognition = null;
+
+        function startVoiceRecognition() {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SpeechRecognition) {
+                alert(currentLang === 'gu' ? "આ બ્રાઉઝરમાં વોઇસ સપોર્ટ નથી." : "Voice recognition not supported.");
+                return;
+            }
+            try {
+                if (activeRecognition) { activeRecognition.abort(); }
+                activeRecognition = new SpeechRecognition();
+                activeRecognition.continuous = false;
+                activeRecognition.interimResults = false;
+                activeRecognition.lang = currentLang === 'gu' ? 'gu-IN' : (currentLang === 'hi' ? 'hi-IN' : 'en-US');
+                document.getElementById("voiceStatus").innerText = currentLang === 'gu' ? "સંભળાઈ રહ્યું છે... બોલો!" : "Listening...";
+                activeRecognition.onresult = function(event) {
+                    const spokenText = event.results[0][0].transcript;
+                    document.getElementById("aiTextInput").value = spokenText;
+                    sendQueryToAI(spokenText);
+                };
+                activeRecognition.start();
+            } catch(e) {
+                document.getElementById("voiceStatus").innerText = "Mic unavailable.";
+            }
+        }
+
+        function quickAsk(queryType) {
+            document.getElementById("aiTextInput").value = queryType;
+            sendQueryToAI(queryType);
+        }
+
+        function sendQueryToAI(queryText) {
+            if(!queryText.trim()) return;
+            const replyElem = document.getElementById("aiReply");
+            replyElem.style.display = "block";
+            replyElem.innerText = "Processing...";
+
+            fetch('/api/ai-assistant', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ query: queryText, lang: currentLang })
+            })
+            .then(res => res.json())
+            .then(data => {
+                replyElem.innerText = (translations[currentLang].ai_prefix || "🤖 AI Answer: ") + data.reply;
+            })
+            .catch(err => {
+                replyElem.innerText = "Error connecting to AI Assistant.";
+            });
         }
     </script>
 </body>
@@ -429,7 +531,7 @@ TRADING_WORLD_HTML = """
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vajra Pro Trading Exchange - Upstox/Groww World</title>
+    <title>Vajra Pro Trading World - Upstox/Groww Edition</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -662,7 +764,7 @@ def login():
                 return redirect(url_for("dashboard"))
             else:
                 error = "Invalid Credentials!"
-    return render_template_string(LOGIN_HTML, error=error, msg=msg)
+    return render_template_string(LOGIN_HTML, error=error, msg=msg, math_question=session.get("math_q", "5 + 3 = ?"))
 
 @app.route("/dashboard")
 def dashboard():
@@ -685,6 +787,15 @@ def dashboard():
 def pro_trading_hub():
     if not session.get("logged_in"): return redirect(url_for("login"))
     return render_template_string(TRADING_WORLD_HTML)
+
+@app.route("/api/ai-assistant", methods=["POST"])
+def ai_assistant():
+    data = request.get_json(silent=True) or {}
+    q = str(data.get("query", "")).lower()
+    with sqlite3.connect(DB_NAME) as conn:
+        rev = conn.execute("SELECT SUM(total_with_gst) FROM vouchers WHERE voucher_type IN ('RECEIPT', 'SALES')").fetchone()[0] or 0.0
+    reply = f"Total revenue / sales is ₹{rev:.2f}."
+    return jsonify({"status": "success", "reply": reply})
 
 @app.route("/add_watchlist", methods=["POST"])
 def add_watchlist():
