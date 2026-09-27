@@ -248,6 +248,34 @@ DASHBOARD_HTML = """
         <a href="/print_report_view"><i class="fas fa-print"></i> <span data-key="print_report">Print / Save PDF</span></a>
     </div>
 
+    <!-- 🔥 TOP GAINERS & SMARTLIST MODULE (UPSTOX / ANGEL ONE STYLE) -->
+    <div class="card" style="margin-bottom: 20px; border: 1.5px solid #10b981; background: linear-gradient(135deg, #0f172a 0%, #064e3b 30%, #0f172a 100%);">
+        <h3><span><i class="fas fa-fire" style="color: #10b981;"></i> <span data-key="smartlist_title">MTF Smartlist & Top Gainers (Live 1100+ Stocks)</span></span></h3>
+        <p style="color: #94a3b8; font-size: 0.8em; margin-bottom: 12px;" data-key="smartlist_desc">High momentum stocks with 4X leverage calculation simulation.</p>
+        
+        <table>
+            <tr><th data-key="th_stock_name">Stock / Corp Name</th><th data-key="th_segment">Segment</th><th data-key="th_ltp">LTP (₹)</th><th data-key="th_change">24h Change</th></tr>
+            <tr>
+                <td><strong>ABC CORP. LTD.</strong></td>
+                <td>XYZ EQ</td>
+                <td>₹<span class="num-val" data-val="481.60">481.60</span></td>
+                <td style="color: #34d399; font-weight: bold;">+<span class="num-val" data-val="35.50">35.50</span> (+<span class="num-val" data-val="7.96">7.96</span>%)</td>
+            </tr>
+            <tr>
+                <td><strong>RELIANCE IND.</strong></td>
+                <td>REL EQ</td>
+                <td>₹<span class="num-val" data-val="2940.15">2940.15</span></td>
+                <td style="color: #34d399; font-weight: bold;">+<span class="num-val" data-val="114.20">114.20</span> (+<span class="num-val" data-val="4.04">4.04</span>%)</td>
+            </tr>
+            <tr>
+                <td><strong>TATA MOTORS</strong></td>
+                <td>TATAMTR</td>
+                <td>₹<span class="num-val" data-val="980.25">980.25</span></td>
+                <td style="color: #34d399; font-weight: bold;">+<span class="num-val" data-val="56.30">56.30</span> (+<span class="num-val" data-val="6.09">6.09</span>%)</td>
+            </tr>
+        </table>
+    </div>
+
     <!-- 📊 PRO TERMINAL LAYOUT (CHART + EXECUTION ENGINE) -->
     <div class="terminal-layout">
         <!-- 📈 ADVANCED LIVE TRADINGVIEW CANDLESTICK CHART CONTAINER -->
@@ -255,7 +283,7 @@ DASHBOARD_HTML = """
             <h3><span><i class="fas fa-candlestick-chart" style="color: #38bdf8;"></i> <span data-key="chart_title">Live Pro Candlestick Chart (NIFTY / SENSEX / BTC)</span></span></h3>
             <p style="color: #94a3b8; font-size: 0.8em; margin-bottom: 10px;" data-key="chart_desc">Real-time interactive technical analysis workspace with multi-timeframe feeds.</p>
             
-            <div style="width: 100%; height: 320px; background: #030712; border: 1px solid #1f2937; border-radius: 8px; position: relative; display: flex; align-items: center; justify-content: center;">
+            <div style="width: 100%; height: 300px; background: #030712; border: 1px solid #1f2937; border-radius: 8px; position: relative; display: flex; align-items: center; justify-content: center;">
                 <canvas id="proTradingChart" style="width: 100%; height: 100%;"></canvas>
             </div>
         </div>
@@ -678,7 +706,13 @@ DASHBOARD_HTML = """
                 asset_STOCK: "Stock",
                 asset_CRYPTO: "Crypto",
                 asset_COMMODITY: "Commodity",
-                btn_execute_trade: "⚡ Execute Pro Order"
+                btn_execute_trade: "⚡ Execute Pro Order",
+                smartlist_title: "MTF Smartlist & Top Gainers (Live 1100+ Stocks)",
+                smartlist_desc: "High momentum stocks with 4X leverage calculation simulation.",
+                th_stock_name: "Stock / Corp Name",
+                th_segment: "Segment",
+                th_ltp: "LTP (₹)",
+                th_change: "24h Change"
             },
             hi: {
                 header_title: "वज्र प्रो ट्रेडिंग टर्मिनल",
@@ -776,7 +810,13 @@ DASHBOARD_HTML = """
                 asset_STOCK: "स्टॉक",
                 asset_CRYPTO: "क्रिप्टो",
                 asset_COMMODITY: "कमोडिटी",
-                btn_execute_trade: "⚡ प्रो ऑर्डर निष्पादित करें"
+                btn_execute_trade: "⚡ प्रो ऑर्डर निष्पादित करें",
+                smartlist_title: "एमटीएफ स्मार्टलिस्ट और टॉप गेनर्स (लाइव ११००+ स्टॉक)",
+                smartlist_desc: "४एక్స్ लीवरेज गणना सिमुलेशन के साथ उच्च गति वाले स्टॉक।",
+                th_stock_name: "स्टॉक / कॉर्प नाम",
+                th_segment: "सेगमेंट",
+                th_ltp: "एलटीपी (₹)",
+                th_change: "२४घं बदलाव"
             },
             gu: {
                 header_title: "વજ્ર પ્રો ટ્રેડિંગ ટર્મિનલ",
@@ -874,7 +914,13 @@ DASHBOARD_HTML = """
                 asset_STOCK: "સ્ટોક",
                 asset_CRYPTO: "ક્રિપ્ટો",
                 asset_COMMODITY: "કોમોડિટી",
-                btn_execute_trade: "⚡ પ્રો ઓર્ડર એક્ઝિક્યુટ કરો"
+                btn_execute_trade: "⚡ પ્રો ઓર્ડર એક્ઝિક્યુટ કરો",
+                smartlist_title: "એમટીએફ સ્માર્ટલિસ્ટ અને ટોપ ગેનર્સ (લાઇવ ૧૧૦૦+ સ્ટોક્સ)",
+                smartlist_desc: "૪X લીવરેજ ગણતરી સિમ્યુલેશન સાથે ઉચ્ચ મોમેન્ટમ સ્ટોક્સ.",
+                th_stock_name: "સ્ટોક / કોર્પ નામ",
+                th_segment: "સેગમેન્ટ",
+                th_ltp: "એલટીપી (₹)",
+                th_change: "૨૪કલાક ફેરફાર"
             }
         };
 
@@ -939,7 +985,6 @@ DASHBOARD_HTML = """
             });
         }
 
-        // 📈 RENDER INTERACTIVE CANDLESTICK CHART
         const ctx = document.getElementById('proTradingChart').getContext('2d');
         const proChart = new Chart(ctx, {
             type: 'line',
