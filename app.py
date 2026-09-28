@@ -10,7 +10,7 @@ import csv
 import io
 
 app = Flask(__name__)
-app.secret_key = "VAJRA_PRO_SUPREME_2026"
+app.secret_key = "VAJRA_PRO_ERP_2026"
 
 DB_NAME = "vajra_erp.db"
 
@@ -42,8 +42,6 @@ def init_db():
             id INTEGER PRIMARY KEY AUTOINCREMENT, bank_id INTEGER, tx_type TEXT, amount REAL, payment_mode TEXT, narration TEXT, date TEXT)''')
         conn.execute('''CREATE TABLE IF NOT EXISTS advances (
             id INTEGER PRIMARY KEY AUTOINCREMENT, party_name TEXT, adv_type TEXT, amount REAL, status TEXT DEFAULT 'PENDING', date TEXT)''')
-        conn.execute('''CREATE TABLE IF NOT EXISTS trading_portfolio (
-            id INTEGER PRIMARY KEY AUTOINCREMENT, symbol TEXT, asset_type TEXT, action_type TEXT, buy_price REAL, qty REAL, timestamp TEXT)''')
 
 init_db()
 
@@ -56,7 +54,7 @@ LOGIN_HTML = """
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vajra Sovereign Pro Terminal - Secure Login</title>
+    <title>Vajra Sovereign Multi System - Secure Login</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body { background: #030712; color: #fff; font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; padding: 20px; box-sizing: border-box; }
@@ -78,9 +76,9 @@ LOGIN_HTML = """
 </head>
 <body>
     <div class="card">
-        <div class="logo-box"><i class="fas fa-chart-line"></i></div>
-        <h2>Vajra Sovereign Pro Terminal</h2>
-        <p>Supreme Global Secure Portal</p>
+        <div class="logo-box"><i class="fas fa-shield-alt"></i></div>
+        <h2>Vajra Sovereign Multi System</h2>
+        <p>Enterprise Secure Login Portal</p>
         
         {% if error %}<div class="error"><i class="fas fa-exclamation-triangle"></i> {{ error }}</div>{% endif %}
         {% if msg %}<div class="success"><i class="fas fa-check-circle"></i> {{ msg }}</div>{% endif %}
@@ -94,7 +92,7 @@ LOGIN_HTML = """
             </div>
             <input type="number" name="math_input" placeholder="Enter Math Answer" required autocomplete="off">
 
-            <button type="submit"><i class="fas fa-lock-open"></i> Secure Pro Login</button>
+            <button type="submit"><i class="fas fa-lock-open"></i> Secure Access Login</button>
         </form>
         
         <div class="link-text">
@@ -111,7 +109,7 @@ REGISTER_HTML = """
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vajra Sovereign Pro Terminal - User Registration</title>
+    <title>Vajra Sovereign Multi System - User Registration</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body { background: #030712; color: #fff; font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; padding: 20px; box-sizing: border-box; }
@@ -132,8 +130,8 @@ REGISTER_HTML = """
 <body>
     <div class="card">
         <div class="logo-box"><i class="fas fa-user-plus"></i></div>
-        <h2>Vajra Sovereign Pro Terminal</h2>
-        <p>New Pro Trader Registration</p>
+        <h2>Vajra Sovereign Multi System</h2>
+        <p>New Enterprise User Registration</p>
         
         {% if error %}<div class="error"><i class="fas fa-exclamation-triangle"></i> {{ error }}</div>{% endif %}
 
@@ -160,72 +158,57 @@ DASHBOARD_HTML = """
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vajra Pro Terminal - Dashboard</title>
+    <title>Vajra Multi System - Dashboard</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body { background: #030712; color: #f8f9fa; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 15px; box-sizing: border-box; }
-        header { background: #0f172a; padding: 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #3b82f6; border-radius: 10px; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
-        h1 { margin: 0; font-size: 1.25em; color: #38bdf8; letter-spacing: 0.5px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+        body { background: #030712; color: #f8f9fa; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 20px; }
+        header { background: #0f172a; padding: 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #3b82f6; border-radius: 10px; margin-bottom: 25px; flex-wrap: wrap; gap: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+        h1 { margin: 0; font-size: 1.4em; color: #38bdf8; letter-spacing: 1px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
         
-        .lang-switcher { display: flex; gap: 4px; background: #030712; padding: 3px; border-radius: 6px; border: 1px solid #1f2937; }
-        .lang-btn { background: transparent; border: none; color: #94a3b8; padding: 6px 10px; cursor: pointer; font-size: 0.85em; font-weight: bold; border-radius: 4px; transition: 0.2s; }
+        .lang-switcher { display: flex; gap: 5px; background: #030712; padding: 4px; border-radius: 6px; border: 1px solid #1f2937; }
+        .lang-btn { background: transparent; border: none; color: #94a3b8; padding: 5px 10px; cursor: pointer; font-size: 0.85em; font-weight: bold; border-radius: 4px; transition: 0.2s; }
         .lang-btn.active { background: #3b82f6; color: white; }
 
-        .terminal-layout { display: grid; grid-template-columns: 2fr 1fr; gap: 15px; margin-bottom: 20px; }
-        @media(max-width: 900px) { .terminal-layout { grid-template-columns: 1fr; } }
-
-        .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 20px; }
-        .kpi { background: #111827; padding: 15px; border-radius: 10px; border: 1px solid #1f2937; box-shadow: 0 8px 20px rgba(0,0,0,0.3); }
-        .kpi h3 { margin: 0; font-size: 0.7em; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; }
-        .kpi p { margin: 6px 0 0 0; font-size: 1.25em; font-weight: bold; color: #38bdf8; word-break: break-all; }
+        .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 25px; }
+        .kpi { background: #111827; padding: 20px; border-radius: 10px; border: 1px solid #1f2937; box-shadow: 0 8px 20px rgba(0,0,0,0.3); }
+        .kpi h3 { margin: 0; font-size: 0.75em; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; }
+        .kpi p { margin: 8px 0 0 0; font-size: 1.4em; font-weight: bold; color: #38bdf8; }
         
-        .ai-banner { background: linear-gradient(135deg, #1e1b4b, #312e81); border: 1px solid #6366f1; padding: 15px; border-radius: 10px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
-        .ai-banner h3 { margin: 0 0 4px 0; color: #e0e7ff; font-size: 1.05em; }
-        .ai-banner p { margin: 0; font-size: 0.85em; color: #c7d2fe; }
+        .ai-banner { background: linear-gradient(135deg, #1e1b4b, #312e81); border: 1px solid #6366f1; padding: 20px; border-radius: 10px; margin-bottom: 25px; display: flex; align-items: center; justify-content: space-between; gap: 15px; flex-wrap: wrap; }
+        .ai-banner h3 { margin: 0 0 5px 0; color: #e0e7ff; font-size: 1.1em; }
+        .ai-banner p { margin: 0; font-size: 0.9em; color: #c7d2fe; }
 
-        .main-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; margin-bottom: 20px; }
-        .card { background: #111827; padding: 18px; border-radius: 10px; border: 1px solid #1f2937; box-shadow: 0 8px 20px rgba(0,0,0,0.3); overflow-x: auto; }
-        .card h3 { margin-top: 0; color: #38bdf8; font-size: 1.05em; border-bottom: 1px solid #1f2937; padding-bottom: 8px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 5px; }
+        .main-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 20px; margin-bottom: 25px; }
+        .card { background: #111827; padding: 22px; border-radius: 10px; border: 1px solid #1f2937; box-shadow: 0 8px 20px rgba(0,0,0,0.3); }
+        .card h3 { margin-top: 0; color: #38bdf8; font-size: 1.1em; border-bottom: 1px solid #1f2937; padding-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
         
         label { font-size: 0.85em; color: #94a3b8; font-weight: bold; display: block; margin-top: 8px; }
-        input, select, textarea { width: 100%; padding: 10px; margin-top: 4px; background: #030712; border: 1px solid #374151; color: #fff; border-radius: 6px; box-sizing: border-box; font-size: 0.95em; }
-        input:focus, select:focus { border-color: #3b82f6; outline: none; }
-        button { background: #3b82f6; color: #fff; border: none; padding: 11px; width: 100%; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 12px; font-size: 0.95em; transition: 0.2s; }
+        input, select, textarea { width: 100%; padding: 11px; margin-top: 5px; background: #030712; border: 1px solid #374151; color: #fff; border-radius: 6px; box-sizing: border-box; font-size: 0.95em; }
+        button { background: #3b82f6; color: #fff; border: none; padding: 12px; width: 100%; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 12px; font-size: 1em; transition: 0.2s; }
         button:hover { background: #2563eb; }
         
-        .btn-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
-        .btn-row a, .btn-row button { background: #374151; color: white; padding: 10px 14px; border-radius: 6px; text-decoration: none; font-size: 0.85em; border: none; flex: 1; min-width: 130px; text-align: center; font-weight: bold; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+        .btn-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 25px; }
+        .btn-row a, .btn-row button { background: #374151; color: white; padding: 10px 18px; border-radius: 6px; text-decoration: none; font-size: 0.9em; border: none; flex: 1; text-align: center; font-weight: bold; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
         .logout { background: #f43f5e !important; }
 
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.85em; min-width: 320px; }
-        th, td { border: 1px solid #1f2937; padding: 8px 6px; text-align: left; word-break: break-word; }
+        table { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 0.85em; overflow-x: auto; display: block; }
+        th, td { border: 1px solid #1f2937; padding: 8px; text-align: left; }
         th { background: #0f172a; color: #38bdf8; }
-        .badge-trend { background: #10b981; color: white; padding: 2px 5px; border-radius: 4px; font-size: 0.7em; font-weight: bold; }
-        .badge-alert { background: #ef4444; color: white; padding: 2px 5px; border-radius: 4px; font-size: 0.7em; font-weight: bold; }
+        .badge-trend { background: #10b981; color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.75em; font-weight: bold; }
+        .badge-alert { background: #ef4444; color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.75em; font-weight: bold; }
         
-        .share-group { display: flex; gap: 4px; flex-wrap: wrap; }
-        .whatsapp-btn { background: #25d366; color: white; padding: 4px 6px; border-radius: 4px; text-decoration: none; font-size: 0.7em; display: inline-flex; align-items: center; gap: 3px; font-weight: bold; }
-        .telegram-btn { background: #0088cc; color: white; padding: 4px 6px; border-radius: 4px; text-decoration: none; font-size: 0.7em; display: inline-flex; align-items: center; gap: 3px; font-weight: bold; }
-        .gmail-btn { background: #ea4335; color: white; padding: 4px 6px; border-radius: 4px; text-decoration: none; font-size: 0.7em; display: inline-flex; align-items: center; gap: 3px; font-weight: bold; }
-        
-        .market-card { background: #0f172a; border: 1px solid #374151; padding: 12px; border-radius: 8px; text-align: center; margin-bottom: 8px; }
-        .market-card h4 { margin: 0 0 4px 0; color: #38bdf8; font-size: 0.85em; }
-        .market-card .price { font-size: 1.1em; font-weight: bold; color: #34d399; }
-        
-        @media(max-width: 600px) {
-            body { padding: 8px; }
-            header { padding: 10px; }
-            h1 { font-size: 1.05em; }
-            .card { padding: 12px; }
-        }
+        .share-group { display: flex; gap: 5px; flex-wrap: wrap; }
+        .whatsapp-btn { background: #25d366; color: white; padding: 5px 8px; border-radius: 4px; text-decoration: none; font-size: 0.75em; display: inline-flex; align-items: center; gap: 4px; font-weight: bold; }
+        .telegram-btn { background: #0088cc; color: white; padding: 5px 8px; border-radius: 4px; text-decoration: none; font-size: 0.75em; display: inline-flex; align-items: center; gap: 4px; font-weight: bold; }
+        .gmail-btn { background: #ea4335; color: white; padding: 5px 8px; border-radius: 4px; text-decoration: none; font-size: 0.75em; display: inline-flex; align-items: center; gap: 4px; font-weight: bold; }
     </style>
 </head>
 <body>
     <header>
         <h1>
-            <i class="fas fa-chart-line"></i> <span data-key="header_title">VAJRA PRO TRADING TERMINAL</span>
-            <span style="font-size: 0.65em; background: rgba(59,130,246,0.2); border: 1px solid #3b82f6; padding: 2px 8px; border-radius: 15px; color: #38bdf8;">
+            <i class="fas fa-globe"></i> <span data-key="header_title">VAJRA SOVEREIGN MULTI SYSTEM</span>
+            <span style="font-size: 0.7em; background: rgba(59,130,246,0.2); border: 1px solid #3b82f6; padding: 3px 10px; border-radius: 20px; color: #38bdf8;">
                 <i class="fas fa-user-circle"></i> {{ username }}
             </span>
         </h1>
@@ -236,9 +219,9 @@ DASHBOARD_HTML = """
             <button class="lang-btn" onclick="setLanguage('gu')">ગુજરાતી</button>
         </div>
 
-        <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
-            <span style="font-family: monospace; color: #34d399; font-size: 0.8em;"><i class="fas fa-bolt"></i> {{ query_latency }} ms</span>
-            <a href="/logout" class="logout" style="padding: 6px 12px; background: #f43f5e; color: #fff; border-radius: 6px; text-decoration:none; font-size:0.85em; font-weight:bold;" data-key="logout">Logout</a>
+        <div style="display: flex; gap: 10px; align-items: center;">
+            <span style="font-family: monospace; color: #34d399; font-size: 0.85em;"><i class="fas fa-bolt"></i> {{ query_latency }} ms</span>
+            <a href="/logout" class="logout" style="padding: 8px 16px; background: #f43f5e; color: #fff; border-radius: 6px; text-decoration:none; font-size:0.9em; font-weight:bold;" data-key="logout">Logout</a>
         </div>
     </header>
     
@@ -248,138 +231,36 @@ DASHBOARD_HTML = """
         <a href="/print_report_view"><i class="fas fa-print"></i> <span data-key="print_report">Print / Save PDF</span></a>
     </div>
 
-    <!-- 📊 PRO TERMINAL LAYOUT (CHART + EXECUTION ENGINE) -->
-    <div class="terminal-layout">
-        <!-- 📈 ADVANCED LIVE TRADINGVIEW CANDLESTICK CHART CONTAINER -->
-        <div class="card" style="border: 1.5px solid #3b82f6; background: linear-gradient(135deg, #0f172a 0%, #020617 100%);">
-            <h3><span><i class="fas fa-candlestick-chart" style="color: #38bdf8;"></i> <span data-key="chart_title">Live Pro Candlestick Chart (NIFTY / SENSEX / BTC)</span></span></h3>
-            <p style="color: #94a3b8; font-size: 0.8em; margin-bottom: 10px;" data-key="chart_desc">Real-time interactive technical analysis workspace with multi-timeframe feeds.</p>
-            
-            <div style="width: 100%; height: 320px; background: #030712; border: 1px solid #1f2937; border-radius: 8px; position: relative; display: flex; align-items: center; justify-content: center;">
-                <canvas id="proTradingChart" style="width: 100%; height: 100%;"></canvas>
-            </div>
-        </div>
-
-        <!-- ⚡ PRO ORDER EXECUTION ENGINE (BUY / SELL) -->
-        <div class="card" style="border: 1.5px solid #10b981; background: linear-gradient(135deg, #0f172a 0%, #064e3b 25%, #0f172a 100%);">
-            <h3><span><i class="fas fa-bolt" style="color: #10b981;"></i> <span data-key="order_engine_title">Instant Pro Order Execution</span></span></h3>
-            <p style="color: #94a3b8; font-size: 0.8em; margin-bottom: 10px;" data-key="order_engine_desc">Execute market/limit buy and sell orders instantly.</p>
-
-            <form action="/add_watchlist" method="POST">
-                <label data-key="lbl_symbol">Asset Symbol:</label>
-                <input type="text" name="symbol" data-placeholder="ph_symbol" placeholder="e.g., RELIANCE, TCS, BTC" required>
-                
-                <div style="display: flex; gap: 8px;">
-                    <div style="flex:1;">
-                        <label data-key="lbl_asset_type">Asset Type:</label>
-                        <select name="asset_type">
-                            <option value="STOCK" data-key="opt_stock">Stock</option>
-                            <option value="CRYPTO" data-key="opt_crypto">Crypto</option>
-                            <option value="COMMODITY" data-key="opt_commodity">Commodity</option>
-                        </select>
-                    </div>
-                    <div style="flex:1;">
-                        <label data-key="th_action_type">Action:</label>
-                        <select name="action_type">
-                            <option value="BUY" data-key="opt_buy">BUY</option>
-                            <option value="SELL" data-key="opt_sell">SELL</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div style="display: flex; gap: 8px; margin-top: 4px;">
-                    <div style="flex:1;">
-                        <label data-key="th_buy">Price (₹):</label>
-                        <input type="number" step="0.01" name="buy_price" placeholder="0.00" required>
-                    </div>
-                    <div style="flex:1;">
-                        <label data-key="th_holding_qty">Quantity:</label>
-                        <input type="number" step="0.01" name="qty" placeholder="1" required>
-                    </div>
-                </div>
-
-                <button type="submit" style="background: linear-gradient(135deg, #10b981, #059669); margin-top: 15px;" data-key="btn_execute_trade">⚡ Execute Pro Order</button>
-            </form>
-        </div>
-    </div>
-
-    <!-- 📊 ACTIVE PORTFOLIO HOLDINGS & WATCHLIST -->
-    <div class="card" style="margin-bottom: 20px; border: 1.5px solid #3b82f6;">
-        <h3><span><i class="fas fa-briefcase"></i> <span data-key="portfolio_title">My Active Trading & Investment Portfolio</span></span></h3>
-        <table>
-            <tr><th data-key="th_symbol">Symbol</th><th data-key="th_type">Type</th><th data-key="th_action_type">Action</th><th data-key="th_buy">Price</th><th data-key="th_holding_qty">Qty</th><th data-key="th_action">Manage</th></tr>
-            {% if watchlist %}
-                {% for w in watchlist %}
-                <tr>
-                    <td><strong>{{ w[1] }}</strong></td>
-                    <td><span class="asset-type" data-val="{{ w[2] }}">{{ w[2] }}</span></td>
-                    <td>
-                        {% if w[3] == 'BUY' %}
-                            <span style="color: #34d399; font-weight: bold;" data-key="opt_buy">BUY</span>
-                        {% else %}
-                            <span style="color: #f43f5e; font-weight: bold;" data-key="opt_sell">SELL</span>
-                        {% endif %}
-                    </td>
-                    <td>₹<span class="num-val" data-val="{{ "%.2f"|format(w[4]) }}">{{ "%.2f"|format(w[4]) }}</span></td>
-                    <td><span class="num-val" data-val="{{ w[5] }}">{{ w[5] }}</span></td>
-                    <td><a href="/delete_watchlist/{{ w[0] }}" style="color:#f43f5e; text-decoration:none; font-weight:bold;"><i class="fas fa-trash"></i> <span data-key="del">Delete</span></a></td>
-                </tr>
-                {% endfor %}
-            {% else %}
-                <tr><td colspan="6" style="text-align: center; color: #94a3b8;" data-key="no_watchlist">No active trades in portfolio.</td></tr>
-            {% endif %}
-        </table>
-    </div>
-
-    <!-- 🌐 WORLD INTELLIGENCE & NEWS HUB -->
-    <div class="card" style="margin-bottom: 20px; border: 1.5px solid #3b82f6; background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 30%, #0f172a 100%);">
-        <h3><span><i class="fas fa-globe-americas" style="color: #3b82f6;"></i> <span data-key="global_news_title">Global Intelligence & Economic Calendar</span></span></h3>
-        <p style="color: #94a3b8; font-size: 0.8em; margin-bottom: 12px;" data-key="global_news_desc">Live international financial updates, monetary policy alerts, and sovereign announcements.</p>
-        
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px;">
-            <div style="background: #030712; padding: 12px; border-radius: 8px; border: 1px solid #1f2937;">
-                <span style="font-size: 0.7em; color: #38bdf8; font-weight: bold;" data-key="news_1_tag">RBI POLICY UPDATE</span>
-                <h4 style="margin: 4px 0; color: #fff; font-size: 0.9em;" data-key="news_1_title">Repo Rate Maintained at 6.5% for Stable Liquidity Flow</h4>
-                <p style="font-size: 0.75em; color: #94a3b8; margin: 0;" data-key="news_1_desc">Central bank emphasizes robust credit growth and inflation containment across Indian markets.</p>
-            </div>
-            <div style="background: #030712; padding: 12px; border-radius: 8px; border: 1px solid #1f2937;">
-                <span style="font-size: 0.7em; color: #10b981; font-weight: bold;" data-key="news_2_tag">GLOBAL TECH & AI</span>
-                <h4 style="margin: 4px 0; color: #fff; font-size: 0.9em;" data-key="news_2_title">Enterprise Cloud Infrastructures Shift Towards Zero-Latency WAL</h4>
-                <p style="font-size: 0.75em; color: #94a3b8; margin: 0;" data-key="news_2_desc">High-security sovereign multi systems adopt decentralized ledger auditing for absolute transparency.</p>
-            </div>
-        </div>
-    </div>
-
     <!-- 🤖 VAJRA AI VOICE & SMART ASSISTANT WIDGET -->
-    <div class="card" style="margin-bottom: 20px; border: 1.5px solid #818cf8; background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%); box-shadow: 0 12px 30px rgba(99,102,241,0.25);">
+    <div class="card" style="margin-bottom: 25px; border: 1.5px solid #818cf8; background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%); box-shadow: 0 12px 30px rgba(99,102,241,0.25);">
         <h3><span><i class="fas fa-microphone-alt" style="color: #818cf8;"></i> <span data-key="ai_voice_title">Vajra AI Voice & Smart Assistant</span></span></h3>
-        <p id="voiceStatus" style="color: #38bdf8; margin: 6px 0; font-size: 0.9em;" data-key="voice_hint">Click mic to speak or use quick buttons below:</p>
+        <p id="voiceStatus" style="color: #38bdf8; margin: 8px 0; font-size: 0.95em;" data-key="voice_hint">Click mic to speak or use quick buttons below:</p>
         
-        <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-bottom: 10px;">
-            <button onclick="startVoiceRecognition()" style="background: linear-gradient(135deg, #2563eb, #1d4ed8); width: auto; padding: 9px 14px; margin-top: 0; border-radius: 8px;"><i class="fas fa-microphone"></i> <span data-key="speak_btn">🎤 Speak</span></button>
-            <input type="text" id="aiTextInput" data-placeholder="type_query_placeholder" placeholder="Type query here..." style="flex: 1; min-width: 160px; margin-top: 0; padding: 10px; background: #030712; border: 1px solid #4f46e5; border-radius: 8px; color: #fff;" onkeypress="if(event.key==='Enter') sendQueryToAI(this.value)">
-            <button onclick="sendQueryToAI(document.getElementById('aiTextInput').value)" style="background: linear-gradient(135deg, #10b981, #059669); width: auto; padding: 9px 16px; margin-top: 0; border-radius: 8px;"><span data-key="ask_btn">Ask AI</span></button>
+        <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 12px;">
+            <button onclick="startVoiceRecognition()" style="background: linear-gradient(135deg, #2563eb, #1d4ed8); width: auto; padding: 10px 18px; margin-top: 0; border-radius: 8px;"><i class="fas fa-microphone"></i> <span data-key="speak_btn">🎤 Speak</span></button>
+            <input type="text" id="aiTextInput" data-placeholder="type_query_placeholder" placeholder="Type query here..." style="flex: 1; margin-top: 0; padding: 11px; background: #030712; border: 1px solid #4f46e5; border-radius: 8px; color: #fff;" onkeypress="if(event.key==='Enter') sendQueryToAI(this.value)">
+            <button onclick="sendQueryToAI(document.getElementById('aiTextInput').value)" style="background: linear-gradient(135deg, #10b981, #059669); width: auto; padding: 10px 20px; margin-top: 0; border-radius: 8px;"><span data-key="ask_btn">Ask AI</span></button>
         </div>
 
         <!-- ⚡ INSTANT QUICK ACTION BUTTONS -->
-        <div style="display: flex; gap: 6px; flex-wrap: wrap; border-top: 1px solid #312e81; padding-top: 10px;">
-            <button onclick="quickAsk('profit')" style="background: #3b82f6; width: auto; padding: 5px 10px; margin-top:0; font-size: 0.8em; border-radius: 6px;"><i class="fas fa-chart-line"></i> <span data-key="btn_profit">Net Profit</span></button>
-            <button onclick="quickAsk('sales')" style="background: #6366f1; width: auto; padding: 5px 10px; margin-top:0; font-size: 0.8em; border-radius: 6px;"><i class="fas fa-rupee-sign"></i> <span data-key="btn_sales">Total Sales</span></button>
-            <button onclick="quickAsk('bank')" style="background: #0ea5e9; width: auto; padding: 5px 10px; margin-top:0; font-size: 0.8em; border-radius: 6px;"><i class="fas fa-university"></i> <span data-key="btn_bank">Bank Balance</span></button>
-            <button onclick="quickAsk('stock')" style="background: #10b981; width: auto; padding: 5px 10px; margin-top:0; font-size: 0.8em; border-radius: 6px;"><i class="fas fa-boxes"></i> <span data-key="btn_stock">Stock Summary</span></button>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap; border-top: 1px solid #312e81; padding-top: 12px;">
+            <button onclick="quickAsk('profit')" style="background: #3b82f6; width: auto; padding: 6px 14px; margin-top:0; font-size: 0.85em; border-radius: 6px;"><i class="fas fa-chart-line"></i> <span data-key="btn_profit">Net Profit</span></button>
+            <button onclick="quickAsk('sales')" style="background: #6366f1; width: auto; padding: 6px 14px; margin-top:0; font-size: 0.85em; border-radius: 6px;"><i class="fas fa-rupee-sign"></i> <span data-key="btn_sales">Total Sales</span></button>
+            <button onclick="quickAsk('bank')" style="background: #0ea5e9; width: auto; padding: 6px 14px; margin-top:0; font-size: 0.85em; border-radius: 6px;"><i class="fas fa-university"></i> <span data-key="btn_bank">Bank Balance</span></button>
+            <button onclick="quickAsk('stock')" style="background: #10b981; width: auto; padding: 6px 14px; margin-top:0; font-size: 0.85em; border-radius: 6px;"><i class="fas fa-boxes"></i> <span data-key="btn_stock">Stock Summary</span></button>
         </div>
 
-        <p id="aiReply" style="margin-top: 12px; font-size: 1em; font-weight: bold; color: #4ade80; border-left: 4px solid #22c55e; padding-left: 8px; display: none;"></p>
+        <p id="aiReply" style="margin-top: 15px; font-size: 1.05em; font-weight: bold; color: #4ade80; border-left: 4px solid #22c55e; padding-left: 10px; display: none;"></p>
     </div>
 
     <div class="ai-banner">
         <div>
             <h3 data-key="sentinel_title"><i class="fas fa-shield-alt"></i> Sovereign Multi-Lingual Sentinel</h3>
-            <p><span data-key="runway_label">Estimated Liquidity Runway</span>: <strong style="color:#34d399;"><span class="num-val" data-val="{{ runway_days }}">{{ runway_days }}</span> <span data-key="days_unit">Days</span></strong> | <span data-key="sentinel_status">Status</span>: <strong style="color:#38bdf8;" data-key="sentinel_val">{{ sentinel_status }}</strong></p>
+            <p><span data-key="runway_label">Estimated Liquidity Runway</span>: <strong style="color:#34d399;">{{ runway_days }} <span data-key="days_unit">Days</span></strong> | <span data-key="sentinel_status">Status</span>: <strong style="color:#38bdf8;" data-key="sentinel_val">{{ sentinel_status }}</strong></p>
         </div>
-        <div style="background: rgba(0,0,0,0.4); padding: 12px 15px; border-radius: 8px; text-align: center; border: 1px solid #6366f1;">
-            <div style="font-size: 0.7em; text-transform: uppercase; color: #c7d2fe;" data-key="cloud_status">Cloud Status</div>
-            <div style="font-size: 1.05em; font-weight: bold; color: #34d399;" data-key="cloud_val">Live & Secure</div>
+        <div style="background: rgba(0,0,0,0.4); padding: 15px 20px; border-radius: 8px; text-align: center; border: 1px solid #6366f1;">
+            <div style="font-size: 0.75em; text-transform: uppercase; color: #c7d2fe;" data-key="cloud_status">Cloud Status</div>
+            <div style="font-size: 1.1em; font-weight: bold; color: #34d399;" data-key="cloud_val">Live & Secure</div>
         </div>
     </div>
 
@@ -390,7 +271,7 @@ DASHBOARD_HTML = """
         <div class="kpi"><h3 data-key="kpi_advances">Net Advances</h3><p>₹<span class="num-val" data-val="{{ "%.2f"|format(kpis.advances) }}">{{ "%.2f"|format(kpis.advances) }}</span></p></div>
     </div>
 
-    <div class="card" style="margin-bottom: 20px;">
+    <div class="card" style="margin-bottom: 25px;">
         <h3><span><i class="fas fa-university"></i> <span data-key="bank_hub_title">Indian Bank Accounts Hub</span></span></h3>
         <table>
             <tr><th data-key="th_bank_name">Bank Name</th><th data-key="th_acc_no">Account No / Ref</th><th data-key="th_balance">Current Balance</th></tr>
@@ -408,7 +289,7 @@ DASHBOARD_HTML = """
         </table>
     </div>
 
-    <div class="card" style="margin-bottom: 20px;">
+    <div class="card" style="margin-bottom: 25px;">
         <h3><span><i class="fas fa-boxes"></i> <span data-key="stock_hub_title">Live Stock & Market Trending Status</span></span></h3>
         <table>
             <tr><th data-key="th_item">Item Name</th><th data-key="th_sku">SKU Code</th><th data-key="th_status">Market Status</th><th data-key="th_qty">Current Qty</th><th data-key="th_price">Unit Price</th><th data-key="th_val">Stock Value</th></tr>
@@ -481,7 +362,7 @@ DASHBOARD_HTML = """
                 <button type="submit" style="background:#10b981;" data-key="btn_process_tx">Process Bank Txn</button>
             </form>
             
-            <form action="/add_bank" method="POST" style="margin-top:15px; border-top:1px solid #1f2937; padding-top:12px;">
+            <form action="/add_bank" method="POST" style="margin-top:20px; border-top:1px solid #1f2937; padding-top:15px;">
                 <label style="color:#38bdf8;" data-key="lbl_add_bank">+ Add Indian Bank Account:</label>
                 <select name="bank_name" required>
                     <option value="State Bank of India (SBI)" data-key="bank_sbi">State Bank of India (SBI)</option>
@@ -542,7 +423,7 @@ DASHBOARD_HTML = """
                     <option value="REGULAR" data-key="opt_regular">Regular Stock</option>
                     <option value="TRENDING" data-key="opt_trending">Fast-Moving (Trending)</option>
                 </select>
-                <div style="display: flex; gap: 8px; margin-top: 8px;">
+                <div style="display: flex; gap: 10px; margin-top: 8px;">
                     <div style="flex:1;"><label data-key="lbl_qty">Qty:</label><input type="number" name="qty" required></div>
                     <div style="flex:1;"><label data-key="lbl_price">Price (₹):</label><input type="number" step="0.01" name="price" required></div>
                 </div>
@@ -565,6 +446,33 @@ DASHBOARD_HTML = """
         </div>
     </div>
 
+    <div class="card" id="printableArea">
+        <h3><span><i class="fas fa-history"></i> <span data-key="history_title">Recent Vouchers & Sharing</span></span></h3>
+        <table>
+            <tr><th data-key="th_type">Type</th><th data-key="th_party">Party</th><th data-key="th_total">Total (Inc. GST)</th><th data-key="th_action">Action</th></tr>
+            {% for v in vouchers %}
+            <tr>
+                <td><span class="vtype-val" data-val="{{ v[2] }}">{{ v[2] }}</span></td>
+                <td>{{ v[3] }}</td>
+                <td>₹<span class="num-val" data-val="{{ "%.2f"|format(v[6]) }}">{{ "%.2f"|format(v[6]) }}</span></td>
+                <td>
+                    <div class="share-group">
+                        <a href="https://wa.me/?text=Vajra%20ERP%20Invoice:%20{{ v[2] }}%20for%20{{ v[3] }}%20Amount:%20₹{{ '%.2f'|format(v[6]) }}" target="_blank" class="whatsapp-btn">
+                            <i class="fab fa-whatsapp"></i> <span data-key="share_wa">WA</span>
+                        </a>
+                        <a href="https://t.me/share/url?url=&text=Vajra%20ERP%20Invoice:%20{{ v[2] }}%20for%20{{ v[3] }}%20Amount:%20₹{{ '%.2f'|format(v[6]) }}" target="_blank" class="telegram-btn">
+                            <i class="fab fa-telegram-plane"></i> <span data-key="share_tg">TG</span>
+                        </a>
+                        <a href="https://mail.google.com/mail/?view=cm&fs=1&su=Vajra%20ERP%20Invoice&body=Voucher%20Type:%20{{ v[2] }}%20Party:%20{{ v[3] }}%20Amount:%20₹{{ '%.2f'|format(v[6]) }}" target="_blank" class="gmail-btn">
+                            <i class="fas fa-envelope"></i> <span data-key="share_mail">Mail</span>
+                        </a>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
     <script>
         let currentLang = 'en';
 
@@ -583,7 +491,7 @@ DASHBOARD_HTML = """
 
         const translations = {
             en: {
-                header_title: "VAJRA PRO TRADING TERMINAL",
+                header_title: "VAJRA SOVEREIGN MULTI SYSTEM",
                 logout: "Logout",
                 backup_db: "Backup DB",
                 export_csv: "Export CSV",
@@ -649,39 +557,76 @@ DASHBOARD_HTML = """
                 opt_adv_given: "Advance Given",
                 opt_adv_taken: "Advance Taken",
                 btn_record_adv: "Record Advance",
-                chart_title: "Live Pro Candlestick Chart (NIFTY / SENSEX / BTC)",
-                chart_desc: "Real-time interactive technical analysis workspace with multi-timeframe feeds.",
-                order_engine_title: "Instant Pro Order Execution",
-                order_engine_desc: "Execute market/limit buy and sell orders instantly.",
-                lbl_symbol: "Asset Symbol:",
-                lbl_asset_type: "Asset Type:",
-                portfolio_title: "My Active Trading & Investment Portfolio",
-                th_symbol: "Symbol",
+                history_title: "Recent Vouchers & Sharing",
                 th_type: "Type",
-                th_action_type: "Action",
-                th_buy: "Price",
-                th_holding_qty: "Qty",
-                th_action: "Manage",
-                del: "Delete",
-                no_watchlist: "No active trades in portfolio.",
-                global_news_title: "Global Intelligence & Economic Calendar",
-                global_news_desc: "Live international financial updates, monetary policy alerts, and sovereign announcements.",
-                news_1_title: "Repo Rate Maintained at 6.5% for Stable Liquidity Flow",
-                news_1_desc: "Central bank emphasizes robust credit growth and inflation containment across Indian markets.",
-                news_2_title: "Enterprise Cloud Infrastructures Shift Towards Zero-Latency WAL",
-                news_2_desc: "High-security sovereign multi systems adopt decentralized ledger auditing for absolute transparency.",
-                opt_stock: "Stock",
-                opt_crypto: "Crypto",
-                opt_commodity: "Commodity",
-                opt_buy: "BUY",
-                opt_sell: "SELL",
-                asset_STOCK: "Stock",
-                asset_CRYPTO: "Crypto",
-                asset_COMMODITY: "Commodity",
-                btn_execute_trade: "⚡ Execute Pro Order"
+                th_party: "Party",
+                th_total: "Total (Inc. GST)",
+                th_action: "Action",
+                share_wa: "WA",
+                share_tg: "TG",
+                share_mail: "Mail",
+                ai_voice_title: "Vajra AI Voice & Smart Assistant",
+                speak_btn: "🎤 Speak",
+                ask_btn: "Ask AI",
+                voice_hint: "Click mic to speak or use quick buttons below:",
+                type_query_placeholder: "Type query here...",
+                ai_prefix: "🤖 AI Answer: ",
+                btn_profit: "Net Profit",
+                btn_sales: "Total Sales",
+                btn_bank: "Bank Balance",
+                btn_stock: "Stock Summary",
+                opt_receipt: "RECEIPT",
+                opt_payment: "PAYMENT",
+                opt_sales: "SALES",
+                opt_purchase: "PURCHASE",
+                opt_add_bank_first: "-- Add Bank First --",
+                opt_cash: "Cash",
+                opt_regular: "Regular Stock",
+                opt_adv_given: "Advance Given",
+                opt_adv_taken: "Advance Taken",
+                mode_upi: "UPI",
+                mode_neft: "NEFT",
+                mode_rtgs: "RTGS",
+                mode_imps: "IMPS",
+                bank_sbi: "State Bank of India (SBI)",
+                bank_hdfc: "HDFC Bank",
+                bank_icici: "ICICI Bank",
+                bank_axis: "Axis Bank",
+                bank_pnb: "Punjab National Bank (PNB)",
+                bank_bob: "Bank of Baroda",
+                bank_canara: "Canara Bank",
+                bank_union: "Union Bank of India",
+                bank_boi: "Bank of India",
+                bank_indian: "Indian Bank",
+                bank_kotak: "Kotak Mahindra Bank",
+                bank_indusind: "IndusInd Bank",
+                bank_yes: "Yes Bank",
+                bank_federal: "Federal Bank",
+                bank_idfc: "IDFC First Bank",
+                bank_kalupur: "The Kalupur Commercial Co-op Bank",
+                bank_surat: "Surat People's Co-operative Bank",
+                bank_mehsana_urban: "Mehsana Urban Co-operative Bank",
+                bank_amco: "Ahmedabad Mercantile Co-operative Bank",
+                bank_nutan: "Nutan Nagarik Sahakari Bank",
+                bank_rajkot_peoples: "Rajkot Peoples Co-operative Bank",
+                bank_bggb: "Baroda Gujarat Gramin Bank",
+                bank_saurashtra_gramin: "Saurashtra Gramin Bank",
+                bank_gandhinagar: "Gandhinagar Nagarik Sahakari Bank",
+                bank_anand: "Anand Mercantile Co-op Bank",
+                bank_sabarkantha: "Sabarkantha District Cooperative Bank",
+                bank_banaskantha: "Banaskantha District Central Cooperative Bank",
+                bank_saraswat: "Saraswat Co-operative Bank",
+                bank_cosmos: "Cosmos Co-operative Bank",
+                bank_abhyudaya: "Abhyudaya Co-operative Bank (Mumbai)",
+                bank_greater_bombay: "Greater Bombay Co-operative Bank",
+                bank_up_coop: "Uttar Pradesh Cooperative Bank",
+                bank_aryavart: "Aryavart Bank (UP)",
+                bank_mp_coop: "Madhya Pradesh Rajya Sahakari Bank",
+                bank_mp_gramin: "Madhya Pradesh Gramin Bank",
+                bank_delhi_coop: "Delhi State Cooperative Bank"
             },
             hi: {
-                header_title: "वज्र प्रो ट्रेडिंग टर्मिनल",
+                header_title: "वज्र संप्रभु मल्टी सिस्टम",
                 logout: "लॉग आउट",
                 backup_db: "डेटाबेस बैकअप",
                 export_csv: "इन्वेंट्री एक्सपोर्ट",
@@ -747,39 +692,85 @@ DASHBOARD_HTML = """
                 opt_adv_given: "अग्रिम दिया गया",
                 opt_adv_taken: "अग्रिम लिया गया",
                 btn_record_adv: "अग्रिम दर्ज करें",
-                chart_title: "लाइव प्रो कैंडलस्टिक चार्ट (निफ्टी / सेंसेक्स / बिटकॉइन)",
-                chart_desc: "रीयल-टाइम इंटरैक्टिव तकनीकी विश्लेषण और मल्टी-टाइमफ्रेम डेटा।",
-                order_engine_title: "त्वरित प्रो ऑर्डर निष्पादन",
-                order_engine_desc: "मार्केट/लिमिट खरीदें और बेचें तुरंत निष्पादित करें।",
-                lbl_symbol: "एसेट सिंबल:",
-                lbl_asset_type: "एसेट प्रकार:",
-                portfolio_title: "मेरा सक्रिय ट्रेडिंग और निवेश पोर्टफोलियो",
-                th_symbol: "सिंबल",
+                history_title: "हाल के वाउचर और शेयरिंग",
                 th_type: "प्रकार",
-                th_action_type: "एक्शन",
-                th_buy: "मूल्य",
-                th_holding_qty: "मात्रा",
-                th_action: "प्रबंधन",
-                del: "हटाएं",
-                no_watchlist: "पोर्टफोलियो में कोई सक्रिय ट्रेड नहीं है।",
-                global_news_title: "वैश्विक बुद्धिमत्ता और आर्थिक कैलेंडर",
-                global_news_desc: "लाइव अंतर्राष्ट्रीय वित्तीय अपडेट, मौद्रिक नीति अलर्ट और संप्रभु घोषणाएं।",
-                news_1_title: "स्थिर तरलता प्रवाह के लिए रेपो रेट 6.5% पर बनाए रखा गया",
-                news_1_desc: "केंद्रीय बैंक भारतीय बाजारों में मजबूत ऋण वृद्धि और मुद्रास्फीति नियंत्रण पर जोर देता है।",
-                news_2_title: "एंटरप्राइज क्लाउड इंफ्रास्ट्रक्चर जीरो-लेटency WAL की ओर स्थानांतरित",
-                news_2_desc: "उच्च-सुरक्षा संप्रभु मल्टी सिस्टम पूर्ण पारस्परिकता के लिए विकेंद्रीकृत बहीखाता लेखा परीक्षा अपनाते हैं。",
-                opt_stock: "स्टॉक",
-                opt_crypto: "क्रिप्टो",
-                opt_commodity: "कमोडिटी",
-                opt_buy: "खरीदें (BUY)",
-                opt_sell: "बेचें (SELL)",
-                asset_STOCK: "स्टॉक",
-                asset_CRYPTO: "क्रिप्टो",
-                asset_COMMODITY: "कमोडिटी",
-                btn_execute_trade: "⚡ प्रो ऑर्डर निष्पादित करें"
+                th_party: "पार्टी",
+                th_total: "कुल (जीएसटी सहित)",
+                th_action: "कार्रवाई",
+                share_wa: "व्हाट्सऐप",
+                share_tg: "टेलीग्राम",
+                share_mail: "मेल",
+                ai_voice_title: "वज्र एआई वॉयस और स्मार्ट असिस्टेंट",
+                speak_btn: "🎤 बोलें",
+                ask_btn: "पूछें",
+                voice_hint: "माइक दबाएं, क्विक बटन उपयोग करें या नीचे टाइप करें:",
+                type_query_placeholder: "यहाँ अपना प्रश्न टाइप करें...",
+                ai_prefix: "🤖 एआई उत्तर: ",
+                btn_profit: "शुद्ध लाभ",
+                btn_sales: "कुल बिक्री",
+                btn_bank: "बैंक बैलेंस",
+                btn_stock: "स्टॉक सारांश",
+                opt_receipt: "रसीद",
+                opt_payment: "भुगतान",
+                opt_sales: "बिक्री",
+                opt_purchase: "खरीद",
+                opt_add_bank_first: "-- पहले बैंक जोड़ें --",
+                opt_cash: "नकद",
+                opt_regular: "नियमित स्टॉक",
+                opt_trending: "तेजी से बिकने वाला (ट्रेंडिंग)",
+                opt_adv_given: "अग्रिम दिया गया",
+                opt_adv_taken: "अग्रिम लिया गया",
+                opt_inward: "आवक",
+                opt_outward: "जावक",
+                opt_deposit: "जमा",
+                opt_withdraw: "निकासी",
+                mode_upi: "यूपीआई (UPI)",
+                mode_neft: "एनईएफटी (NEFT)",
+                mode_rtgs: "आरटीजीएस (RTGS)",
+                mode_imps: "आईएमपीएस (IMPS)",
+                bank_sbi: "भारतीय स्टेट बैंक (एसबीआई)",
+                bank_hdfc: "एचडीएफसी बैंक",
+                bank_icici: "आईसीआईसीआई बैंक",
+                bank_axis: "एक्सिस बैंक",
+                bank_pnb: "पंजाब नेशनल बैंक (पीएनबी)",
+                bank_bob: "बैंक ऑफ बड़ौदा",
+                bank_canara: "केनरा बैंक",
+                bank_union: "यूनियन बैंक ऑफ इंडिया",
+                bank_boi: "बैंक ऑफ इंडिया",
+                bank_indian: "इंडियन बैंक",
+                bank_kotak: "कोटक महिंद्रा बैंक",
+                bank_indusind: "इंडसइंड बैंक",
+                bank_yes: "यस बैंक",
+                bank_federal: "फेडरल बैंक",
+                bank_idfc: "आईडीएफसी फर्स्ट बैंक",
+                bank_kalupur: "कालूपुर कमर्शियल को-ऑपरेटिव बैंक",
+                bank_surat: "सूरत पीपल्स को-ऑपरेटिव बैंक",
+                bank_mehsana_urban: "मेहसाणा अर्बन को-ऑपरेटिव बैंक",
+                bank_amco: "अहमदाबाद मर्केंटाइल को-ऑपरेटिव बैंक",
+                bank_nutan: "नूतन नागरिक सहकारी बैंक",
+                bank_rajkot_peoples: "राजकोट पीपल्स को-ऑपरेटिव बैंक",
+                bank_bggb: "बड़ौदा गुजरात ग्रामीण बैंक",
+                bank_saurashtra_gramin: "सौराष्ट्र ग्रामीण बैंक",
+                bank_gandhinagar: "गांधीनगर नागरिक सहकारी बैंक",
+                bank_anand: "आनंद મર્કેન્ટાઈલ કો-ઓપ બેંક",
+                bank_sabarkantha: "साबरकांठा जिला सहकारी बैंक",
+                bank_banaskantha: "बनासकांठा जिला केंद्रीय सहकारी बैंक",
+                bank_saraswat: "सारस्वत को-ऑपरेटिव बैंक",
+                bank_cosmos: "कॉसमॉस को-ऑपरेटिव बैंक",
+                bank_abhyudaya: "अभ्युदय को-ऑपरेटिव बैंक (मुंबई)",
+                bank_greater_bombay: "ग्रेटर बॉम्बे को-ऑपरेटिव बैंक",
+                bank_up_coop: "उत्तर प्रदेश सहकारी बैंक",
+                bank_aryavart: "आर्यावर्त बैंक (यूपी)",
+                bank_mp_coop: "मध्य प्रदेश राज्य सहकारी बैंक",
+                bank_mp_gramin: "मध्य प्रदेश ग्रामीण बैंक",
+                bank_delhi_coop: "दिल्ली राज्य सहकारी बैंक",
+                vtype_RECEIPT: "रसीद",
+                vtype_PAYMENT: "भुगतान",
+                vtype_SALES: "बिक्री",
+                vtype_PURCHASE: "खरीद"
             },
             gu: {
-                header_title: "વજ્ર પ્રો ટ્રેડિંગ ટર્મિનલ",
+                header_title: "વજ્ર સોવરિન મલ્ટી સિસ્ટમ",
                 logout: "લોગઆઉટ",
                 backup_db: "બેકઅપ ડીબી",
                 export_csv: "ઇન્વેન્ટરી એક્સપોર્ટ",
@@ -845,49 +836,89 @@ DASHBOARD_HTML = """
                 opt_adv_given: "એડવાન્સ આપેલું",
                 opt_adv_taken: "એડવાન્સ લીધેલું",
                 btn_record_adv: "એડવાન્સ નોંધી કરો",
-                chart_title: "લાઈવ પ્રો કેન્ડલસ્ટિક ચાર્ટ (નિફ્ટી / સેન્સેક્સ / બિટકોઈન)",
-                chart_desc: "વાસ્તવિક સમયની ઇન્ટરેક્ટિવ તકનીકી વિશ્લેષણ અને મલ્ટી-ટાઇમફ્રેમ ફીડ્સ.",
-                order_engine_title: "ઇન્સ્ટન્ટ પ્રો ઓર્ડર એક્ઝિક્યુશન",
-                order_engine_desc: "માર્કેટ/લિમિટ ખરીદો અને વેચો ઓર્ડર તરત જ એક્ઝિક્યુટ કરો.",
-                lbl_symbol: "એસેટ સિમ્બોલ:",
-                lbl_asset_type: "એસેટ પ્રકાર:",
-                portfolio_title: "મારું સક્રિય ટ્રેડિંગ અને ઇન્વેસ્ટમેન્ટ પોર્ટફોલિયો",
-                th_symbol: "સિમ્બોલ",
+                history_title: "તાજેતરના વાઉચર્સ અને શેરિંગ",
                 th_type: "પ્રકાર",
-                th_action_type: "એક્શન",
-                th_buy: "કિંમત",
-                th_holding_qty: "જથ્થો",
-                th_action: "મેનેજ",
-                del: "ડિલીટ",
-                no_watchlist: "પોર્ટફોલિયોમાં કોઈ સક્રિય ટ્રેડ નથી.",
-                global_news_title: "વૈશ્વિક ઇન્ટેલિજન્સ અને આર્થિક કેલેન્ડર",
-                global_news_desc: "લાઇવ આંતરરાષ્ટ્રીય નાણાકીય અપડેટ્સ, નાણાકીય નીતિ ચેતવણીઓ અને સોવરિન ઘોષણાઓ.",
-                news_1_title: "સ્થિર લિક્વિડિટી પ્રવાહ માટે રેપો રેટ 6.5% પર જાળવી રાખ્યો",
-                news_1_desc: "સેન્ટ્રલ બેંક ભારતીય બજારોમાં મજબૂત ક્રેડિટ વૃદ્ધિ અને ફુગાવા નિયંત્રણ પર ભાર મૂકે છે.",
-                news_2_title: "એન્ટરપ્રાઇઝ ક્લાઉડ ઇન્ફ્રાસ્ટ્રક્ચર્સ ઝીરો-લેટન્સી WAL તરફ શિફ્ટ થાય છે",
-                news_2_desc: "ઉચ્ચ-સુરક્ષા સોવરિન મલ્ટી સિસ્ટમ્સ સંપૂર્ણ પારદર્શિતા માટે વિકેન્દ્રિત બહીખાતા ઓડિટ અપનાવે છે.",
-                opt_stock: "સ્ટોક",
-                opt_crypto: "ક્રિપ્ટો",
-                opt_commodity: "કોમોડિટી",
-                opt_buy: "ખરીદો (BUY)",
-                opt_sell: "વેચો (SELL)",
-                asset_STOCK: "સ્ટોક",
-                asset_CRYPTO: "ક્રિપ્ટો",
-                asset_COMMODITY: "કોમોડિટી",
-                btn_execute_trade: "⚡ પ્રો ઓર્ડર એક્ઝિક્યુટ કરો"
+                th_party: "પાર્ટી",
+                th_total: "કુલ (જીએસટી સાથે)",
+                th_action: "એક્શન",
+                share_wa: "વ્હોટ્સએપ",
+                share_tg: "ટેલિગ્રામ",
+                share_mail: "મેઇલ",
+                ai_voice_title: "વજ્ર એઆઈ વોઇસ અને સ્માર્ટ અસિસ્ટન્ટ",
+                speak_btn: "🎤 બોલો",
+                ask_btn: "પૂછો",
+                voice_hint: "માઇક, ક્વિક બટન અથવા નીચે ટાઈપ કરો:",
+                type_query_placeholder: "તમારો પ્રશ્ન અહીં ટાઈપ કરો...",
+                ai_prefix: "🤖 એઆઈ જવાબ: ",
+                btn_profit: "નેટ નફો",
+                btn_sales: "કુલ વેચાણ",
+                btn_bank: "બેંક બેલેન્સ",
+                btn_stock: "સ્ટોક રિપોર્ટ",
+                opt_receipt: "રસીદ",
+                opt_payment: "ચુકવણી",
+                opt_sales: "વેચાણ",
+                opt_purchase: "ખરીદી",
+                opt_add_bank_first: "-- પહેલા બેંક ઉમેરો --",
+                opt_cash: "રોકડ",
+                opt_regular: "સામાન્ય સ્ટોક",
+                opt_trending: "બજારમાં ચલતી વસ્તુ (ટ્રેન્ડિંગ)",
+                opt_adv_given: "એડવાન્સ આપેલું",
+                opt_adv_taken: "એડવાન્સ લીધેલું",
+                opt_inward: "આવક",
+                opt_outward: "જાવક",
+                opt_deposit: "જમા",
+                opt_withdraw: "ઉપાડ",
+                mode_upi: "યુપીઆઈ (UPI)",
+                mode_neft: "એનઇએફટી (NEFT)",
+                mode_rtgs: "આરટીજીએસ (RTGS)",
+                mode_imps: "આઈએમપીએસ (IMPS)",
+                bank_sbi: "સ્ટેટ બેંક ઓફ ઇન્ડિયા (SBI)",
+                bank_hdfc: "એચડીએફસી બેંક",
+                bank_icici: "આઈસીઆઈસીઆઈ બેંક",
+                bank_axis: "એક્સિસ બેંક",
+                bank_pnb: "પંજાબ નેશનલ બેંક (PNB)",
+                bank_bob: "બેંક ઓફ બરોડા",
+                bank_canara: "કેનરા બેંક",
+                bank_union: "યુનિયન બેંક ઓફ ઇન્ડિયા",
+                bank_boi: "બેંક ઓફ ઇન્ડિયા",
+                bank_indian: "ઇન્ડિયન બેંક",
+                bank_kotak: "કોટક મહિન્દ્રા બેંક",
+                bank_indusind: "ઇન્ડસઇન્ડ બેંક",
+                bank_yes: "યસ બેંક",
+                bank_federal: "ફેડરલ બેંક",
+                bank_idfc: "આઈડીએફસી ફર્સ્ટ બેંક",
+                bank_kalupur: "કાલુપુર કમર્શિયલ કો-ઓપરેટિવ બેંક",
+                bank_surat: "સુરત પીપલ્સ કો-ઓપરેટિવ બેંક",
+                bank_mehsana_urban: "મહેસાણા અર્બન કો-ઓપરેટિવ બેંક",
+                bank_amco: "અમદાવાદ મર્કેન્ટાઈલ કો-ઓપરેટિવ બેંક",
+                bank_nutan: "નૂતન નાગરિક સહકારી બેંક",
+                bank_rajkot_peoples: "રાજકોટ પીપલ્સ કો-ઓપરેટિવ બેંક",
+                bank_bggb: "બરોડા ગુજરાત ગ્રામીણ બેંક",
+                bank_saurashtra_gramin: "સૌરાષ્ટ્ર ગ્રામીણ બેંક",
+                bank_gandhinagar: "ગાંધીનગર નાગરિક સહકારી બેંક",
+                bank_anand: "આણંદ મર્કેન્ટાઈલ કો-ઓપ બેંક",
+                bank_sabarkantha: "સાબરકાંઠા જિલ્લા સહકારી બેંક",
+                bank_banaskantha: "બનાસકાંઠા જિલ્લા મધ્યસ્થ સહકારી બેંક",
+                bank_saraswat: "સારસ્વત કો-ઓપરેટીવ બેંક",
+                bank_cosmos: "કોસ્મોસ કો-ઓપરેટીવ બેંક",
+                bank_abhyudaya: "અભ્યુદય કો-ઓપરેટિવ બેંક (મુંબઈ)",
+                bank_greater_bombay: "ગ્રેટર બોમ્બે કો-ઓપરેટિવ બેંક",
+                bank_up_coop: "ઉત્તર પ્રદેશ સહકારી બેંક",
+                bank_aryavart: "આર્યાવર્ત બેંક (યુપી)",
+                bank_mp_coop: "મધ્ય પ્રદેશ રાજ્ય સહકારી બેંક",
+                bank_mp_gramin: "મધ્ય પ્રદેશ ગ્રામીણ બેંક",
+                bank_delhi_coop: "દિલ્હી રાજ્ય સહકારી બેંક",
+                vtype_RECEIPT: "રસીદ",
+                vtype_PAYMENT: "ચુકવણી",
+                vtype_SALES: "વેચાણ",
+                vtype_PURCHASE: "ખરીદી"
             }
         };
 
         function setLanguage(lang) {
             currentLang = lang;
             document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
-            document.querySelectorAll('.lang-btn').forEach(btn => {
-                if((lang === 'en' && btn.textContent.includes('EN')) ||
-                   (lang === 'hi' && btn.textContent.includes('हिन्दी')) ||
-                   (lang === 'gu' && btn.textContent.includes('ગુજરાતી'))) {
-                    btn.classList.add('active');
-                }
-            });
+            event.target.classList.add('active');
             
             const elements = document.querySelectorAll('[data-key]');
             elements.forEach(el => {
@@ -912,16 +943,6 @@ DASHBOARD_HTML = """
                 }
             });
 
-            document.querySelectorAll('.asset-type').forEach(el => {
-                const atype = el.getAttribute('data-val');
-                const tKey = 'asset_' + atype;
-                if (translations[lang] && translations[lang][tKey]) {
-                    el.textContent = translations[lang][tKey];
-                } else {
-                    el.textContent = atype;
-                }
-            });
-
             const inputs = document.querySelectorAll('[data-placeholder]');
             inputs.forEach(inp => {
                 const pKey = inp.getAttribute('data-placeholder');
@@ -938,33 +959,6 @@ DASHBOARD_HTML = """
                 }
             });
         }
-
-        // 📈 RENDER INTERACTIVE CANDLESTICK CHART
-        const ctx = document.getElementById('proTradingChart').getContext('2d');
-        const proChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: ['09:15', '10:00', '11:00', '12:00', '13:00', '14:00', '15:30'],
-                datasets: [{
-                    label: 'NIFTY Live Price Action',
-                    data: [24700, 24750, 24720, 24810, 24790, 24830, 24850],
-                    borderColor: '#38bdf8',
-                    backgroundColor: 'rgba(56, 189, 248, 0.1)',
-                    borderWidth: 2,
-                    fill: true,
-                    tension: 0.3
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { legend: { labels: { color: '#94a3b8' } } },
-                scales: {
-                    x: { ticks: { color: '#94a3b8' }, grid: { color: '#1f2937' } },
-                    y: { ticks: { color: '#34d399' }, grid: { color: '#1f2937' } }
-                }
-            }
-        });
 
         let activeRecognition = null;
 
@@ -1185,27 +1179,11 @@ def dashboard():
             total_inv_val += val
             stock_summary.append((data["name"], sku, data["status"], net_q, data["price"]))
 
-        watchlist = conn.execute("SELECT * FROM trading_portfolio").fetchall()
         profit = revenue - expenses
         kpis = {"revenue": revenue, "expenses": expenses, "profit": profit, "inventory": total_inv_val, "bank_bal": bank_bal, "advances": net_advances}
 
     query_latency = round((time.time() - start_time) * 1000, 2)
-    return render_template_string(DASHBOARD_HTML, vouchers=vouchers, kpis=kpis, banks=banks, stock_summary=stock_summary, runway_days=runway_days, sentinel_status=sentinel_status, query_latency=query_latency, username=username, watchlist=watchlist)
-
-@app.route("/add_watchlist", methods=["POST"])
-def add_watchlist():
-    if not session.get("logged_in"): return redirect(url_for("login"))
-    with sqlite3.connect(DB_NAME) as conn:
-        conn.execute("INSERT INTO trading_portfolio (symbol, asset_type, action_type, buy_price, qty, timestamp) VALUES (?, ?, ?, ?, ?, ?)",
-                     (request.form.get("symbol"), request.form.get("asset_type"), request.form.get("action_type"), float(request.form.get("buy_price")), float(request.form.get("qty")), datetime.now().strftime("%Y-%m-%d %H:%M")))
-    return redirect(url_for("dashboard"))
-
-@app.route("/delete_watchlist/<int:wid>")
-def delete_watchlist(wid):
-    if not session.get("logged_in"): return redirect(url_for("login"))
-    with sqlite3.connect(DB_NAME) as conn:
-        conn.execute("DELETE FROM trading_portfolio WHERE id = ?", (wid,))
-    return redirect(url_for("dashboard"))
+    return render_template_string(DASHBOARD_HTML, vouchers=vouchers, kpis=kpis, banks=banks, stock_summary=stock_summary, runway_days=runway_days, sentinel_status=sentinel_status, query_latency=query_latency, username=username)
 
 @app.route("/print_report_view")
 def print_report_view():
