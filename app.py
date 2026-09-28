@@ -68,6 +68,9 @@ LOGIN_HTML = """
         .captcha-container { background: #0f172a; border: 1px solid #374151; padding: 12px; border-radius: 8px; margin: 12px 0; display: flex; align-items: center; justify-content: space-between; font-size: 1.1em; color: #38bdf8; font-family: monospace; font-weight: bold; }
         button { background: linear-gradient(135deg, #3b82f6, #2563eb); color: white; border: none; padding: 13px; width: 100%; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 12px; }
         .error { color: #f43f5e; background: rgba(244,63,94,0.1); padding: 10px; border-radius: 8px; font-size: 0.85em; margin-bottom: 15px; border: 1px solid #f43f5e; text-align: left; }
+        .success { color: #34d399; background: rgba(52,211,153,0.1); padding: 10px; border-radius: 8px; font-size: 0.85em; margin-bottom: 15px; border: 1px solid #34d399; text-align: left; }
+        .link-text { margin-top: 15px; font-size: 0.85em; color: #94a3b8; }
+        .link-text a { color: #38bdf8; text-decoration: none; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -76,6 +79,7 @@ LOGIN_HTML = """
         <h2>Vajra Sovereign ERP</h2>
         <p>Enterprise Login & Captcha Security</p>
         {% if error %}<div class="error"><i class="fas fa-exclamation-triangle"></i> {{ error }}</div>{% endif %}
+        {% if msg %}<div class="success"><i class="fas fa-check-circle"></i> {{ msg }}</div>{% endif %}
         <form method="POST">
             <input type="text" name="username" placeholder="Username (VajraERP)" required autocomplete="off">
             <input type="password" name="password" placeholder="Password (Vajra@erp)" required autocomplete="off">
@@ -85,6 +89,44 @@ LOGIN_HTML = """
             <input type="number" name="math_input" placeholder="Enter Math Answer" required autocomplete="off">
             <button type="submit">Secure Access Login</button>
         </form>
+        <div class="link-text">
+            Don't have an account? <a href="/register">Register New User</a>
+        </div>
+    </div>
+</body>
+</html>
+"""
+
+REGISTER_HTML = """
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vajra ERP - Registration</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { background: #030712; color: #fff; font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; padding: 20px; box-sizing: border-box; }
+        .card { background: #111827; padding: 35px 30px; border-radius: 16px; width: 100%; max-width: 400px; border: 1px solid #1f2937; text-align: center; }
+        input { width: 100%; padding: 12px; margin: 8px 0; background: #030712; border: 1px solid #374151; color: #fff; border-radius: 8px; box-sizing: border-box; }
+        button { background: #10b981; color: white; border: none; padding: 13px; width: 100%; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 12px; }
+        .error { color: #f43f5e; background: rgba(244,63,94,0.1); padding: 10px; border-radius: 8px; font-size: 0.85em; margin-bottom: 15px; border: 1px solid #f43f5e; text-align: left; }
+        .link-text { margin-top: 15px; font-size: 0.85em; color: #94a3b8; }
+        .link-text a { color: #38bdf8; text-decoration: none; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>Register New Account</h2>
+        {% if error %}<div class="error">{{ error }}</div>{% endif %}
+        <form method="POST">
+            <input type="text" name="username" placeholder="Choose Username" required autocomplete="off">
+            <input type="password" name="password" placeholder="Create Password" required autocomplete="off">
+            <input type="text" name="mobile" placeholder="Mobile Number" required autocomplete="off">
+            <input type="email" name="email" placeholder="Gmail Address" required autocomplete="off">
+            <button type="submit">Register Account</button>
+        </form>
+        <div class="link-text">Already registered? <a href="/">Login here</a></div>
     </div>
 </body>
 </html>
@@ -202,7 +244,7 @@ DASHBOARD_HTML = """
         <div class="kpi"><h3 data-key="kpi_advances">Net Advances</h3><p>₹<span class="num-val" data-val="{{ "%.2f"|format(kpis.advances) }}">{{ "%.2f"|format(kpis.advances) }}</span></p></div>
     </div>
 
-    <!-- BANK ACCOUNTS & TRANSACTIONS HUB (RESTORED) -->
+    <!-- BANK ACCOUNTS & TRANSACTIONS HUB -->
     <div class="main-grid">
         <div class="card">
             <h3><span><i class="fas fa-university"></i> <span data-key="bank_hub_title">Indian Bank Accounts Hub</span></span></h3>
@@ -230,7 +272,23 @@ DASHBOARD_HTML = """
                     <option value="Axis Bank">Axis Bank</option>
                     <option value="Punjab National Bank (PNB)">Punjab National Bank (PNB)</option>
                     <option value="Bank of Baroda">Bank of Baroda</option>
+                    <option value="Canara Bank">Canara Bank</option>
+                    <option value="Union Bank of India">Union Bank of India</option>
+                    <option value="Bank of India">Bank of India</option>
+                    <option value="Indian Bank">Indian Bank</option>
+                    <option value="Kotak Mahindra Bank">Kotak Mahindra Bank</option>
+                    <option value="IndusInd Bank">IndusInd Bank</option>
+                    <option value="Yes Bank">Yes Bank</option>
+                    <option value="Federal Bank">Federal Bank</option>
+                    <option value="IDFC First Bank">IDFC First Bank</option>
                     <option value="The Kalupur Commercial Co-op Bank">The Kalupur Commercial Co-op Bank</option>
+                    <option value="Surat People's Co-operative Bank">Surat People's Co-operative Bank</option>
+                    <option value="Mehsana Urban Co-operative Bank">Mehsana Urban Co-operative Bank</option>
+                    <option value="Ahmedabad Mercantile Co-operative Bank">Ahmedabad Mercantile Co-operative Bank</option>
+                    <option value="Nutan Nagarik Sahakari Bank">Nutan Nagarik Sahakari Bank</option>
+                    <option value="Rajkot Peoples Co-operative Bank">Rajkot Peoples Co-operative Bank</option>
+                    <option value="Baroda Gujarat Gramin Bank">Baroda Gujarat Gramin Bank</option>
+                    <option value="Saurashtra Gramin Bank">Saurashtra Gramin Bank</option>
                 </select>
                 <label data-key="lbl_acc_num">Account Number:</label><input type="text" name="account_no" placeholder="Enter A/C No" required>
                 <label data-key="lbl_opening_bal">Opening Balance (₹):</label><input type="number" step="0.01" name="balance" value="0.0" required>
@@ -303,10 +361,10 @@ DASHBOARD_HTML = """
                 <td>₹<span class="num-val" data-val="{{ "%.2f"|format(v[6]) }}">{{ "%.2f"|format(v[6]) }}</span></td>
                 <td>
                     <div class="share-group">
-                        <a href="https://api.whatsapp.com/send?text=Vajra%20ERP%20Invoice:%20{{ v[2] }}%20for%20{{ v[3] }}%20Amount:%20₹{{ '%.2f'|format(v[6]) }}" target="_blank" class="whatsapp-btn">
+                        <a href="https://wa.me/?text=Vajra%20ERP%20Invoice:%20{{ v[2] }}%20for%20{{ v[3] }}%20Amount:%20₹{{ '%.2f'|format(v[6]) }}" target="_blank" class="whatsapp-btn">
                             <i class="fab fa-whatsapp"></i> <span data-key="share_wa">WA</span>
                         </a>
-                        <a href="https://t.me/share/url?url=https://vajra-erp.onrender.com&text=Vajra%20ERP%20Invoice:%20{{ v[2] }}%20for%20{{ v[3] }}%20Amount:%20₹{{ '%.2f'|format(v[6]) }}" target="_blank" class="telegram-btn">
+                        <a href="https://t.me/share/url?url=&text=Vajra%20ERP%20Invoice:%20{{ v[2] }}%20for%20{{ v[3] }}%20Amount:%20₹{{ '%.2f'|format(v[6]) }}" target="_blank" class="telegram-btn">
                             <i class="fab fa-telegram-plane"></i> <span data-key="share_tg">TG</span>
                         </a>
                         <a href="https://mail.google.com/mail/?view=cm&fs=1&su=Vajra%20ERP%20Invoice&body=Voucher%20Type:%20{{ v[2] }}%20Party:%20{{ v[3] }}%20Amount:%20₹{{ '%.2f'|format(v[6]) }}" target="_blank" class="gmail-btn">
@@ -876,6 +934,19 @@ def login():
             else:
                 error = "Invalid Credentials!"
     return render_template_string(LOGIN_HTML, error=error, msg=msg, math_question=session.get("math_q", "5 + 3 = ?"))
+
+@app.route("/register", methods=["GET", "POST"])
+def register():
+    error = None
+    if request.method == "POST":
+        try:
+            with sqlite3.connect(DB_NAME) as conn:
+                conn.execute("INSERT INTO users (username, password, mobile, email) VALUES (?, ?, ?, ?)",
+                             (request.form.get("username"), request.form.get("password"), request.form.get("mobile"), request.form.get("email")))
+            return redirect(url_for("login", msg="Registration successful! Please login."))
+        except sqlite3.IntegrityError:
+            error = "Username already exists!"
+    return render_template_string(REGISTER_HTML, error=error)
 
 @app.route("/dashboard")
 def dashboard():
