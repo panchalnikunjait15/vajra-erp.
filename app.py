@@ -174,7 +174,7 @@ DASHBOARD_HTML = """
     <div class="btn-row">
         <a href="/backup_db"><i class="fas fa-database"></i> <span data-key="backup_db">Backup DB</span></a>
         <a href="/export_inventory_csv"><i class="fas fa-download"></i> <span data-key="export_csv">Export CSV</span></a>
-        <a href="/print_report_view"><i class="fas fa-print"></i> <span data-key="print_report">Print Report</span></a>
+        <a href="/print_report_view"><i class="fas fa-print"></i> <span data-key="print_report">Print / Save PDF</span></a>
     </div>
 
     <!-- 🤖 VAJRA AI VOICE & SMART ASSISTANT WIDGET -->
@@ -285,7 +285,7 @@ DASHBOARD_HTML = """
                 logout: "Logout",
                 backup_db: "Backup DB",
                 export_csv: "Export CSV",
-                print_report: "Print Report",
+                print_report: "Print / Save PDF",
                 pro_banner_title: "Vajra Pro Trading Terminal (Upstox & Groww Mode)",
                 pro_banner_desc: "Click here to open a dedicated professional trading exchange world featuring Futures, Option Chain, SIP/Earn, Orders, and TradingView charts.",
                 launch_btn: "Open Pro Trading World",
@@ -336,7 +336,7 @@ DASHBOARD_HTML = """
                 logout: "लॉग आउट",
                 backup_db: "डेटाबेस बैकअप",
                 export_csv: "इन्वेंट्री एक्सपोर्ट",
-                print_report: "प्रिंट रिपोर्ट",
+                print_report: "प्रिंट / पीडीएफ सेव करें",
                 pro_banner_title: "वज्र प्रो ट्रेडिंग टर्मिनल (Upstox और Groww मोड)",
                 pro_banner_desc: "फ्यूचर्स, ऑप्शन चेन, SIP/अर्न, ऑर्डर्स और TradingView चार्ट वाला समर्पित एक्सचेंज खोलने के लिए क्लिक करें।",
                 launch_btn: "प्रो ट्रेडिंग वर्ल्ड खोलें",
@@ -387,7 +387,7 @@ DASHBOARD_HTML = """
                 logout: "લોગઆઉટ",
                 backup_db: "બેકઅપ ડીબી",
                 export_csv: "ઇન્વેન્ટરી એક્સપોર્ટ",
-                print_report: "પ્રિન્ટ રિપોર્ટ",
+                print_report: "પ્રિન્ટ / PDF સેવ કરો",
                 pro_banner_title: "વજ્ર પ્રો ટ્રેડિંગ ટર્મિનલ (Upstox & Groww મોડ)",
                 pro_banner_desc: "ફ્યુચર્સ, ઓપ્શન ચેઈન, SIP/અર્ન, ઓર્ડર્સ અને TradingView ચાર્ટવાળી અદભુત ટ્રેડિંગ દુનિયા ખોલવા માટે ક્લિક કરો.",
                 launch_btn: "પ્રો ટ્રેડિંગ વર્લ્ડ ખોલો",
@@ -807,17 +807,23 @@ def ai_assistant():
     q = str(data.get("query", "")).lower()
     with sqlite3.connect(DB_NAME) as conn:
         rev = conn.execute("SELECT SUM(total_with_gst) FROM vouchers WHERE voucher_type IN ('RECEIPT', 'SALES')").fetchone()[0] or 0.0
+        purch = conn.execute("SELECT SUM(total_with_gst) FROM vouchers WHERE voucher_type = 'PURCHASE'").fetchone()[0] or 0.0
         exp = conn.execute("SELECT SUM(amount) FROM expenses").fetchone()[0] or 0.0
         net_profit = rev - exp
         banks_total = conn.execute("SELECT SUM(balance) FROM bank_accounts").fetchone()[0] or 0.0
+        total_items = conn.execute("SELECT COUNT(*) FROM inventory").fetchone()[0] or 0
     
     response_text = f"Total revenue / sales is ₹{rev:.2f}."
     if "profit" in q or "labh" in q or "નફો" in q:
         response_text = f"Today's net profit is ₹{net_profit:.2f}."
     elif "sales" in q or "revenue" in q or "vechan" in q or "વેચાણ" in q:
         response_text = f"Total revenue / sales is ₹{rev:.2f}."
+    elif "purchase" in q or "kharidi" in q or "ખરીદી" in q:
+        response_text = f"Total purchase is ₹{purch:.2f}."
     elif "bank" in q or "balance" in q or "belez" in q:
         response_text = f"Total bank balance across accounts is ₹{banks_total:.2f}."
+    elif "stock" in q or "stok" in q:
+        response_text = f"Live inventory stock summary: {total_items} items registered."
     return jsonify({"status": "success", "reply": response_text})
 
 @app.route("/add_watchlist", methods=["POST"])
@@ -856,24 +862,33 @@ def print_report_view():
     with sqlite3.connect(DB_NAME) as conn:
         vouchers = conn.execute("SELECT * FROM vouchers ORDER BY id DESC").fetchall()
         banks = conn.execute("SELECT * FROM bank_accounts").fetchall()
+        inventory = conn.execute("SELECT * FROM inventory").fetchall()
+    
     return render_template_string('''
         <!DOCTYPE html>
         <html>
         <head>
             <meta charset="UTF-8">
-            <title>Vajra ERP - Print Report</title>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Vajra ERP - Print & Download Report</title>
             <style>
                 body { background: white; color: black; font-family: sans-serif; padding: 20px; }
                 h2 { color: #0f172a; border-bottom: 2px solid #2563eb; padding-bottom: 8px; }
                 table { width: 100%; border-collapse: collapse; margin-top: 15px; margin-bottom: 25px; font-size: 0.9em; }
                 th, td { border: 1px solid #cbd5e1; padding: 8px; text-align: left; }
                 th { background: #f1f5f9; color: #1e293b; }
-                .print-btn { background: #2563eb; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; margin-bottom: 20px; }
-                @media print { .print-btn { display: none; } }
+                .btn-container { display: flex; gap: 15px; justify-content: center; margin: 20px 0; flex-wrap: wrap; }
+                .action-btn { background: #2563eb; color: white; border: none; padding: 12px 24px; border-radius: 6px; font-size: 1em; cursor: pointer; font-weight: bold; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
+                .download-btn { background: #10b981; }
+                @media print { .btn-container { display: none; } }
             </style>
         </head>
         <body>
-            <button class="print-btn" onclick="window.print()">🖨️ Print Report</button>
+            <div class="btn-container">
+                <button class="action-btn" onclick="window.print()">🖨️ Print Page</button>
+                <a href="/download_report_file" class="action-btn download-btn">📥 Download Report File</a>
+            </div>
+
             <h2>⚡ Vajra ERP - Official Business Report</h2>
             <h3>Recent Vouchers</h3>
             <table>
@@ -892,6 +907,38 @@ def print_report_view():
         </body>
         </html>
     ''', vouchers=vouchers, banks=banks)
+
+@app.route("/download_report_file")
+def download_report_file():
+    if not session.get("logged_in"): return redirect(url_for("login"))
+    with sqlite3.connect(DB_NAME) as conn:
+        vouchers = conn.execute("SELECT * FROM vouchers ORDER BY id DESC").fetchall()
+        banks = conn.execute("SELECT * FROM bank_accounts").fetchall()
+    
+    html_content = f"""
+    <!DOCTYPE html>
+    <html>
+    <head><meta charset="UTF-8"><title>Vajra ERP Report</title></head>
+    <body style="font-family: sans-serif; padding: 20px;">
+        <h2>⚡ Vajra ERP - Official Business Report</h2>
+        <h3>Recent Vouchers</h3>
+        <table border="1" style="border-collapse: collapse; width: 100%;">
+            <tr><th>ID</th><th>Date</th><th>Type</th><th>Party</th><th>Total (Inc. GST)</th></tr>
+            {''.join(f"<tr><td>{v[0]}</td><td>{v[1]}</td><td>{v[2]}</td><td>{v[3]}</td><td>₹{v[6]:.2f}</td></tr>" for v in vouchers)}
+        </table>
+        <h3 style="margin-top: 20px;">Bank Accounts</h3>
+        <table border="1" style="border-collapse: collapse; width: 100%;">
+            <tr><th>Bank Name</th><th>Account No</th><th>Balance</th></tr>
+            {''.join(f"<tr><td>{b[1]}</td><td>{b[2]}</td><td>₹{b[3]:.2f}</td></tr>" for b in banks)}
+        </table>
+    </body>
+    </html>
+    """
+    return Response(
+        html_content,
+        mimetype="text/html",
+        headers={"Content-Disposition": "attachment;filename=Vajra_ERP_Report.html"}
+    )
 
 @app.route("/export_inventory_csv")
 def export_inventory_csv():
