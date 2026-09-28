@@ -482,21 +482,27 @@ DASHBOARD_HTML = """
                 if (activeRecognition) { activeRecognition.abort(); }
                 activeRecognition = new SpeechRecognition();
                 activeRecognition.continuous = false;
-                activeRecognition.interimResults = false;
+                activeRecognition.interimResults = true; // Fast live update
                 activeRecognition.lang = currentLang === 'gu' ? 'gu-IN' : (currentLang === 'hi' ? 'hi-IN' : 'en-US');
-                document.getElementById("voiceStatus").innerText = currentLang === 'gu' ? "સંભળાઈ રહ્યું છે... બોલો!" : "Listening...";
                 
+                document.getElementById("voiceStatus").innerText = currentLang === 'gu' ? "સંભળાઈ રહ્યું છે... બોલો!" : "Listening...";
+
                 activeRecognition.onresult = function(event) {
-                    const spokenText = event.results[0][0].transcript;
-                    document.getElementById("aiTextInput").value = spokenText;
-                    sendQueryToAI(spokenText);
+                    const transcript = event.results[0][0].transcript;
+                    document.getElementById("aiTextInput").value = transcript;
+                    if (event.results[0].isFinal) {
+                        sendQueryToAI(transcript);
+                    }
                 };
+
                 activeRecognition.onerror = function() {
                     document.getElementById("voiceStatus").innerText = "Mic error.";
                 };
+
                 activeRecognition.onend = function() {
                     document.getElementById("voiceStatus").innerText = currentLang === 'gu' ? "માઈક બંધ." : "Mic idle.";
                 };
+
                 activeRecognition.start();
             } catch(e) {
                 document.getElementById("voiceStatus").innerText = "Mic unavailable.";
@@ -806,7 +812,7 @@ def ai_assistant():
         banks_total = conn.execute("SELECT SUM(balance) FROM bank_accounts").fetchone()[0] or 0.0
     
     response_text = f"Total revenue / sales is ₹{rev:.2f}."
-    if "profit" in user_query if 'user_query' in locals() else "profit" in q:
+    if "profit" in q:
         response_text = f"Today's net profit is ₹{net_profit:.2f}."
     elif "sales" in q or "revenue" in q:
         response_text = f"Total revenue / sales is ₹{rev:.2f}."
@@ -854,6 +860,7 @@ def export_inventory_csv():
     if not session.get("logged_in"): return redirect(url_for("login"))
     return "id,item,sku,qty\n1,Sample,SKU01,10", 200, {"Content-Type": "text/csv"}
 
+@app.post("/backup_db")
 @app.route("/backup_db")
 def backup_db():
     if not session.get("logged_in"): return redirect(url_for("login"))
