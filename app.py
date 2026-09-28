@@ -251,10 +251,10 @@ DASHBOARD_HTML = """
                 <td>₹<span class="num-val" data-val="{{ "%.2f"|format(v[6]) }}">{{ "%.2f"|format(v[6]) }}</span></td>
                 <td>
                     <div class="share-group">
-                        <a href="https://wa.me/?text=Vajra%20ERP%20Invoice:%20{{ v[2] }}%20for%20{{ v[3] }}%20Amount:%20₹{{ '%.2f'|format(v[6]) }}" target="_blank" class="whatsapp-btn">
+                        <a href="https://api.whatsapp.com/send?text=Vajra%20ERP%20Invoice:%20{{ v[2] }}%20for%20{{ v[3] }}%20Amount:%20₹{{ '%.2f'|format(v[6]) }}" target="_blank" class="whatsapp-btn">
                             <i class="fab fa-whatsapp"></i> <span data-key="share_wa">WA</span>
                         </a>
-                        <a href="https://t.me/share/url?url=&text=Vajra%20ERP%20Invoice:%20{{ v[2] }}%20for%20{{ v[3] }}%20Amount:%20₹{{ '%.2f'|format(v[6]) }}" target="_blank" class="telegram-btn">
+                        <a href="https://t.me/share/url?url=https://vajra-erp.onrender.com&text=Vajra%20ERP%20Invoice:%20{{ v[2] }}%20for%20{{ v[3] }}%20Amount:%20₹{{ '%.2f'|format(v[6]) }}" target="_blank" class="telegram-btn">
                             <i class="fab fa-telegram-plane"></i> <span data-key="share_tg">TG</span>
                         </a>
                         <a href="https://mail.google.com/mail/?view=cm&fs=1&su=Vajra%20ERP%20Invoice&body=Voucher%20Type:%20{{ v[2] }}%20Party:%20{{ v[3] }}%20Amount:%20₹{{ '%.2f'|format(v[6]) }}" target="_blank" class="gmail-btn">
@@ -482,7 +482,7 @@ DASHBOARD_HTML = """
                 if (activeRecognition) { activeRecognition.abort(); }
                 activeRecognition = new SpeechRecognition();
                 activeRecognition.continuous = false;
-                activeRecognition.interimResults = true; // Fast live update
+                activeRecognition.interimResults = true;
                 activeRecognition.lang = currentLang === 'gu' ? 'gu-IN' : (currentLang === 'hi' ? 'hi-IN' : 'en-US');
                 
                 document.getElementById("voiceStatus").innerText = currentLang === 'gu' ? "સંભળાઈ રહ્યું છે... બોલો!" : "Listening...";
@@ -812,11 +812,11 @@ def ai_assistant():
         banks_total = conn.execute("SELECT SUM(balance) FROM bank_accounts").fetchone()[0] or 0.0
     
     response_text = f"Total revenue / sales is ₹{rev:.2f}."
-    if "profit" in q:
+    if "profit" in q or "labh" in q or "નફો" in q:
         response_text = f"Today's net profit is ₹{net_profit:.2f}."
-    elif "sales" in q or "revenue" in q:
+    elif "sales" in q or "revenue" in q or "vechan" in q or "વેચાણ" in q:
         response_text = f"Total revenue / sales is ₹{rev:.2f}."
-    elif "bank" in q or "balance" in q:
+    elif "bank" in q or "balance" in q or "belez" in q:
         response_text = f"Total bank balance across accounts is ₹{banks_total:.2f}."
     return jsonify({"status": "success", "reply": response_text})
 
@@ -853,14 +853,51 @@ def add_inventory():
 @app.route("/print_report_view")
 def print_report_view():
     if not session.get("logged_in"): return redirect(url_for("login"))
-    return "Report View"
+    with sqlite3.connect(DB_NAME) as conn:
+        vouchers = conn.execute("SELECT * FROM vouchers ORDER BY id DESC").fetchall()
+        banks = conn.execute("SELECT * FROM bank_accounts").fetchall()
+    return render_template_string('''
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>Vajra ERP - Print Report</title>
+            <style>
+                body { background: white; color: black; font-family: sans-serif; padding: 20px; }
+                h2 { color: #0f172a; border-bottom: 2px solid #2563eb; padding-bottom: 8px; }
+                table { width: 100%; border-collapse: collapse; margin-top: 15px; margin-bottom: 25px; font-size: 0.9em; }
+                th, td { border: 1px solid #cbd5e1; padding: 8px; text-align: left; }
+                th { background: #f1f5f9; color: #1e293b; }
+                .print-btn { background: #2563eb; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; margin-bottom: 20px; }
+                @media print { .print-btn { display: none; } }
+            </style>
+        </head>
+        <body>
+            <button class="print-btn" onclick="window.print()">🖨️ Print Report</button>
+            <h2>⚡ Vajra ERP - Official Business Report</h2>
+            <h3>Recent Vouchers</h3>
+            <table>
+                <tr><th>ID</th><th>Date</th><th>Type</th><th>Party</th><th>Total (Inc. GST)</th></tr>
+                {% for v in vouchers %}
+                <tr><td>{{ v[0] }}</td><td>{{ v[1] }}</td><td>{{ v[2] }}</td><td>{{ v[3] }}</td><td>₹{{ "%.2f"|format(v[6]) }}</td></tr>
+                {% endfor %}
+            </table>
+            <h3>Bank Accounts</h3>
+            <table>
+                <tr><th>Bank Name</th><th>Account No</th><th>Balance</th></tr>
+                {% for b in banks %}
+                <tr><td>{{ b[1] }}</td><td>{{ b[2] }}</td><td>₹{{ "%.2f"|format(b[3]) }}</td></tr>
+                {% endfor %}
+            </table>
+        </body>
+        </html>
+    ''', vouchers=vouchers, banks=banks)
 
 @app.route("/export_inventory_csv")
 def export_inventory_csv():
     if not session.get("logged_in"): return redirect(url_for("login"))
     return "id,item,sku,qty\n1,Sample,SKU01,10", 200, {"Content-Type": "text/csv"}
 
-@app.post("/backup_db")
 @app.route("/backup_db")
 def backup_db():
     if not session.get("logged_in"): return redirect(url_for("login"))
