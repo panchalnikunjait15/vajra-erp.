@@ -115,8 +115,8 @@ DASHBOARD_HTML = """
 
         .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 20px; }
         .kpi { background: #111827; padding: 15px; border-radius: 10px; border: 1px solid #1f2937; box-shadow: 0 8px 20px rgba(0,0,0,0.3); }
-        .kpi h3 { margin: 0; font-size: 0.7em; color: #94a3b8; text-transform: uppercase; }
-        .kpi p { margin: 6px 0 0 0; font-size: 1.25em; font-weight: bold; color: #38bdf8; }
+        .kpi h3 { margin: 0; font-size: 0.7em; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; }
+        .kpi p { margin: 6px 0 0 0; font-size: 1.25em; font-weight: bold; color: #38bdf8; word-break: break-all; }
 
         .main-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; margin-bottom: 20px; }
         .card { background: #111827; padding: 18px; border-radius: 10px; border: 1px solid #1f2937; box-shadow: 0 8px 20px rgba(0,0,0,0.3); overflow-x: auto; }
@@ -485,10 +485,17 @@ DASHBOARD_HTML = """
                 activeRecognition.interimResults = false;
                 activeRecognition.lang = currentLang === 'gu' ? 'gu-IN' : (currentLang === 'hi' ? 'hi-IN' : 'en-US');
                 document.getElementById("voiceStatus").innerText = currentLang === 'gu' ? "સંભળાઈ રહ્યું છે... બોલો!" : "Listening...";
+                
                 activeRecognition.onresult = function(event) {
                     const spokenText = event.results[0][0].transcript;
                     document.getElementById("aiTextInput").value = spokenText;
                     sendQueryToAI(spokenText);
+                };
+                activeRecognition.onerror = function() {
+                    document.getElementById("voiceStatus").innerText = "Mic error.";
+                };
+                activeRecognition.onend = function() {
+                    document.getElementById("voiceStatus").innerText = currentLang === 'gu' ? "માઈક બંધ." : "Mic idle.";
                 };
                 activeRecognition.start();
             } catch(e) {
@@ -794,8 +801,18 @@ def ai_assistant():
     q = str(data.get("query", "")).lower()
     with sqlite3.connect(DB_NAME) as conn:
         rev = conn.execute("SELECT SUM(total_with_gst) FROM vouchers WHERE voucher_type IN ('RECEIPT', 'SALES')").fetchone()[0] or 0.0
-    reply = f"Total revenue / sales is ₹{rev:.2f}."
-    return jsonify({"status": "success", "reply": reply})
+        exp = conn.execute("SELECT SUM(amount) FROM expenses").fetchone()[0] or 0.0
+        net_profit = rev - exp
+        banks_total = conn.execute("SELECT SUM(balance) FROM bank_accounts").fetchone()[0] or 0.0
+    
+    response_text = f"Total revenue / sales is ₹{rev:.2f}."
+    if "profit" in user_query if 'user_query' in locals() else "profit" in q:
+        response_text = f"Today's net profit is ₹{net_profit:.2f}."
+    elif "sales" in q or "revenue" in q:
+        response_text = f"Total revenue / sales is ₹{rev:.2f}."
+    elif "bank" in q or "balance" in q:
+        response_text = f"Total bank balance across accounts is ₹{banks_total:.2f}."
+    return jsonify({"status": "success", "reply": response_text})
 
 @app.route("/add_watchlist", methods=["POST"])
 def add_watchlist():
