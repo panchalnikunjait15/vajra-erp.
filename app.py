@@ -202,7 +202,42 @@ DASHBOARD_HTML = """
         <div class="kpi"><h3 data-key="kpi_advances">Net Advances</h3><p>₹<span class="num-val" data-val="{{ "%.2f"|format(kpis.advances) }}">{{ "%.2f"|format(kpis.advances) }}</span></p></div>
     </div>
 
+    <!-- BANK ACCOUNTS & TRANSACTIONS HUB (RESTORED) -->
     <div class="main-grid">
+        <div class="card">
+            <h3><span><i class="fas fa-university"></i> <span data-key="bank_hub_title">Indian Bank Accounts Hub</span></span></h3>
+            <table>
+                <tr><th data-key="th_bank_name">Bank Name</th><th data-key="th_acc_no">A/C No</th><th data-key="th_balance">Balance</th></tr>
+                {% if banks %}
+                    {% for b in banks %}
+                    <tr>
+                        <td><strong>{{ b[1] }}</strong></td>
+                        <td><span class="num-val" data-val="{{ b[2] }}">{{ b[2] }}</span></td>
+                        <td style="color:#34d399; font-weight:bold;">₹<span class="num-val" data-val="{{ "%.2f"|format(b[3]) }}">{{ "%.2f"|format(b[3]) }}</span></td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr><td colspan="3" style="text-align: center; color: #f43f5e;" data-key="no_bank">No bank accounts registered yet.</td></tr>
+                {% endif %}
+            </table>
+            
+            <form action="/add_bank" method="POST" style="margin-top:15px; border-top:1px solid #1f2937; padding-top:12px;">
+                <label style="color:#38bdf8;" data-key="lbl_add_bank">+ Add Indian Bank Account:</label>
+                <select name="bank_name" required>
+                    <option value="State Bank of India (SBI)">State Bank of India (SBI)</option>
+                    <option value="HDFC Bank">HDFC Bank</option>
+                    <option value="ICICI Bank">ICICI Bank</option>
+                    <option value="Axis Bank">Axis Bank</option>
+                    <option value="Punjab National Bank (PNB)">Punjab National Bank (PNB)</option>
+                    <option value="Bank of Baroda">Bank of Baroda</option>
+                    <option value="The Kalupur Commercial Co-op Bank">The Kalupur Commercial Co-op Bank</option>
+                </select>
+                <label data-key="lbl_acc_num">Account Number:</label><input type="text" name="account_no" placeholder="Enter A/C No" required>
+                <label data-key="lbl_opening_bal">Opening Balance (₹):</label><input type="number" step="0.01" name="balance" value="0.0" required>
+                <button type="submit" style="background:#6366f1; margin-top:8px;" data-key="btn_register_bank">Register Bank</button>
+            </form>
+        </div>
+
         <div class="card">
             <h3><span><i class="fas fa-book-open"></i> <span data-key="acc_title">Accounting & GST Voucher</span></span></h3>
             <form action="/add_voucher" method="POST">
@@ -219,7 +254,10 @@ DASHBOARD_HTML = """
                 <button type="submit" data-key="btn_save_voucher">Save Voucher (Auto 18% GST)</button>
             </form>
         </div>
+    </div>
 
+    <!-- INVENTORY & ADVANCES -->
+    <div class="main-grid">
         <div class="card">
             <h3><span><i class="fas fa-boxes"></i> <span data-key="inv_title">Inventory Control</span></span></h3>
             <form action="/add_inventory" method="POST">
@@ -235,6 +273,20 @@ DASHBOARD_HTML = """
                     <div style="flex:1;"><label data-key="lbl_price">Price (₹):</label><input type="number" step="0.01" name="price" required></div>
                 </div>
                 <button type="submit" data-key="btn_update_stock">Update Stock</button>
+            </form>
+        </div>
+
+        <div class="card">
+            <h3><span><i class="fas fa-hand-holding-usd"></i> <span data-key="adv_title">Advance Ledger</span></span></h3>
+            <form action="/add_advance" method="POST">
+                <label data-key="lbl_party_name">Party Name:</label><input type="text" name="party_name" required>
+                <label data-key="lbl_adv_type">Advance Type:</label>
+                <select name="adv_type">
+                    <option value="GIVEN" data-key="opt_adv_given">Advance Given</option>
+                    <option value="TAKEN" data-key="opt_adv_taken">Advance Taken</option>
+                </select>
+                <label data-key="lbl_amount">Amount (₹):</label><input type="number" step="0.01" name="amount" required>
+                <button type="submit" style="background:#8b5cf6;" data-key="btn_record_adv">Record Advance</button>
             </form>
         </div>
     </div>
@@ -293,6 +345,15 @@ DASHBOARD_HTML = """
                 kpi_profit: "Net Profit (P&L)",
                 kpi_bank: "Total Bank Balance",
                 kpi_advances: "Net Advances",
+                bank_hub_title: "Indian Bank Accounts Hub",
+                th_bank_name: "Bank Name",
+                th_acc_no: "A/C No",
+                th_balance: "Balance",
+                no_bank: "No bank accounts registered yet.",
+                lbl_add_bank: "+ Add Indian Bank Account:",
+                lbl_acc_num: "Account Number:",
+                lbl_opening_bal: "Opening Balance (₹):",
+                btn_register_bank: "Register Bank",
                 acc_title: "Accounting & GST Voucher",
                 lbl_vtype: "Voucher Type:",
                 lbl_party: "Party / Ledger Name:",
@@ -308,6 +369,12 @@ DASHBOARD_HTML = """
                 lbl_qty: "Qty:",
                 lbl_price: "Price (₹):",
                 btn_update_stock: "Update Stock",
+                adv_title: "Advance Ledger",
+                lbl_party_name: "Party Name:",
+                lbl_adv_type: "Advance Type:",
+                opt_adv_given: "Advance Given",
+                opt_adv_taken: "Advance Taken",
+                btn_record_adv: "Record Advance",
                 history_title: "Recent Vouchers & Direct Sharing",
                 th_type: "Type",
                 th_party: "Party",
@@ -344,6 +411,15 @@ DASHBOARD_HTML = """
                 kpi_profit: "शुद्ध लाभ (P&L)",
                 kpi_bank: "कुल बैंक शेष",
                 kpi_advances: "शुद्ध अग्रिम",
+                bank_hub_title: "भारतीय बैंक खाता हब",
+                th_bank_name: "बैंक का नाम",
+                th_acc_no: "खाता नंबर",
+                th_balance: "शेष राशि",
+                no_bank: "अभी तक कोई बैंक पंजीकृत नहीं है।",
+                lbl_add_bank: "+ भारतीय बैंक खाता जोड़ें:",
+                lbl_acc_num: "खाता संख्या:",
+                lbl_opening_bal: "शुरुआती शेष (₹):",
+                btn_register_bank: "बैंक पंजीकृत करें",
                 acc_title: "लेखांकन और जीएसटी वाउचर",
                 lbl_vtype: "वाउचर प्रकार:",
                 lbl_party: "पार्टी / लेजर नाम:",
@@ -359,6 +435,12 @@ DASHBOARD_HTML = """
                 lbl_qty: "मात्रा:",
                 lbl_price: "मूल्य (₹):",
                 btn_update_stock: "स्टॉक अपडेट करें",
+                adv_title: "अग्रिम खाता लेजर",
+                lbl_party_name: "पार्टी का नाम:",
+                lbl_adv_type: "अग्रिम प्रकार:",
+                opt_adv_given: "अग्रिम दिया गया",
+                opt_adv_taken: "अग्रिम लिया गया",
+                btn_record_adv: "अग्रिम दर्ज करें",
                 history_title: "हाल के वाउचर और डायरेक्ट शेयरिंग",
                 th_type: "प्रकार",
                 th_party: "पार्टी",
@@ -395,6 +477,15 @@ DASHBOARD_HTML = """
                 kpi_profit: "નેટ પ્રોફિટ (નફો)",
                 kpi_bank: "કુલ બેંક બેલેન્સ",
                 kpi_advances: "નેટ એડવાન્સ",
+                bank_hub_title: "ઇન્ડિયન બેંક એકાઉન્ટ્સ હબ",
+                th_bank_name: "બેંકનું નામ",
+                th_acc_no: "એકાઉન્ટ નંબર",
+                th_balance: "બેલેન્સ",
+                no_bank: "હજી સુધી કોઈ બેંક એડ નથી કરી.",
+                lbl_add_bank: "+ નવી બેંક ઉમેરો:",
+                lbl_acc_num: "એકાઉન્ટ નંબર:",
+                lbl_opening_bal: "શરૂઆતનું બેલેન્સ (₹):",
+                btn_register_bank: "બેંક રજીસ્ટર કરો",
                 acc_title: "એકાઉન્ટિંગ અને જીએસટી વાઉચર",
                 lbl_vtype: "વાઉચર પ્રકાર:",
                 lbl_party: "પાર્ટી / લેજર નામ:",
@@ -410,6 +501,12 @@ DASHBOARD_HTML = """
                 lbl_qty: "જથ્થો (Qty):",
                 lbl_price: "કિંમત (₹):",
                 btn_update_stock: "સ્ટોક અપડેટ કરો",
+                adv_title: "એડવાન્સ એકાઉન્ટ લેજર",
+                lbl_party_name: "પાર્ટીનું નામ:",
+                lbl_adv_type: "એડવાન્સ પ્રકાર:",
+                opt_adv_given: "એડવાન્સ આપેલું",
+                opt_adv_taken: "એડવાન્સ લીધેલું",
+                btn_record_adv: "એડવાન્સ નોંધી કરો",
                 history_title: "તાજેતરના વાઉચર્સ અને ડાયરેક્ટ શેરિંગ",
                 th_type: "પ્રકાર",
                 th_party: "પાર્ટી",
@@ -527,7 +624,8 @@ DASHBOARD_HTML = """
             })
             .then(res => res.json())
             .then(data => {
-                replyElem.innerText = (translations[currentLang].ai_prefix || "🤖 AI Answer: ") + data.reply;
+                let replyPrefix = currentLang === 'gu' ? "🤖 એઆઈ જવાબ: " : (currentLang === 'hi' ? "🤖 एआई उत्तर: " : "🤖 AI Answer: ");
+                replyElem.innerText = replyPrefix + data.reply;
             })
             .catch(err => {
                 replyElem.innerText = "Error connecting to AI Assistant.";
@@ -794,7 +892,7 @@ def dashboard():
         profit = revenue - expenses
         kpis = {"revenue": revenue, "expenses": expenses, "profit": profit, "bank_bal": bank_bal, "advances": net_advances}
     query_latency = round((time.time() - start_time) * 1000, 2)
-    return render_template_string(DASHBOARD_HTML, vouchers=vouchers, kpis=kpis, query_latency=query_latency, username=session.get("username", "Admin"))
+    return render_template_string(DASHBOARD_HTML, vouchers=vouchers, kpis=kpis, banks=banks, query_latency=query_latency, username=session.get("username", "Admin"))
 
 @app.route("/pro_trading_hub")
 def pro_trading_hub():
@@ -805,6 +903,8 @@ def pro_trading_hub():
 def ai_assistant():
     data = request.get_json(silent=True) or {}
     q = str(data.get("query", "")).lower()
+    lang = str(data.get("lang", "en"))
+    
     with sqlite3.connect(DB_NAME) as conn:
         rev = conn.execute("SELECT SUM(total_with_gst) FROM vouchers WHERE voucher_type IN ('RECEIPT', 'SALES')").fetchone()[0] or 0.0
         purch = conn.execute("SELECT SUM(total_with_gst) FROM vouchers WHERE voucher_type = 'PURCHASE'").fetchone()[0] or 0.0
@@ -813,17 +913,43 @@ def ai_assistant():
         banks_total = conn.execute("SELECT SUM(balance) FROM bank_accounts").fetchone()[0] or 0.0
         total_items = conn.execute("SELECT COUNT(*) FROM inventory").fetchone()[0] or 0
     
-    response_text = f"Total revenue / sales is ₹{rev:.2f}."
-    if "profit" in q or "labh" in q or "નફો" in q:
-        response_text = f"Today's net profit is ₹{net_profit:.2f}."
-    elif "sales" in q or "revenue" in q or "vechan" in q or "વેચાણ" in q:
+    if lang == "gu":
+        response_text = f"કુલ વેચાણ / આવક ₹{rev:.2f} છે."
+        if "profit" in q or "labh" in q or "નફો" in q or "nafa" in q:
+            response_text = f"આજે કુલ નેટ નફો ₹{net_profit:.2f} થયો છે."
+        elif "sales" in q or "vechan" in q or "aavak" in q or "revenue" in q or "વેચાણ" in q:
+            response_text = f"કુલ વેચાણ / આવક ₹{rev:.2f} છે."
+        elif "purchase" in q or "kharidi" in q or "ખરીદી" in q:
+            response_text = f"કુલ ખરીદી ₹{purch:.2f} છે."
+        elif "bank" in q or "balance" in q or "belez" in q:
+            response_text = f"બધી બેંકનું કુલ બેલેન્સ ₹{banks_total:.2f} છે."
+        elif "stock" in q or "stok" in q:
+            response_text = f"ઇન્વેન્ટરી સ્ટોક મેનેજમેન્ટમાં કુલ {total_items} આઇટમ્સ રજીસ્ટર થયેલી છે."
+    elif lang == "hi":
+        response_text = f"कुल राजस्व / बिक्री ₹{rev:.2f} है।"
+        if "profit" in q or "labh" in q or "नफा" in q:
+            response_text = f"आज कुल शुद्ध लाभ ₹{net_profit:.2f} हुआ है।"
+        elif "sales" in q or "bikri" in q or "revenue" in q:
+            response_text = f"कुल राजस्व / बिक्री ₹{rev:.2f} है।"
+        elif "purchase" in q or "kharidi" in q:
+            response_text = f"कुल खरीद ₹{purch:.2f} है।"
+        elif "bank" in q or "balance" in q:
+            response_text = f"सभी बैंकों का कुल शेष ₹{banks_total:.2f} है।"
+        elif "stock" in q:
+            response_text = f"इन्वेंट्री स्टॉक में कुल {total_items} आइटम पंजीकृत हैं।"
+    else:
         response_text = f"Total revenue / sales is ₹{rev:.2f}."
-    elif "purchase" in q or "kharidi" in q or "ખરીદી" in q:
-        response_text = f"Total purchase is ₹{purch:.2f}."
-    elif "bank" in q or "balance" in q or "belez" in q:
-        response_text = f"Total bank balance across accounts is ₹{banks_total:.2f}."
-    elif "stock" in q or "stok" in q:
-        response_text = f"Live inventory stock summary: {total_items} items registered."
+        if "profit" in q:
+            response_text = f"Today's net profit is ₹{net_profit:.2f}."
+        elif "sales" in q or "revenue" in q:
+            response_text = f"Total revenue / sales is ₹{rev:.2f}."
+        elif "purchase" in q:
+            response_text = f"Total purchase is ₹{purch:.2f}."
+        elif "bank" in q or "balance" in q:
+            response_text = f"Total bank balance across accounts is ₹{banks_total:.2f}."
+        elif "stock" in q:
+            response_text = f"Live inventory stock summary: {total_items} items registered."
+
     return jsonify({"status": "success", "reply": response_text})
 
 @app.route("/add_watchlist", methods=["POST"])
@@ -833,6 +959,14 @@ def add_watchlist():
         conn.execute("INSERT INTO trading_portfolio (symbol, asset_type, action_type, buy_price, qty, timestamp) VALUES (?, ?, ?, ?, ?, ?)",
                      (request.form.get("symbol"), request.form.get("asset_type"), request.form.get("action_type"), float(request.form.get("buy_price")), float(request.form.get("qty")), datetime.now().strftime("%Y-%m-%d %H:%M")))
     return redirect(url_for("pro_trading_hub"))
+
+@app.route("/add_bank", methods=["POST"])
+def add_bank():
+    if not session.get("logged_in"): return redirect(url_for("login"))
+    with sqlite3.connect(DB_NAME) as conn:
+        conn.execute("INSERT INTO bank_accounts (bank_name, account_no, balance) VALUES (?, ?, ?)",
+                     (request.form.get("bank_name"), request.form.get("account_no"), float(request.form.get("balance"))))
+    return redirect(url_for("dashboard"))
 
 @app.route("/add_voucher", methods=["POST"])
 def add_voucher():
@@ -856,13 +990,20 @@ def add_inventory():
                      (request.form.get("item_name"), request.form.get("sku"), int(request.form.get("qty")), float(request.form.get("price")), request.form.get("movement_type")))
     return redirect(url_for("dashboard"))
 
+@app.route("/add_advance", methods=["POST"])
+def add_advance():
+    if not session.get("logged_in"): return redirect(url_for("login"))
+    with sqlite3.connect(DB_NAME) as conn:
+        conn.execute("INSERT INTO advances (party_name, adv_type, amount, date) VALUES (?, ?, ?, ?)",
+                     (request.form.get("party_name"), request.form.get("adv_type"), float(request.form.get("amount")), datetime.now().strftime("%Y-%m-%d")))
+    return redirect(url_for("dashboard"))
+
 @app.route("/print_report_view")
 def print_report_view():
     if not session.get("logged_in"): return redirect(url_for("login"))
     with sqlite3.connect(DB_NAME) as conn:
         vouchers = conn.execute("SELECT * FROM vouchers ORDER BY id DESC").fetchall()
         banks = conn.execute("SELECT * FROM bank_accounts").fetchall()
-        inventory = conn.execute("SELECT * FROM inventory").fetchall()
     
     return render_template_string('''
         <!DOCTYPE html>
